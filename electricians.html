@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Find Electricians - SparkConnect</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      .list-container {
+        display: flex;
+        gap: var(--spacing-xl);
+        padding: var(--spacing-xl) 0;
+        align-items: flex-start;
+      }
+
+      .filters {
+        width: 250px;
+        background: var(--white);
+        padding: var(--spacing-md);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border-color);
+        position: sticky;
+        top: 100px;
+      }
+
+      .filter-group {
+        margin-bottom: var(--spacing-lg);
+      }
+
+      .filter-group h3 {
+        font-size: var(--font-size-base);
+        margin-bottom: var(--spacing-md);
+      }
+
+      .filter-select {
+        width: 100%;
+        padding: var(--spacing-sm);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border-color);
+      }
+
+      .filter-option {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-sm);
+        cursor: pointer;
+      }
+
+      .results {
+        flex: 1;
+      }
+
+      .results-header {
+        margin-bottom: var(--spacing-lg);
+      }
+
+      .electrician-list-item {
+        background: var(--white);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-lg);
+        margin-bottom: var(--spacing-md);
+        display: flex;
+        gap: var(--spacing-lg);
+        transition: box-shadow 0.2s;
+      }
+
+      .electrician-list-item:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      .list-img {
+        width: 120px;
+        height: 120px;
+        border-radius: var(--radius-full);
+        object-fit: cover;
+        background-color: #eee;
+      }
+
+      .list-info {
+        flex: 1;
+      }
+
+      .info-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: var(--spacing-sm);
+      }
+
+      .list-name {
+        font-size: var(--font-size-xl);
+        font-weight: 700;
+      }
+
+      .list-rating {
+        font-weight: 700;
+      }
+
+      @media (max-width: 768px) {
+        .list-container {
+          flex-direction: column;
+        }
+
+        .filters {
+          width: 100%;
+          position: static;
+          margin-bottom: var(--spacing-lg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Nav rendered by js/nav.js -->
+    <nav></nav>
+
+    <div class="container list-container">
+      <!-- Sidebar Filters -->
+      <aside class="filters">
+        <div class="filter-group">
+          <h3>Location (State)</h3>
+          <select
+            id="state-filter"
+            class="filter-select"
+            onchange="filterElectricians()"
+          >
+            <option value="">All States</option>
+            <!-- Populated by JS -->
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <h3>Availability</h3>
+          <label class="filter-option"
+            ><input type="checkbox" /> Available Now</label
+          >
+          <label class="filter-option"
+            ><input type="checkbox" /> Weekends</label
+          >
+        </div>
+        <div class="filter-group">
+          <h3>Specialty</h3>
+          <label class="filter-option"
+            ><input type="checkbox" /> Residential</label
+          >
+          <label class="filter-option"
+            ><input type="checkbox" /> Commercial</label
+          >
+          <label class="filter-option"
+            ><input type="checkbox" /> Industrial</label
+          >
+        </div>
+      </aside>
+
+      <!-- Main Results -->
+      <main class="results">
+        <div class="results-header">
+          <h1>Electricians in Your Area</h1>
+          <p id="results-count">Showing all electricians</p>
+        </div>
+
+        <div id="electricians-list">
+          <!-- Populated by JS -->
+        </div>
+      </main>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/nav.js"></script>
+    <script>
+      // Check if logged in to show Dashboard link
+      const user = DataManager.getCurrentUser();
+      if (user) {
+        const dashboardLink = document.getElementById("dashboard-link");
+        if (dashboardLink) {
+          dashboardLink.classList.remove("hidden");
+        }
+      }
+
+      const container = document.getElementById("electricians-list");
+      const countLabel = document.getElementById("results-count");
+
+      // Populate State Filter
+      const stateSelect = document.getElementById("state-filter");
+      NIGERIAN_STATES.forEach((state) => {
+        const opt = document.createElement("option");
+        opt.value = state;
+        opt.textContent = state;
+        stateSelect.appendChild(opt);
+      });
+
+      function renderList(list) {
+        container.innerHTML = "";
+        countLabel.textContent = `Showing ${list.length} results`;
+
+        if (list.length === 0) {
+          container.innerHTML = "<p>No electricians found in this area.</p>";
+          return;
+        }
+
+        list.forEach((el) => {
+          const item = document.createElement("div");
+          item.className = "electrician-list-item";
+
+          // Show rating only if they have one (new users start at 0)
+          const ratingHtml =
+            el.reviews > 0
+              ? `★ ${el.rating} <span style="font-weight:400; color:var(--text-gray)">(${el.reviews} reviews)</span>`
+              : `<span style="font-weight:400; color:var(--text-gray)">New Member</span>`;
+
+          // Create image or initials placeholder
+          let imageHtml;
+          if (
+            el.image &&
+            el.image !== "assets/images/profile_placeholder.jpg"
+          ) {
+            imageHtml = `<img src="${el.image}" alt="${
+              el.name
+            }" class="list-img" onerror="this.outerHTML='<div class=\\'list-img list-img-placeholder\\'>${DataManager.getInitials(
+              el.name
+            )}</div>'">`;
+          } else {
+            imageHtml = `<div class="list-img list-img-placeholder">${DataManager.getInitials(
+              el.name
+            )}</div>`;
+          }
+
+          item.innerHTML = `
+                    ${imageHtml}
+                    <div class="list-info">
+                        <div class="info-header">
+                            <div class="list-name">${el.name}</div>
+                            <div class="list-rating">${ratingHtml}</div>
+                        </div>
+                        <div style="color: var(--primary-blue); margin-bottom: var(--spacing-sm);">${el.specialty} • ${el.state}</div>
+                        <p style="color: var(--text-gray); margin-bottom: var(--spacing-md);">${el.description}</p>
+                        <a href="profile.html?id=${el.id}" class="btn btn-outline">View Profile</a>
+                    </div>
+                `;
+
+          container.appendChild(item);
+        });
+      }
+
+      function filterElectricians() {
+        const selectedState = stateSelect.value;
+        let all = DataManager.getAllElectricians();
+
+        // Filter out visitors and admin users
+        all = all.filter((e) => {
+          const isVisitor =
+            e.specialty && e.specialty.toLowerCase() === "visitor";
+          const isAdmin = e.name && e.name.toLowerCase() === "admin";
+          return !isVisitor && !isAdmin;
+        });
+
+        if (selectedState === "") {
+          renderList(all);
+        } else {
+          const filtered = all.filter((e) => e.state === selectedState);
+          renderList(filtered);
+        }
+      }
+
+      // Initial Render - also filter out visitors and admin
+      let initialList = DataManager.getAllElectricians();
+      initialList = initialList.filter((e) => {
+        const isVisitor =
+          e.specialty && e.specialty.toLowerCase() === "visitor";
+        const isAdmin = e.name && e.name.toLowerCase() === "admin";
+        return !isVisitor && !isAdmin;
+      });
+      renderList(initialList);
+    </script>
+  </body>
+</html>

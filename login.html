@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login/Sign Up - SparkConnect</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #eef2f6;
+        padding: var(--spacing-md);
+      }
+
+      .login-card {
+        background-color: var(--white);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-xxl);
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .login-header {
+        margin-bottom: var(--spacing-xl);
+        text-align: center;
+      }
+
+      .login-header h1 {
+        font-size: var(--font-size-2xl);
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: var(--spacing-md);
+      }
+
+      .form-group {
+        margin-bottom: var(--spacing-lg);
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: var(--spacing-sm);
+        font-weight: 500;
+        color: var(--text-dark);
+      }
+
+      .form-actions {
+        margin-top: var(--spacing-xl);
+      }
+
+      .btn-full {
+        width: 100%;
+        padding: var(--spacing-md);
+        font-size: var(--font-size-base);
+      }
+
+      .toggle-auth {
+        margin-top: var(--spacing-md);
+        text-align: center;
+        font-size: var(--font-size-sm);
+        color: var(--text-gray);
+        cursor: pointer;
+      }
+
+      .toggle-auth span {
+        color: var(--primary-blue);
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Nav rendered by js/nav.js -->
+    <nav></nav>
+
+    <div class="login-container">
+      <!-- Login Form -->
+      <div class="login-card" id="login-form">
+        <div class="login-header">
+          <h1>Welcome Back</h1>
+          <p style="color: var(--text-gray)">Sign in to your account</p>
+        </div>
+
+        <form id="form-login">
+          <div class="form-group">
+            <label for="username">Username / Name</label>
+            <input
+              type="text"
+              id="username"
+              placeholder="e.g. Sarah Johnson"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="password-wrapper">
+              <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                required
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                onclick="togglePassword('password', this)"
+              >
+                👁️
+              </button>
+            </div>
+            <div style="text-align: right; margin-top: 5px">
+              <a
+                href="#"
+                onclick="showForgotModal()"
+                style="
+                  font-size: var(--font-size-sm);
+                  color: var(--primary-blue);
+                "
+                >Forgot Password?</a
+              >
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-full">
+              Sign In
+            </button>
+          </div>
+
+          <div class="toggle-auth" onclick="toggleForm('signup')">
+            Don't have an account? <span>Sign up</span>
+          </div>
+        </form>
+      </div>
+
+      <!-- Signup Form -->
+      <div class="login-card hidden" id="signup-form">
+        <div class="login-header">
+          <h1>Create Account</h1>
+          <p style="color: var(--text-gray)">Join as an Electrician</p>
+        </div>
+
+        <form id="form-signup">
+          <div class="form-group">
+            <label for="new-name">Full Name</label>
+            <input type="text" id="new-name" placeholder="John Doe" required />
+          </div>
+
+          <div class="form-group">
+            <label for="new-state">State</label>
+            <select id="new-state" required>
+              <!-- Populated by JS -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="new-specialty">I am a...</label>
+            <select id="new-specialty" required>
+              <option value="">Select your role</option>
+              <option value="Visitor">Visitor (Browse only)</option>
+              <option value="Residential Electrician">
+                Residential Electrician
+              </option>
+              <option value="Commercial Electrician">
+                Commercial Electrician
+              </option>
+              <option value="Industrial Electrician">
+                Industrial Electrician
+              </option>
+              <option value="Maintenance Electrician">
+                Maintenance Electrician
+              </option>
+              <option value="Installation Electrician">
+                Installation Electrician
+              </option>
+              <option value="Emergency Electrician">
+                Emergency Electrician
+              </option>
+              <option value="Smart Home Specialist">
+                Smart Home Specialist
+              </option>
+              <option value="Solar Panel Installer">
+                Solar Panel Installer
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="new-password">Password</label>
+            <div class="password-wrapper">
+              <input
+                type="password"
+                id="new-password"
+                placeholder="Create a password"
+                required
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                onclick="togglePassword('new-password', this)"
+              >
+                👁️
+              </button>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-full">
+              Create Account
+            </button>
+          </div>
+
+          <div class="toggle-auth" onclick="toggleForm('login')">
+            Already have an account? <span>Sign In</span>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgot-modal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Reset Password</h2>
+          <button class="close-modal" onclick="closeForgotModal()">×</button>
+        </div>
+        <p
+          style="
+            color: var(--text-gray);
+            margin-bottom: var(--spacing-md);
+            font-size: var(--font-size-sm);
+          "
+        >
+          Enter your email address to receive a reset code.
+        </p>
+        <form id="form-forgot">
+          <div class="form-group">
+            <label for="reset-email">Email Address</label>
+            <input
+              type="email"
+              id="reset-email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-full">
+              Send Reset Code
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <style>
+      /* Modal Styles */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        padding: var(--spacing-md);
+      }
+
+      .modal-content {
+        background-color: var(--white);
+        padding: var(--spacing-xl);
+        border-radius: var(--radius-lg);
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-md);
+      }
+
+      .modal-header h2 {
+        font-size: var(--font-size-xl);
+        margin: 0;
+      }
+
+      .close-modal {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-gray);
+      }
+    </style>
+
+    <script src="js/data.js"></script>
+    <script src="js/nav.js"></script>
+    <script>
+      // Populate States
+      const stateSelect = document.getElementById("new-state");
+      NIGERIAN_STATES.forEach((state) => {
+        const opt = document.createElement("option");
+        opt.value = state;
+        opt.textContent = state;
+        stateSelect.appendChild(opt);
+      });
+
+      function toggleForm(show) {
+        document
+          .getElementById("login-form")
+          .classList.toggle("hidden", show === "signup");
+        document
+          .getElementById("signup-form")
+          .classList.toggle("hidden", show === "login");
+      }
+
+      function togglePassword(inputId, btn) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+          input.type = "text";
+          btn.textContent = "🔒"; // Change icon to lock or cross-eye
+        } else {
+          input.type = "password";
+          btn.textContent = "👁️";
+        }
+      }
+
+      // Modal Logic
+      function showForgotModal() {
+        document.getElementById("forgot-modal").classList.remove("hidden");
+      }
+
+      function closeForgotModal() {
+        document.getElementById("forgot-modal").classList.add("hidden");
+      }
+
+      // Login Handler
+      document.getElementById("form-login").onsubmit = function (e) {
+        e.preventDefault();
+        const username = document.getElementById("username").value;
+        const user = DataManager.login(username);
+
+        if (user) {
+          window.location.href = "dashboard.html";
+        } else {
+          alert('User not found. Try "Sarah Johnson" or Sign Up.');
+        }
+      };
+
+      // Signup Handler
+      document.getElementById("form-signup").onsubmit = function (e) {
+        e.preventDefault();
+        const name = document.getElementById("new-name").value;
+        const state = document.getElementById("new-state").value;
+        const specialty = document.getElementById("new-specialty").value;
+
+        // Random default image for new users
+        const defaultImg = "assets/images/profile_placeholder.jpg";
+
+        const newData = {
+          name: name,
+          state: state,
+          location: state + ", Nigeria",
+          specialty: specialty,
+          image: defaultImg,
+          description: "Hi, I am a new electrician on Sparkconnect.",
+          reviews: 0,
+          rating: 0,
+        };
+
+        const user = DataManager.signup(newData);
+        if (user) {
+          alert("Account created! Redirecting to dashboard...");
+          window.location.href = "dashboard.html";
+        }
+      };
+
+      // Forgot Password Handler
+      document.getElementById("form-forgot").onsubmit = function (e) {
+        e.preventDefault();
+        const email = document.getElementById("reset-email").value;
+        // Simulate Code Sending
+        alert(
+          `A reset code has been sent to ${email}. Please check your inbox.`
+        );
+        closeForgotModal();
+      };
+
+      // Close modal on outside click
+      document
+        .getElementById("forgot-modal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) {
+            closeForgotModal();
+          }
+        });
+    </script>
+  </body>
+</html>

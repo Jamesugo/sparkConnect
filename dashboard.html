@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - SparkConnect</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      .dashboard-container {
+        padding: var(--spacing-xxl) 0;
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        gap: var(--spacing-xl);
+      }
+
+      .sidebar {
+        background: var(--white);
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+        height: fit-content;
+      }
+
+      .sidebar-menu a {
+        display: block;
+        padding: var(--spacing-md);
+        border-radius: var(--radius-md);
+        margin-bottom: var(--spacing-xs);
+        color: var(--text-dark);
+      }
+
+      .sidebar-menu a.active {
+        background-color: #f0f4f8;
+        color: var(--primary-blue);
+        font-weight: 500;
+      }
+
+      .main-content {
+        background: var(--white);
+        padding: var(--spacing-xl);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+      }
+
+      .section-header {
+        margin-bottom: var(--spacing-lg);
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: var(--spacing-md);
+      }
+
+      .profile-edit-grid {
+        display: grid;
+        gap: var(--spacing-lg);
+        max-width: 600px;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-md);
+      }
+
+      .preview-img {
+        width: 100px;
+        height: 100px;
+        border-radius: var(--radius-full);
+        object-fit: cover;
+        margin-bottom: var(--spacing-md);
+        background-color: #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Nav rendered by js/nav.js -->
+    <nav></nav>
+
+    <div class="container dashboard-container">
+      <aside class="sidebar">
+        <div class="sidebar-menu">
+          <a href="#" class="active" onclick="switchTab('profile')"
+            >Edit Profile</a
+          >
+          <a href="#" onclick="switchTab('contacts')">Contact Info</a>
+          <a href="#" onclick="switchTab('gallery')">My Work (Gallery)</a>
+          <a href="#" onclick="switchTab('settings')">Account Settings</a>
+        </div>
+      </aside>
+
+      <main class="main-content" id="tab-profile">
+        <div class="section-header">
+          <h2>Edit Profile</h2>
+        </div>
+
+        <form id="profile-form" class="profile-edit-grid">
+          <div>
+            <label>Profile Picture</label>
+            <br />
+            <img id="current-img" src="" class="preview-img" />
+            <input type="file" id="edit-image-file" accept="image/*" />
+            <small style="color: grey; display: block; margin-top: 5px"
+              >Upload a new photo</small
+            >
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="edit-name" required />
+            </div>
+            <div class="form-group">
+              <label>State</label>
+              <select id="edit-state">
+                <!-- Populated JS -->
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Specialty</label>
+            <select id="edit-specialty" required>
+              <option value="">Select your role</option>
+              <option value="Visitor">Visitor (Browse only)</option>
+              <option value="Residential Electrician">
+                Residential Electrician
+              </option>
+              <option value="Commercial Electrician">
+                Commercial Electrician
+              </option>
+              <option value="Industrial Electrician">
+                Industrial Electrician
+              </option>
+              <option value="Maintenance Electrician">
+                Maintenance Electrician
+              </option>
+              <option value="Installation Electrician">
+                Installation Electrician
+              </option>
+              <option value="Emergency Electrician">
+                Emergency Electrician
+              </option>
+              <option value="Smart Home Specialist">
+                Smart Home Specialist
+              </option>
+              <option value="Solar Panel Installer">
+                Solar Panel Installer
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>About Me</label>
+            <textarea id="edit-desc" rows="5"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </main>
+
+      <main class="main-content hidden" id="tab-contacts">
+        <div class="section-header">
+          <h2>Contact Information</h2>
+        </div>
+        <form id="contact-form" class="profile-edit-grid">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input
+              type="email"
+              id="edit-email"
+              placeholder="e.g. your@email.com"
+            />
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input
+              type="tel"
+              id="edit-phone"
+              placeholder="e.g. +234 800 000 0000"
+            />
+          </div>
+          <!-- Future: Social Links -->
+          <button type="submit" class="btn btn-primary">Save Contacts</button>
+        </form>
+      </main>
+
+      <main class="main-content hidden" id="tab-gallery">
+        <div class="section-header">
+          <h2>My Work</h2>
+        </div>
+        <p>Upload photos of your recent work.</p>
+        <br />
+
+        <form id="gallery-form">
+          <div class="form-group">
+            <label>Select Image</label>
+            <input type="file" id="new-work-file" accept="image/*" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Add Photo</button>
+        </form>
+
+        <div
+          id="gallery-preview"
+          style="
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+          "
+        >
+          <!-- Populated by JS -->
+        </div>
+      </main>
+
+      <main class="main-content hidden" id="tab-settings">
+        <div class="section-header">
+          <h2>Account Settings</h2>
+        </div>
+
+        <div style="max-width: 600px">
+          <div
+            style="
+              margin-bottom: var(--spacing-xxl);
+              padding-bottom: var(--spacing-xl);
+              border-bottom: 1px solid var(--border-color);
+            "
+          >
+            <h3 style="margin-bottom: var(--spacing-md)">
+              Account Information
+            </h3>
+            <p
+              style="color: var(--text-gray); margin-bottom: var(--spacing-sm)"
+            >
+              <strong>Name:</strong> <span id="settings-name"></span>
+            </p>
+            <p
+              style="color: var(--text-gray); margin-bottom: var(--spacing-sm)"
+            >
+              <strong>Specialty:</strong> <span id="settings-specialty"></span>
+            </p>
+            <p style="color: var(--text-gray)">
+              <strong>State:</strong> <span id="settings-state"></span>
+            </p>
+          </div>
+
+          <div
+            style="
+              margin-top: var(--spacing-xxl);
+              padding-top: var(--spacing-xl);
+              border-top: 1px solid var(--border-color);
+            "
+          >
+            <h3 style="color: #dc3545; margin-bottom: var(--spacing-md)">
+              Danger Zone
+            </h3>
+            <p
+              style="color: var(--text-gray); margin-bottom: var(--spacing-md)"
+            >
+              Once you delete your account, there is no going back. Please be
+              certain.
+            </p>
+            <button
+              onclick="deleteMyAccount()"
+              class="btn"
+              style="background-color: #dc3545; color: white"
+            >
+              Delete My Account
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/nav.js"></script>
+    <script>
+      // Check Auth using DataManager (which connects to localStorage)
+      const currentUser = DataManager.getCurrentUser();
+      if (!currentUser) {
+        window.location.href = "login.html";
+      }
+
+      // Init Data for Profile Tab
+      document.getElementById("edit-name").value = currentUser.name;
+      document.getElementById("edit-specialty").value = currentUser.specialty;
+      document.getElementById("edit-desc").value =
+        currentUser.description || "";
+      document.getElementById("current-img").src = currentUser.image;
+
+      // Init Data for Contacts Tab
+      document.getElementById("edit-email").value = currentUser.email || "";
+      document.getElementById("edit-phone").value = currentUser.phone || "";
+
+      // Populate States
+      const stateSelect = document.getElementById("edit-state");
+      NIGERIAN_STATES.forEach((state) => {
+        const opt = document.createElement("option");
+        opt.value = state;
+        opt.textContent = state;
+        if (state === currentUser.state) opt.selected = true;
+        stateSelect.appendChild(opt);
+      });
+
+      // Render Gallery
+      function renderGallery() {
+        const container = document.getElementById("gallery-preview");
+        // Ensure gallery is an array
+        const gallery = currentUser.gallery || [];
+        container.innerHTML = gallery
+          .map(
+            (img) => `
+                <div style="aspect-ratio:1; background: #eee; overflow:hidden; border-radius: 4px;">
+                    <img src="${img}" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+            `
+          )
+          .join("");
+      }
+      renderGallery();
+
+      // Helper to read file to base64
+      function readFileToBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = (error) => reject(error);
+        });
+      }
+
+      // Save Profile
+      document.getElementById("profile-form").onsubmit = async function (e) {
+        e.preventDefault();
+
+        let imageUrl = currentUser.image;
+        const fileInput = document.getElementById("edit-image-file");
+
+        if (fileInput.files && fileInput.files[0]) {
+          try {
+            imageUrl = await readFileToBase64(fileInput.files[0]);
+          } catch (err) {
+            console.error("Error reading file", err);
+            alert("Failed to upload image.");
+            return;
+          }
+        }
+
+        const updates = {
+          id: currentUser.id,
+          name: document.getElementById("edit-name").value,
+          state: document.getElementById("edit-state").value,
+          location: document.getElementById("edit-state").value + ", Nigeria",
+          specialty: document.getElementById("edit-specialty").value,
+          description: document.getElementById("edit-desc").value,
+          image: imageUrl,
+        };
+
+        // Update in mock DB
+        DataManager.updateElectrician(updates);
+        // Update current session user
+        const updatedUser = { ...currentUser, ...updates };
+        localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+
+        alert("Profile updated!");
+        location.reload();
+      };
+
+      // Save Contacts
+      document.getElementById("contact-form").onsubmit = function (e) {
+        e.preventDefault();
+        const updates = {
+          id: currentUser.id,
+          email: document.getElementById("edit-email").value,
+          phone: document.getElementById("edit-phone").value,
+        };
+
+        DataManager.updateElectrician(updates);
+        const updatedUser = { ...currentUser, ...updates };
+        localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+        alert("Contact info saved!");
+      };
+
+      // Add to Gallery
+      document.getElementById("gallery-form").onsubmit = async function (e) {
+        e.preventDefault();
+        const fileInput = document.getElementById("new-work-file");
+
+        if (fileInput.files && fileInput.files[0]) {
+          try {
+            const newImgBase64 = await readFileToBase64(fileInput.files[0]);
+            const currentGallery = currentUser.gallery || [];
+            const updatedGallery = [...currentGallery, newImgBase64];
+
+            DataManager.updateElectrician({
+              id: currentUser.id,
+              gallery: updatedGallery,
+            });
+
+            // Update session
+            currentUser.gallery = updatedGallery;
+            localStorage.setItem(USER_KEY, JSON.stringify(currentUser));
+
+            renderGallery();
+            fileInput.value = ""; // Reset input
+          } catch (err) {
+            console.error("Error reading file", err);
+            alert("Failed to upload photo.");
+          }
+        }
+      };
+
+      // Tab switching
+      function switchTab(tab) {
+        document
+          .querySelectorAll(".sidebar-menu a")
+          .forEach((a) => a.classList.remove("active"));
+        // Find link that called this and set active - simplified logic finding target
+        // In a real app we'd bind properly, here we just trust the click event or match by text
+        Array.from(document.querySelectorAll(".sidebar-menu a"))
+          .find((a) => a.getAttribute("onclick").includes(tab))
+          .classList.add("active");
+
+        document.getElementById("tab-profile").classList.add("hidden");
+        document.getElementById("tab-contacts").classList.add("hidden");
+        document.getElementById("tab-gallery").classList.add("hidden");
+        document.getElementById("tab-settings").classList.add("hidden");
+
+        document.getElementById("tab-" + tab).classList.remove("hidden");
+      }
+
+      // Initialize Account Settings tab
+      document.getElementById("settings-name").textContent = currentUser.name;
+      document.getElementById("settings-specialty").textContent =
+        currentUser.specialty;
+      document.getElementById("settings-state").textContent =
+        currentUser.state || currentUser.location;
+
+      // Delete My Account function
+      function deleteMyAccount() {
+        if (
+          confirm(
+            "Are you sure you want to delete your account? This action cannot be undone."
+          )
+        ) {
+          if (
+            confirm(
+              "This will permanently remove all your data. Are you absolutely sure?"
+            )
+          ) {
+            DataManager.deleteElectrician(currentUser.id);
+            alert("Your account has been deleted successfully.");
+            window.location.href = "index.html";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

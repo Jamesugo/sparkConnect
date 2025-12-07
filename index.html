@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SparkConnect - Find Electricians</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      .hero {
+        padding: var(--spacing-xxl) 0;
+        background-color: var(--white);
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-size: var(--font-size-3xl);
+        margin-bottom: var(--spacing-md);
+      }
+
+      .search-bar-container {
+        max-width: 600px;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .search-bar {
+        display: flex;
+        gap: var(--spacing-sm);
+      }
+
+      .search-input {
+        flex: 1;
+        padding: var(--spacing-md);
+        border-radius: var(--radius-md);
+        background-color: #f0f4f8;
+        border: none;
+      }
+
+      .search-btn {
+        padding: 0 var(--spacing-lg);
+      }
+
+      .featured-section {
+        padding: var(--spacing-xxl) 0;
+      }
+
+      .section-title {
+        font-size: var(--font-size-2xl);
+        margin-bottom: var(--spacing-lg);
+        font-weight: 700;
+      }
+
+      .electrician-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: var(--spacing-lg);
+      }
+
+      .electrician-card {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+        cursor: pointer;
+        border: 1px solid transparent;
+      }
+
+      .electrician-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border-color: var(--border-color);
+      }
+
+      .card-img {
+        height: 200px;
+        background-color: #e0e0e0; /* Placeholder color */
+        width: 100%;
+        object-fit: cover;
+      }
+
+      .card-body {
+        padding: var(--spacing-md);
+      }
+
+      .card-name {
+        font-weight: 700;
+        font-size: var(--font-size-lg);
+        margin-bottom: var(--spacing-xs);
+      }
+
+      .card-specialty {
+        color: var(--primary-blue);
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        margin-bottom: var(--spacing-sm);
+      }
+
+      .card-desc {
+        font-size: var(--font-size-sm);
+        color: var(--text-gray);
+        margin-bottom: var(--spacing-md);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .card-rating {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+        font-size: var(--font-size-sm);
+        color: var(--text-dark);
+      }
+
+      .star {
+        color: var(--secondary-orange);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Nav rendered by js/nav.js -->
+    <nav></nav>
+
+    <div class="container hero">
+      <h1>Electricians in Your Area</h1>
+      <p style="margin-bottom: var(--spacing-lg); color: var(--text-gray)">
+        Showing results for 'residential wiring' near 90001 (Mock)
+      </p>
+
+      <div class="search-bar-container">
+        <form action="electricians.html" class="search-bar">
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search for electricians..."
+          />
+          <button type="submit" class="btn btn-primary search-btn">
+            Search
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="container featured-section">
+      <h2 class="section-title">Top Rated Electricians</h2>
+      <div class="electrician-grid" id="featured-grid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/nav.js"></script>
+    <script>
+      const grid = document.getElementById("featured-grid");
+      const featured = getFeaturedElectricians();
+
+      featured.forEach((el) => {
+        const card = document.createElement("div");
+        card.className = "electrician-card";
+        card.onclick = () =>
+          (window.location.href = `profile.html?id=${el.id}`);
+
+        // Using a colored div as placeholder if image fails, or the actual image
+        const imgPath = el.image;
+
+        card.innerHTML = `
+                <div class="card-img" style="background-image: url('${imgPath}'); background-color: #ccc;"></div>
+                <div class="card-body">
+                    <div class="card-name">${el.name}</div>
+                    <div class="card-specialty">${el.specialty}</div>
+                    <div class="card-desc">${el.description}</div>
+                    <div class="card-rating">
+                        <span class="star">★</span>
+                        <span>${el.rating}</span>
+                        <span style="color: var(--text-gray);">(${el.reviews} reviews)</span>
+                    </div>
+                </div>
+            `;
+        grid.appendChild(card);
+      });
+    </script>
+  </body>
+</html>

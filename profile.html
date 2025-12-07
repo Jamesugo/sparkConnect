@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Electrician Profile - SparkConnect</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      .profile-header-container {
+        background-color: var(--white);
+        padding: var(--spacing-xxl) 0;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .profile-header {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xl);
+      }
+
+      .profile-avatar {
+        width: 150px;
+        height: 150px;
+        border-radius: var(--radius-full);
+        object-fit: cover;
+        border: 4px solid var(--white);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .profile-info h1 {
+        font-size: var(--font-size-3xl);
+        margin-bottom: var(--spacing-xs);
+      }
+
+      .profile-meta {
+        color: var(--primary-blue);
+        font-weight: 500;
+        margin-bottom: var(--spacing-sm);
+      }
+
+      .profile-stats {
+        margin-top: var(--spacing-md);
+        color: var(--text-gray);
+      }
+
+      .content-section {
+        padding: var(--spacing-xxl) 0;
+      }
+
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: var(--spacing-md);
+        margin-top: var(--spacing-md);
+      }
+
+      .gallery-item {
+        aspect-ratio: 1;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        background-color: #eee;
+      }
+
+      .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s;
+      }
+
+      .gallery-item:hover img {
+        transform: scale(1.05);
+      }
+
+      .reviews-chart {
+        margin-top: var(--spacing-lg);
+        max-width: 500px;
+      }
+
+      .review-bar {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-xs);
+        font-size: var(--font-size-sm);
+      }
+
+      .bar-bg {
+        flex: 1;
+        height: 8px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .bar-fill {
+        height: 100%;
+        background-color: var(--primary-blue);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Nav rendered by js/nav.js -->
+    <nav></nav>
+
+    <div id="profile-content">
+      <!-- Rendered by JS -->
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/nav.js"></script>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = parseInt(urlParams.get("id")) || 1; // Default to 1 for demo
+      const electrician = electricians.find((e) => e.id === id);
+
+      if (electrician) {
+        const container = document.getElementById("profile-content");
+
+        // Mock gallery items if array is short
+        const galleryHtml = electrician.gallery
+          .concat([
+            "assets/images/gallery1.jpg",
+            "assets/images/gallery2.jpg",
+            "assets/images/gallery3.jpg",
+          ])
+          .slice(0, 5)
+          .map(
+            (img) => `
+                <div class="gallery-item">
+                    <img src="${img}" onerror="this.onerror=null; this.src='https://via.placeholder.com/300'">
+                </div>
+            `
+          )
+          .join("");
+
+        container.innerHTML = `
+                <div class="profile-header-container">
+                    <div class="container profile-header">
+                        <img src="${electrician.image}" alt="${
+          electrician.name
+        }" class="profile-avatar" onerror="this.onerror=null; this.src='https://via.placeholder.com/150'">
+                        <div class="profile-info">
+                            <h1>${electrician.name}</h1>
+                            <div class="profile-meta">${
+                              electrician.specialty
+                            } • ${
+          electrician.state || "NG"
+        } • Licensed Electrician</div>
+                            <div class="profile-stats">★ ${
+                              electrician.rating
+                            } (${electrician.reviews} reviews)</div>
+                            ${
+                              electrician.email
+                                ? `<div style="font-size:0.9rem; color:var(--text-gray); margin-top:5px;">📧 ${electrician.email}</div>`
+                                : ""
+                            }
+                            ${
+                              electrician.phone
+                                ? `<div style="font-size:0.9rem; color:var(--text-gray); margin-top:2px;">📞 ${electrician.phone}</div>`
+                                : ""
+                            }
+                            
+                            <div style="margin-top: var(--spacing-lg);">
+                                <button class="btn btn-primary">Contact</button>
+                                <button class="btn btn-outline" style="margin-left: 10px;">Share Profile</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container content-section">
+                    <section style="margin-bottom: var(--spacing-xxl);">
+                        <h2 style="margin-bottom: var(--spacing-md); font-size: var(--font-size-xl);">About Me</h2>
+                        <p style="color: var(--text-gray); line-height: 1.6;">${
+                          electrician.description
+                        } I am committed to providing top-quality electrical services with a focus on safety and customer satisfaction. Whether it's a small repair or a major installation, I bring the same level of dedication and expertise to every project.</p>
+                    </section>
+                    
+                    ${
+                      // Show delete button ONLY if current user is admin
+                      DataManager.isAdmin()
+                        ? `<div style="margin-top: var(--spacing-xxl); padding-top: var(--spacing-xl); border-top: 1px solid var(--border-color);">
+                             <h3 style="color: #dc3545; margin-bottom: var(--spacing-md);">Admin: Danger Zone</h3>
+                             <p style="color: var(--text-gray); margin-bottom: var(--spacing-md);">Permanently delete this account and remove all data.</p>
+                             <button onclick="deleteAccount(${electrician.id})" class="btn" style="background-color: #dc3545; color: white;">Delete Account</button>
+                        </div>`
+                        : ""
+                    }
+
+                    <section style="margin-bottom: var(--spacing-xxl);">
+                        <h2 style="margin-bottom: var(--spacing-md); font-size: var(--font-size-xl);">Gallery</h2>
+                        <div class="gallery-grid">
+                            ${galleryHtml}
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2 style="margin-bottom: var(--spacing-md); font-size: var(--font-size-xl);">Reviews</h2>
+                        <div style="display: flex; align-items: center; gap: var(--spacing-md); margin-bottom: var(--spacing-xl);">
+                             <h1 style="font-size: 4rem; font-weight: 700;">${
+                               electrician.rating || 0
+                             }</h1>
+                             <div>
+                                <div style="color: var(--secondary-orange);">★★★★★</div>
+                                <div style="color: var(--text-gray);">${
+                                  electrician.reviews || 0
+                                } reviews</div>
+                             </div>
+                        </div>
+
+                        <!-- Add Review Form -->
+                        <div style="background: #f8f9fa; padding: var(--spacing-lg); border-radius: var(--radius-md); margin-bottom: var(--spacing-xl);">
+                            <h3 style="margin-bottom: var(--spacing-md);">Leave a Review</h3>
+                            <form id="review-form">
+                                <div style="margin-bottom: var(--spacing-md);">
+                                    <label style="display: block; margin-bottom: var(--spacing-sm); font-weight: 500;">Rating</label>
+                                    <div class="star-rating" style="font-size: 2rem; cursor: pointer;">
+                                        <span class="star" data-rating="1">☆</span>
+                                        <span class="star" data-rating="2">☆</span>
+                                        <span class="star" data-rating="3">☆</span>
+                                        <span class="star" data-rating="4">☆</span>
+                                        <span class="star" data-rating="5">☆</span>
+                                    </div>
+                                    <input type="hidden" id="rating-value" required>
+                                </div>
+                                <div style="margin-bottom: var(--spacing-md);">
+                                    <label style="display: block; margin-bottom: var(--spacing-sm); font-weight: 500;">Your Name</label>
+                                    <input type="text" id="reviewer-name" placeholder="Enter your name" required style="width: 100%; max-width: 400px;">
+                                </div>
+                                <div style="margin-bottom: var(--spacing-md);">
+                                    <label style="display: block; margin-bottom: var(--spacing-sm); font-weight: 500;">Comment (Optional)</label>
+                                    <textarea id="review-comment" rows="3" placeholder="Share your experience..." style="width: 100%; max-width: 600px;"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit Review</button>
+                            </form>
+                        </div>
+
+                        <!-- Reviews List -->
+                        <div id="reviews-list" style="margin-top: var(--spacing-xl);">
+                            <!-- Populated by JS -->
+                        </div>
+                    </section>
+                </div>
+            `;
+      }
+
+      // Star Rating Interaction
+      const stars = document.querySelectorAll(".star");
+      const ratingInput = document.getElementById("rating-value");
+      let selectedRating = 0;
+
+      stars.forEach((star) => {
+        star.addEventListener("click", function () {
+          selectedRating = parseInt(this.getAttribute("data-rating"));
+          ratingInput.value = selectedRating;
+          updateStars(selectedRating);
+        });
+
+        star.addEventListener("mouseover", function () {
+          const hoverRating = parseInt(this.getAttribute("data-rating"));
+          updateStars(hoverRating);
+        });
+      });
+
+      document
+        .querySelector(".star-rating")
+        .addEventListener("mouseout", function () {
+          updateStars(selectedRating);
+        });
+
+      function updateStars(rating) {
+        stars.forEach((star, index) => {
+          if (index < rating) {
+            star.textContent = "★";
+            star.style.color = "var(--secondary-orange)";
+          } else {
+            star.textContent = "☆";
+            star.style.color = "#ccc";
+          }
+        });
+      }
+
+      // Load and display reviews
+      function loadReviews() {
+        const electrician = DataManager.getElectricianById(electricianId);
+        const reviewsList = document.getElementById("reviews-list");
+
+        if (!electrician.reviewsList || electrician.reviewsList.length === 0) {
+          reviewsList.innerHTML =
+            '<p style="color: var(--text-gray); text-align: center;">No reviews yet. Be the first to review!</p>';
+          return;
+        }
+
+        reviewsList.innerHTML = electrician.reviewsList
+          .map(
+            (review) => `
+          <div style="border-bottom: 1px solid var(--border-color); padding: var(--spacing-lg) 0;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--spacing-sm);">
+              <div>
+                <strong>${review.name}</strong>
+                <div style="color: var(--secondary-orange); margin-top: 4px;">${"★".repeat(
+                  review.rating
+                )}${"☆".repeat(5 - review.rating)}</div>
+              </div>
+              <small style="color: var(--text-gray);">${new Date(
+                review.date
+              ).toLocaleDateString()}</small>
+            </div>
+            ${
+              review.comment
+                ? `<p style="color: var(--text-gray); margin-top: var(--spacing-sm);">${review.comment}</p>`
+                : ""
+            }
+          </div>
+        `
+          )
+          .join("");
+      }
+
+      // Submit Review
+      document
+        .getElementById("review-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const rating = parseInt(ratingInput.value);
+          const name = document.getElementById("reviewer-name").value;
+          const comment = document.getElementById("review-comment").value;
+
+          if (!rating) {
+            alert("Please select a rating");
+            return;
+          }
+
+          const electrician = DataManager.getElectricianById(electricianId);
+
+          // Initialize reviewsList if it doesn't exist
+          if (!electrician.reviewsList) {
+            electrician.reviewsList = [];
+          }
+
+          // Add new review
+          const newReview = {
+            rating: rating,
+            name: name,
+            comment: comment,
+            date: new Date().toISOString(),
+          };
+
+          electrician.reviewsList.push(newReview);
+
+          // Recalculate average rating
+          const totalRating = electrician.reviewsList.reduce(
+            (sum, r) => sum + r.rating,
+            0
+          );
+          const avgRating = (
+            totalRating / electrician.reviewsList.length
+          ).toFixed(1);
+
+          // Update electrician data
+          DataManager.updateElectrician({
+            id: electricianId,
+            reviewsList: electrician.reviewsList,
+            rating: parseFloat(avgRating),
+            reviews: electrician.reviewsList.length,
+          });
+
+          // Reset form
+          this.reset();
+          selectedRating = 0;
+          updateStars(0);
+          ratingInput.value = "";
+
+          alert("Thank you for your review!");
+
+          // Reload page to show updated data
+          location.reload();
+        });
+
+      // Load reviews on page load
+      loadReviews();
+    </script>
+  </body>
+</html>
