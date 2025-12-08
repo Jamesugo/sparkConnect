@@ -27,6 +27,11 @@ const NavManager = {
 
         nav.innerHTML = `
             <div class="container nav-container">
+                <!-- Hamburger Menu Button -->
+                <button class="hamburger-btn" onclick="NavManager.toggleMobileMenu()">
+                    <span class="hamburger-icon">☰</span>
+                </button>
+
                 <a href="index.html" class="logo">
                     <img src="assets/logo.png" alt="SparkConnect Logo">
                     <span>SparkConnect</span>
@@ -65,13 +70,19 @@ const NavManager = {
                     </div>
                 </div>
             </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="mobile-menu hidden">
+                 <a href="index.html" class="${isHome ? 'active' : ''}">Home</a>
+                 <a href="electricians.html" class="${isList ? 'active' : ''}">Find Electricians</a>
+                 ${currentUser ? `<a href="dashboard.html" class="${path.includes('dashboard.html') ? 'active' : ''}">Dashboard</a>` : ''}
+            </div>
             
-            <!-- Mobile Menu Toggle (simplified for now) -->
-             <style>
+            <style>
                 .dropdown-menu a:hover {
                     background-color: #f8f9fa;
                 }
-             </style>
+            </style>
         `;
         
         // Close dropdown when clicking outside
@@ -87,6 +98,11 @@ const NavManager = {
     toggleDropdown: function() {
         const dropdown = document.getElementById('nav-dropdown');
         if (dropdown) dropdown.classList.toggle('hidden');
+    },
+
+    toggleMobileMenu: function() {
+        const menu = document.getElementById('mobile-menu');
+        if (menu) menu.classList.toggle('hidden');
     },
 
     logout: function() {

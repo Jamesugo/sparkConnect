@@ -116,6 +116,25 @@
       .star {
         color: var(--secondary-orange);
       }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .hero {
+          padding: var(--spacing-lg) 0;
+        }
+
+        .hero h1 {
+          font-size: var(--font-size-2xl);
+        }
+
+        .search-bar {
+          flex-direction: column;
+        }
+
+        .search-btn {
+          width: 100%;
+        }
+      }
     </style>
   </head>
   <body>
