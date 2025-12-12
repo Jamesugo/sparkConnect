@@ -116,25 +116,6 @@
       .star {
         color: var(--secondary-orange);
       }
-
-      /* Responsive Design */
-      @media (max-width: 768px) {
-        .hero {
-          padding: var(--spacing-lg) 0;
-        }
-
-        .hero h1 {
-          font-size: var(--font-size-2xl);
-        }
-
-        .search-bar {
-          flex-direction: column;
-        }
-
-        .search-btn {
-          width: 100%;
-        }
-      }
     </style>
   </head>
   <body>
@@ -172,19 +153,25 @@
     <script src="js/nav.js"></script>
     <script>
       const grid = document.getElementById("featured-grid");
-      const featured = getFeaturedElectricians();
 
-      featured.forEach((el) => {
-        const card = document.createElement("div");
-        card.className = "electrician-card";
-        card.onclick = () =>
-          (window.location.href = `profile.html?id=${el.id}`);
+      // Async function to load data
+      async function loadFeatured() {
+        // Use DataManager (which calls API now)
+        const electricians = await DataManager.getAllElectricians();
 
-        // Using a colored div as placeholder if image fails, or the actual image
-        const imgPath = el.image;
+        // Filter top rated (mock logic: rating > 4.5)
+        const featured = electricians.filter((e) => e.rating >= 4.5);
 
-        card.innerHTML = `
-                <div class="card-img" style="background-image: url('${imgPath}'); background-color: #ccc;"></div>
+        featured.forEach((el) => {
+          const card = document.createElement("div");
+          card.className = "electrician-card";
+          card.onclick = () =>
+            (window.location.href = `profile.html?id=${el.id}`);
+
+          const imgPath = el.image || "assets/images/default.jpg";
+
+          card.innerHTML = `
+                <div class="card-img" style="background-image: url('${imgPath}'); background-color: #ccc; background-size: cover; background-position: center;"></div>
                 <div class="card-body">
                     <div class="card-name">${el.name}</div>
                     <div class="card-specialty">${el.specialty}</div>
@@ -196,8 +183,12 @@
                     </div>
                 </div>
             `;
-        grid.appendChild(card);
-      });
+          grid.appendChild(card);
+        });
+      }
+
+      // Init
+      loadFeatured();
     </script>
   </body>
 </html>

@@ -1,53 +1,3 @@
-const defaultElectricians = [
-    {
-        id: 1,
-        name: "Sarah Johnson",
-        specialty: "Residential Wiring",
-        rating: 4.8,
-        reviews: 120,
-        location: "Lagos",
-        state: "Lagos",
-        image: "assets/images/profile1.jpg",
-        description: "Expert in residential wiring and lighting installations with over 7 years of experience.",
-        gallery: ["assets/images/gallery1.jpg", "assets/images/gallery2.jpg"]
-    },
-    {
-        id: 2,
-        name: "Michael Chen",
-        specialty: "Commercial Systems",
-        rating: 4.9,
-        reviews: 150,
-        location: "Abuja",
-        state: "FCT - Abuja",
-        image: "assets/images/profile2.jpg",
-        description: "Specializes in commercial electrical systems and panel upgrades.",
-        gallery: ["assets/images/gallery3.jpg", "assets/images/gallery4.jpg"]
-    },
-    {
-        id: 3,
-        name: "David Rodriguez",
-        specialty: "Emergency Repairs",
-        rating: 4.7,
-        reviews: 95,
-        location: "Ikeja, Lagos",
-        state: "Lagos",
-        image: "assets/images/profile3.jpg",
-        description: "Offers a wide range of electrical services, including emergency repairs available 24/7.",
-        gallery: ["assets/images/gallery5.jpg"]
-    },
-    {
-        id: 4,
-        name: "Emily Carter",
-        specialty: "Smart Home",
-        rating: 4.6,
-        reviews: 110,
-        location: "Port Harcourt",
-        state: "Rivers",
-        image: "assets/images/profile4.jpg",
-        description: "Focuses on smart home installations and energy-efficient solutions.",
-        gallery: ["assets/images/gallery6.jpg"]
-    }
-];
 
 // Nigeria States/Locations for filtering
 const NIGERIAN_STATES = [
@@ -58,134 +8,95 @@ const NIGERIAN_STATES = [
     "Taraba", "Yobe", "Zamfara"
 ];
 
-const DB_KEY = 'sparkconnect_electricians';
-const USER_KEY = 'sparkconnect_current_user';
-
-// Data Manager
+// Replaced DataManager with API Calls
 const DataManager = {
-    init: function() {
-        let currentData = [];
+    // No init needed
+    init: function() { console.log("DataManager init (no-op in API mode)"); },
+
+    getAllElectricians: async function() {
         try {
-            currentData = JSON.parse(localStorage.getItem(DB_KEY)) || [];
-        } catch (e) {
-            currentData = [];
-        }
-
-        // Force restore/merge logic via version flag to ensure it runs for the user
-        const RESTORE_FLAG = 'sparkconnect_restored_v2';
-        
-        let shouldRestore = false;
-        if (!localStorage.getItem(RESTORE_FLAG)) {
-            shouldRestore = true;
-            localStorage.setItem(RESTORE_FLAG, 'true');
-        }
-
-        // Smart Merge: Add defaults if they are not present (by name)
-        // Run this if we are forcing restore OR if the list is dangerously empty
-        let modified = false;
-        
-        if (shouldRestore || currentData.length === 0) {
-            defaultElectricians.forEach(def => {
-                const exists = currentData.some(curr => curr.name === def.name);
-                if (!exists) {
-                    // ID Conflict handling: If ID taken, find new Max ID
-                    const idTaken = currentData.some(curr => curr.id === def.id);
-                    let newProfile = { ...def };
-                    
-                    if (idTaken) {
-                        const maxId = currentData.length > 0 ? Math.max(...currentData.map(e => e.id)) : 0;
-                        newProfile.id = maxId + 1;
-                    }
-                    currentData.push(newProfile);
-                    modified = true;
-                }
-            });
-        }
-
-        if (modified || currentData.length === 0) {
-            localStorage.setItem(DB_KEY, JSON.stringify(currentData));
+            const res = await fetch('/api/electricians');
+            if (res.ok) return await res.json();
+            return [];
+        } catch(e) {
+            console.error("Failed to fetch electricians", e);
+            return [];
         }
     },
 
-    getAllElectricians: function() {
-        this.init();
-        return JSON.parse(localStorage.getItem(DB_KEY));
+    getElectricianById: async function(id) {
+        // We fetch all for now as we don't have a specific ID endpoint, or filter client side
+        // Optimization: Add specific endpoint later if list grows
+        const all = await this.getAllElectricians();
+        return all.find(e => e.id == id);
     },
 
-    getElectricianById: function(id) {
-        const electricians = this.getAllElectricians();
-        return electricians.find(e => e.id == id);
-    },
-
-    addElectrician: function(electrician) {
-        const electricians = this.getAllElectricians();
-        // Generate new ID
-        const newId = electricians.length > 0 ? Math.max(...electricians.map(e => e.id)) + 1 : 1;
-        const newElectrician = { ...electrician, id: newId, rating: 0, reviews: 0, gallery: [] };
+    // Signup now hits the register endpoint
+    signup: async function(data) {
+        const res = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
         
-        electricians.push(newElectrician);
-        localStorage.setItem(DB_KEY, JSON.stringify(electricians));
-        return newElectrician;
-    },
-
-    updateElectrician: function(updatedData) {
-        const electricians = this.getAllElectricians();
-        const index = electricians.findIndex(e => e.id == updatedData.id);
+        const result = await res.json();
         
-        if (index !== -1) {
-            electricians[index] = { ...electricians[index], ...updatedData };
-            localStorage.setItem(DB_KEY, JSON.stringify(electricians));
-            return electricians[index];
+        if (res.ok) {
+            // Auto login after signup?
+            return await this.login(data.email, data.password);
+        } else {
+            throw new Error(result.error || "Signup failed");
         }
-        return null;
     },
 
-    // Auth Simulation
-    login: function(username) {
-        // For simulation, we'll see if a user exists with this name (acting as username)
-        // If not, we block. But since we need signup, we'll stick to a simple flow.
-        // For this demo: 'username' effectively maps to 'name' for electricians if they try to login.
+    login: async function(email, password) {
+        const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ email, password })
+        });
         
-        const electricians = this.getAllElectricians();
-        // Simple fuzzy match for demo
-        const user = electricians.find(e => e.name.toLowerCase() === username.toLowerCase());
-        
-        if (user) {
-            localStorage.setItem(USER_KEY, JSON.stringify(user));
-            return user;
+        const result = await res.json();
+        if (res.ok) {
+            return result.user;
+        } else {
+            throw new Error(result.error || "Login failed");
         }
-        return null;
+    },
+
+    logout: async function() {
+        await fetch('/api/auth/logout', { method: 'POST' });
+        window.location.href = 'index.html';
+    },
+
+    getCurrentUser: async function() {
+        try {
+            const res = await fetch('/api/auth/me');
+            if (res.ok) {
+                const user = await res.json();
+                return user; // returns null if not logged in
+            }
+            return null;
+        } catch(e) {
+            return null;
+        }
+    },
+
+    updateElectrician: async function(updates) {
+         const res = await fetch('/api/user/update', {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(updates)
+        });
+        return res.ok;
     },
     
-    signup: function(data) {
-        // data: { name, specialty, location, state, password(ignored) }
-        const newUser = this.addElectrician(data);
-        localStorage.setItem(USER_KEY, JSON.stringify(newUser));
-        return newUser;
-    },
-
-    getCurrentUser: function() {
-        return JSON.parse(localStorage.getItem(USER_KEY));
-    },
-
-    logout: function() {
-        localStorage.removeItem(USER_KEY);
-    },
-
-    deleteElectrician: function(id) {
-        const electricians = this.getAllElectricians();
-        const updatedList = electricians.filter(e => e.id != id); // Filter out the user
-        localStorage.setItem(DB_KEY, JSON.stringify(updatedList));
-
-        // If the deleted user is the currently logged-in user, logout
-        const currentUser = this.getCurrentUser();
-        if (currentUser && currentUser.id == id) {
-            this.logout();
-        }
-        return true;
+    deleteElectrician: async function(id) {
+         // Not fully implemented on backend but simulation
+         // Usually we'd have a delete endpoint
+         console.warn("Delete account not connected to API yet");
     },
     
-    // Helper to generate initials
     getInitials: function(name) {
         if (!name) return 'SC';
         const parts = name.split(' ');
@@ -195,15 +106,47 @@ const DataManager = {
         return name.slice(0, 2).toUpperCase();
     },
 
-    // Check if current user is admin
-    isAdmin: function() {
-        const currentUser = this.getCurrentUser();
-        // Admin is identified by username 'admin' (case-insensitive)
-        return currentUser && currentUser.name && currentUser.name.toLowerCase() === 'admin';
+    deleteUser: async function(userId) {
+        // Admin function to delete a user
+        const res = await fetch(`/api/admin/users/${userId}`, {
+            method: 'DELETE'
+        });
+        
+        if (res.ok) {
+            return true;
+        } else {
+            const error = await res.json();
+            throw new Error(error.error || 'Failed to delete user');
+        }
+    },
+
+    isAdmin: async function() {
+        // Basic check based on current user
+        const user = await this.getCurrentUser();
+        return user && user.email === 'admin@sparkconnect.com';
     }
 };
 
-// Expose electricians global variable for backward compatibility with existing pages temporarily
-// but init it from manager
-DataManager.init();
-const electricians = DataManager.getAllElectricians();
+// MediaStore deprecated in favor of API uploads, but keeping stub if needed for logic transition
+const MediaStore = {
+    saveMedia: async function(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        const res = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (res.ok) {
+            const data = await res.json();
+            return data.url; // Returns server path
+        } else {
+            throw new Error("Upload failed");
+        }
+    },
+    getMedia: async function(url) {
+        // Just return the url directly as it's now a server path
+        return url;
+    }
+}

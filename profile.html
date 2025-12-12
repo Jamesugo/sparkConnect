@@ -111,45 +111,54 @@
     <script src="js/nav.js"></script>
     <script>
       const urlParams = new URLSearchParams(window.location.search);
-      const id = parseInt(urlParams.get("id")) || 1; // Default to 1 for demo
-      const electrician = electricians.find((e) => e.id === id);
+      const id = parseInt(urlParams.get("id")) || 1;
+      let electrician = null;
 
-      if (electrician) {
+      async function initProfile() {
+        try {
+          electrician = await DataManager.getElectricianById(id);
+          if (!electrician) {
+            document.getElementById("profile-content").innerHTML =
+              "<div class='container' style='padding:50px;'>User not found</div>";
+            return;
+          }
+          renderProfile();
+          loadGalleryImages();
+          loadReviews();
+        } catch (e) {
+          console.error(e);
+          document.getElementById("profile-content").innerHTML =
+            "<div class='container' style='padding:50px;'>Error loading profile</div>";
+        }
+      }
+
+      async function renderProfile() {
         const container = document.getElementById("profile-content");
 
-        // Mock gallery items if array is short
-        const galleryHtml = electrician.gallery
-          .concat([
-            "assets/images/gallery1.jpg",
-            "assets/images/gallery2.jpg",
-            "assets/images/gallery3.jpg",
-          ])
-          .slice(0, 5)
-          .map(
-            (img) => `
-                <div class="gallery-item">
-                    <img src="${img}" onerror="this.onerror=null; this.src='https://via.placeholder.com/300'">
-                </div>
-            `
-          )
-          .join("");
+        // Check if current user is admin
+        const currentUser = await DataManager.getCurrentUser();
+        const isAdmin =
+          currentUser && currentUser.email === "admin@sparkconnect.com";
 
         container.innerHTML = `
                 <div class="profile-header-container">
                     <div class="container profile-header">
-                        <img src="${electrician.image}" alt="${
+                        <img src="${
+                          electrician.image ||
+                          "assets/images/profile_placeholder.jpg"
+                        }" alt="${
           electrician.name
-        }" class="profile-avatar" onerror="this.onerror=null; this.src='https://via.placeholder.com/150'">
+        }" class="profile-avatar" onerror="this.onerror=null; this.src='assets/images/profile_placeholder.jpg'">
                         <div class="profile-info">
                             <h1>${electrician.name}</h1>
                             <div class="profile-meta">${
-                              electrician.specialty
+                              electrician.specialty || "Electrician"
                             } • ${
           electrician.state || "NG"
         } • Licensed Electrician</div>
                             <div class="profile-stats">★ ${
-                              electrician.rating
-                            } (${electrician.reviews} reviews)</div>
+                              electrician.rating || 0
+                            } (${electrician.reviews || 0} reviews)</div>
                             ${
                               electrician.email
                                 ? `<div style="font-size:0.9rem; color:var(--text-gray); margin-top:5px;">📧 ${electrician.email}</div>`
@@ -162,13 +171,9 @@
                             }
                             
                             <div style="margin-top: var(--spacing-lg);">
-                                <button class="btn btn-primary">Contact</button>
+                                <button class="btn btn-primary contact-btn" onclick="contactElectrician()">Contact</button>
                                 <button class="btn btn-outline" style="margin-left: 10px;">Share Profile</button>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
                         </div>
                     </div>
                 </div>
@@ -177,25 +182,24 @@
                     <section style="margin-bottom: var(--spacing-xxl);">
                         <h2 style="margin-bottom: var(--spacing-md); font-size: var(--font-size-xl);">About Me</h2>
                         <p style="color: var(--text-gray); line-height: 1.6;">${
-                          electrician.description
-                        } I am committed to providing top-quality electrical services with a focus on safety and customer satisfaction. Whether it's a small repair or a major installation, I bring the same level of dedication and expertise to every project.</p>
+                          electrician.description || "No description provided."
+                        }</p>
                     </section>
                     
                     ${
-                      // Show delete button ONLY if current user is admin
-                      DataManager.isAdmin()
-                        ? `<div style="margin-top: var(--spacing-xxl); padding-top: var(--spacing-xl); border-top: 1px solid var(--border-color);">
+                      isAdmin
+                        ? `<div id="admin-panel" style="margin-top: var(--spacing-xxl); padding-top: var(--spacing-xl); border-top: 1px solid var(--border-color);">
                              <h3 style="color: #dc3545; margin-bottom: var(--spacing-md);">Admin: Danger Zone</h3>
                              <p style="color: var(--text-gray); margin-bottom: var(--spacing-md);">Permanently delete this account and remove all data.</p>
                              <button onclick="deleteAccount(${electrician.id})" class="btn" style="background-color: #dc3545; color: white;">Delete Account</button>
-                        </div>`
+                    </div>`
                         : ""
                     }
 
                     <section style="margin-bottom: var(--spacing-xxl);">
                         <h2 style="margin-bottom: var(--spacing-md); font-size: var(--font-size-xl);">Gallery</h2>
-                        <div class="gallery-grid">
-                            ${galleryHtml}
+                        <div id="profile-gallery-grid" class="gallery-grid">
+                            <p>Loading gallery...</p>
                         </div>
                     </section>
 
@@ -247,56 +251,125 @@
                     </section>
                 </div>
             `;
+
+        // Re-bind star listeners since DOM changed
+        initStarRating();
+      }
+
+      function contactElectrician() {
+        if (electrician.whatsapp) {
+          window.open(electrician.whatsapp, "_blank");
+        } else if (electrician.phone) {
+          window.location.href = "tel:" + electrician.phone;
+        } else if (electrician.email) {
+          window.location.href = "mailto:" + electrician.email;
+        } else {
+          alert("No contact information available for this user.");
+        }
+      }
+
+      // Admin function to delete account
+      async function deleteAccount(userId) {
+        if (
+          !confirm(
+            `Are you sure you want to permanently delete this user account? This action cannot be undone.`
+          )
+        ) {
+          return;
+        }
+
+        try {
+          await DataManager.deleteUser(userId);
+          alert("User account deleted successfully");
+          window.location.href = "/electricians.html";
+        } catch (err) {
+          alert("Failed to delete account: " + err.message);
+        }
+      }
+
+      // Async Gallery Loader
+      function loadGalleryImages() {
+        const gallery = electrician.gallery || [];
+        const container = document.getElementById("profile-gallery-grid");
+        if (!container) return;
+
+        if (gallery.length === 0) {
+          container.innerHTML =
+            '<p style="color:var(--text-gray);">No work uploaded yet.</p>';
+          return;
+        }
+
+        // Just use the strings (URLs from server)
+        const renderedItems = gallery.map((item) => {
+          let src = item;
+          let isVideo =
+            item.endsWith(".mp4") ||
+            item.endsWith(".mov") ||
+            item.endsWith(".webm");
+
+          let mediaHtml = "";
+          if (isVideo) {
+            mediaHtml = `<video src="${src}" style="width:100%; height:100%; object-fit:cover;" controls></video>`;
+          } else {
+            mediaHtml = `<img src="${src}" style="width:100%; height:100%; object-fit:cover;">`;
+          }
+
+          return `<div style="aspect-ratio:1; background: #eee; overflow:hidden; border-radius: 4px;">${mediaHtml}</div>`;
+        });
+        container.innerHTML = renderedItems.join("");
       }
 
       // Star Rating Interaction
-      const stars = document.querySelectorAll(".star");
-      const ratingInput = document.getElementById("rating-value");
-      let selectedRating = 0;
+      function initStarRating() {
+        const stars = document.querySelectorAll(".star");
+        const ratingInput = document.getElementById("rating-value");
+        let selectedRating = 0;
 
-      stars.forEach((star) => {
-        star.addEventListener("click", function () {
-          selectedRating = parseInt(this.getAttribute("data-rating"));
-          ratingInput.value = selectedRating;
-          updateStars(selectedRating);
+        stars.forEach((star) => {
+          star.addEventListener("click", function () {
+            selectedRating = parseInt(this.getAttribute("data-rating"));
+            ratingInput.value = selectedRating;
+            updateStars(selectedRating);
+          });
+
+          star.addEventListener("mouseover", function () {
+            const hoverRating = parseInt(this.getAttribute("data-rating"));
+            updateStars(hoverRating);
+          });
         });
 
-        star.addEventListener("mouseover", function () {
-          const hoverRating = parseInt(this.getAttribute("data-rating"));
-          updateStars(hoverRating);
-        });
-      });
+        const starRating = document.querySelector(".star-rating");
+        if (starRating) {
+          starRating.addEventListener("mouseout", function () {
+            updateStars(selectedRating);
+          });
+        }
 
-      document
-        .querySelector(".star-rating")
-        .addEventListener("mouseout", function () {
-          updateStars(selectedRating);
-        });
-
-      function updateStars(rating) {
-        stars.forEach((star, index) => {
-          if (index < rating) {
-            star.textContent = "★";
-            star.style.color = "var(--secondary-orange)";
-          } else {
-            star.textContent = "☆";
-            star.style.color = "#ccc";
-          }
-        });
+        window.updateStars = function (rating) {
+          stars.forEach((star, index) => {
+            if (index < rating) {
+              star.textContent = "★";
+              star.style.color = "var(--secondary-orange)";
+            } else {
+              star.textContent = "☆";
+              star.style.color = "#ccc";
+            }
+          });
+        };
       }
 
       // Load and display reviews
       function loadReviews() {
-        const electrician = DataManager.getElectricianById(electricianId);
-        const reviewsList = document.getElementById("reviews-list");
+        const reviewsListEl = document.getElementById("reviews-list");
+        const list = electrician.reviewsList || [];
 
-        if (!electrician.reviewsList || electrician.reviewsList.length === 0) {
-          reviewsList.innerHTML =
+        if (list.length === 0) {
+          reviewsListEl.innerHTML =
             '<p style="color: var(--text-gray); text-align: center;">No reviews yet. Be the first to review!</p>';
           return;
         }
 
-        reviewsList.innerHTML = electrician.reviewsList
+        reviewsListEl.innerHTML = list
           .map(
             (review) => `
           <div style="border-bottom: 1px solid var(--border-color); padding: var(--spacing-lg) 0;">
@@ -322,69 +395,50 @@
           .join("");
       }
 
-      // Submit Review
-      document
-        .getElementById("review-form")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
+      // Submit Review - ASYNC to API
+      document.addEventListener("submit", async function (e) {
+        if (e.target.id !== "review-form") return;
+        e.preventDefault();
 
-          const rating = parseInt(ratingInput.value);
-          const name = document.getElementById("reviewer-name").value;
-          const comment = document.getElementById("review-comment").value;
+        const ratingInput = document.getElementById("rating-value");
+        const rating = parseInt(ratingInput.value);
+        const name = document.getElementById("reviewer-name").value;
+        const comment = document.getElementById("review-comment").value;
 
-          if (!rating) {
-            alert("Please select a rating");
-            return;
-          }
+        if (!rating) {
+          alert("Please select a rating");
+          return;
+        }
 
-          const electrician = DataManager.getElectricianById(electricianId);
-
-          // Initialize reviewsList if it doesn't exist
-          if (!electrician.reviewsList) {
-            electrician.reviewsList = [];
-          }
-
-          // Add new review
-          const newReview = {
-            rating: rating,
-            name: name,
-            comment: comment,
-            date: new Date().toISOString(),
-          };
-
-          electrician.reviewsList.push(newReview);
-
-          // Recalculate average rating
-          const totalRating = electrician.reviewsList.reduce(
-            (sum, r) => sum + r.rating,
-            0
+        try {
+          const res = await fetch(
+            `/api/electricians/${electrician.id}/review`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                rating: rating,
+                name: name,
+                comment: comment,
+                date: new Date().toISOString(),
+              }),
+            }
           );
-          const avgRating = (
-            totalRating / electrician.reviewsList.length
-          ).toFixed(1);
 
-          // Update electrician data
-          DataManager.updateElectrician({
-            id: electricianId,
-            reviewsList: electrician.reviewsList,
-            rating: parseFloat(avgRating),
-            reviews: electrician.reviewsList.length,
-          });
+          if (res.ok) {
+            alert("Thank you for your review!");
+            location.reload();
+          } else {
+            alert("Failed to submit review");
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Error submitting review");
+        }
+      });
 
-          // Reset form
-          this.reset();
-          selectedRating = 0;
-          updateStars(0);
-          ratingInput.value = "";
-
-          alert("Thank you for your review!");
-
-          // Reload page to show updated data
-          location.reload();
-        });
-
-      // Load reviews on page load
-      loadReviews();
+      // Init
+      initProfile();
     </script>
   </body>
 </html>

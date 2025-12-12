@@ -68,6 +68,23 @@
         margin-bottom: var(--spacing-md);
         background-color: #eee;
       }
+
+      @media (max-width: 570px) {
+        .dashboard-container {
+          grid-template-columns: 1fr; /* Stack sidebar and main content */
+          padding: var(--spacing-md) var(--spacing-sm); /* Reduce vertical padding, small horizontal */
+          gap: var(--spacing-md);
+        }
+
+        .sidebar,
+        .main-content {
+          width: 100%;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr; /* Stack form inputs */
+        }
+      }
     </style>
   </head>
   <body>
@@ -177,6 +194,14 @@
               placeholder="e.g. +234 800 000 0000"
             />
           </div>
+          <div class="form-group">
+            <label>WhatsApp Link</label>
+            <input
+              type="url"
+              id="edit-whatsapp"
+              placeholder="e.g. https://wa.me/2348000000000"
+            />
+          </div>
           <!-- Future: Social Links -->
           <button type="submit" class="btn btn-primary">Save Contacts</button>
         </form>
@@ -191,10 +216,15 @@
 
         <form id="gallery-form">
           <div class="form-group">
-            <label>Select Image</label>
-            <input type="file" id="new-work-file" accept="image/*" required />
+            <label>Select Media (Image or Video)</label>
+            <input
+              type="file"
+              id="new-work-file"
+              accept="image/*,video/*"
+              required
+            />
           </div>
-          <button type="submit" class="btn btn-primary">Add Photo</button>
+          <button type="submit" class="btn btn-primary">Add Media</button>
         </form>
 
         <div
@@ -272,51 +302,110 @@
     <script src="js/data.js"></script>
     <script src="js/nav.js"></script>
     <script>
-      // Check Auth using DataManager (which connects to localStorage)
-      const currentUser = DataManager.getCurrentUser();
-      if (!currentUser) {
-        window.location.href = "login.html";
+      let currentUser = null;
+
+      async function initDashboard() {
+        // Check Auth using DataManager API
+        currentUser = await DataManager.getCurrentUser();
+
+        if (!currentUser) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        // Init Data for Profile Tab
+        document.getElementById("edit-name").value = currentUser.name;
+        document.getElementById("edit-specialty").value = currentUser.specialty;
+        document.getElementById("edit-desc").value =
+          currentUser.description || "";
+
+        // Image handling
+        const img = document.getElementById("current-img");
+        if (currentUser.image) {
+          img.src = currentUser.image;
+        } else {
+          img.style.display = "none"; // logic to show placeholder?
+        }
+
+        // Init Data for Contacts Tab
+        document.getElementById("edit-email").value = currentUser.email || "";
+        document.getElementById("edit-phone").value = currentUser.phone || "";
+        document.getElementById("edit-whatsapp").value =
+          currentUser.whatsapp || "";
+
+        // Populate States
+        const stateSelect = document.getElementById("edit-state");
+        stateSelect.innerHTML = ""; // Clear
+        NIGERIAN_STATES.forEach((state) => {
+          const opt = document.createElement("option");
+          opt.value = state;
+          opt.textContent = state;
+          if (state === currentUser.state) opt.selected = true;
+          stateSelect.appendChild(opt);
+        });
+
+        // Settings Tab
+        document.getElementById("settings-name").textContent = currentUser.name;
+        document.getElementById("settings-specialty").textContent =
+          currentUser.specialty;
+        document.getElementById("settings-state").textContent =
+          currentUser.state || currentUser.location;
+
+        // Render Gallery
+        renderGallery();
       }
 
-      // Init Data for Profile Tab
-      document.getElementById("edit-name").value = currentUser.name;
-      document.getElementById("edit-specialty").value = currentUser.specialty;
-      document.getElementById("edit-desc").value =
-        currentUser.description || "";
-      document.getElementById("current-img").src = currentUser.image;
-
-      // Init Data for Contacts Tab
-      document.getElementById("edit-email").value = currentUser.email || "";
-      document.getElementById("edit-phone").value = currentUser.phone || "";
-
-      // Populate States
-      const stateSelect = document.getElementById("edit-state");
-      NIGERIAN_STATES.forEach((state) => {
-        const opt = document.createElement("option");
-        opt.value = state;
-        opt.textContent = state;
-        if (state === currentUser.state) opt.selected = true;
-        stateSelect.appendChild(opt);
-      });
-
       // Render Gallery
-      function renderGallery() {
+      async function renderGallery() {
         const container = document.getElementById("gallery-preview");
         // Ensure gallery is an array
         const gallery = currentUser.gallery || [];
-        container.innerHTML = gallery
-          .map(
-            (img) => `
-                <div style="aspect-ratio:1; background: #eee; overflow:hidden; border-radius: 4px;">
-                    <img src="${img}" style="width:100%; height:100%; object-fit:cover;">
-                </div>
-            `
-          )
-          .join("");
-      }
-      renderGallery();
 
-      // Helper to read file to base64
+        // In the new API system, gallery items are just URLs (strings)
+        const renderedItems = gallery.map((item, index) => {
+          let src = item;
+          let isVideo =
+            item.endsWith(".mp4") ||
+            item.endsWith(".mov") ||
+            item.endsWith(".webm");
+
+          let mediaHtml = "";
+          if (isVideo) {
+            mediaHtml = `<video src="${src}" style="width:100%; height:100%; object-fit:cover;" controls></video>`;
+          } else {
+            mediaHtml = `<img src="${src}" style="width:100%; height:100%; object-fit:cover;">`;
+          }
+
+          return `
+                <div style="position: relative; aspect-ratio:1; background: #eee; overflow:hidden; border-radius: 4px;">
+                    ${mediaHtml}
+                    <button onclick="deleteGalleryItem('${src}')" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(220, 53, 69, 0.8); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;">🗑️</button>
+                </div>
+            `;
+        });
+        container.innerHTML = renderedItems.join("");
+      }
+
+      // Delete Gallery Item
+      async function deleteGalleryItem(url) {
+        if (!confirm("Are you sure you want to delete this item?")) return;
+
+        const res = await fetch("/api/user/gallery", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: url }),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          currentUser.gallery = data.gallery;
+          renderGallery();
+        } else {
+          alert("Failed to delete item");
+        }
+      }
+
+      // Helper to read file to base64 (Deprecated for main upload, but useful for preview if we wanted)
       function readFileToBase64(file) {
         return new Promise((resolve, reject) => {
           const reader = new FileReader();
@@ -334,17 +423,25 @@
         const fileInput = document.getElementById("edit-image-file");
 
         if (fileInput.files && fileInput.files[0]) {
+          // Upload image first
           try {
-            imageUrl = await readFileToBase64(fileInput.files[0]);
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+            const res = await fetch("/api/upload", {
+              method: "POST",
+              body: formData,
+            });
+            if (res.ok) {
+              const data = await res.json();
+              imageUrl = data.url;
+            }
           } catch (err) {
-            console.error("Error reading file", err);
-            alert("Failed to upload image.");
+            alert("Failed to upload image");
             return;
           }
         }
 
         const updates = {
-          id: currentUser.id,
           name: document.getElementById("edit-name").value,
           state: document.getElementById("edit-state").value,
           location: document.getElementById("edit-state").value + ", Nigeria",
@@ -353,56 +450,75 @@
           image: imageUrl,
         };
 
-        // Update in mock DB
-        DataManager.updateElectrician(updates);
-        // Update current session user
-        const updatedUser = { ...currentUser, ...updates };
-        localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+        const success = await DataManager.updateElectrician(updates);
 
-        alert("Profile updated!");
-        location.reload();
+        if (success) {
+          alert("Profile updated!");
+          // Refresh User
+          currentUser = await DataManager.getCurrentUser();
+          // Re-render handled by reload or manual update
+          location.reload();
+        } else {
+          alert("Failed to update profile.");
+        }
       };
 
       // Save Contacts
-      document.getElementById("contact-form").onsubmit = function (e) {
+      document.getElementById("contact-form").onsubmit = async function (e) {
         e.preventDefault();
         const updates = {
-          id: currentUser.id,
           email: document.getElementById("edit-email").value,
           phone: document.getElementById("edit-phone").value,
+          whatsapp: document.getElementById("edit-whatsapp").value,
         };
 
-        DataManager.updateElectrician(updates);
-        const updatedUser = { ...currentUser, ...updates };
-        localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
-        alert("Contact info saved!");
+        const success = await DataManager.updateElectrician(updates);
+        if (success) {
+          alert("Contact info saved!");
+          currentUser = await DataManager.getCurrentUser(); // Refresh local state
+        } else {
+          alert("Failed to save contacts.");
+        }
       };
 
       // Add to Gallery
       document.getElementById("gallery-form").onsubmit = async function (e) {
         e.preventDefault();
         const fileInput = document.getElementById("new-work-file");
+        const file = fileInput.files[0];
 
-        if (fileInput.files && fileInput.files[0]) {
+        if (file) {
           try {
-            const newImgBase64 = await readFileToBase64(fileInput.files[0]);
-            const currentGallery = currentUser.gallery || [];
-            const updatedGallery = [...currentGallery, newImgBase64];
+            const formData = new FormData();
+            formData.append("file", file);
 
-            DataManager.updateElectrician({
-              id: currentUser.id,
-              gallery: updatedGallery,
+            // 1. Upload
+            const res = await fetch("/api/upload", {
+              method: "POST",
+              body: formData,
+            });
+            if (!res.ok) throw new Error("Upload failed");
+
+            const data = await res.json();
+            const newUrl = data.url;
+
+            // 2. Add to Gallery List
+            const res2 = await fetch("/api/user/gallery", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ url: newUrl }),
             });
 
-            // Update session
-            currentUser.gallery = updatedGallery;
-            localStorage.setItem(USER_KEY, JSON.stringify(currentUser));
-
-            renderGallery();
-            fileInput.value = ""; // Reset input
+            if (res2.ok) {
+              const data2 = await res2.json();
+              currentUser.gallery = data2.gallery;
+              renderGallery();
+              fileInput.value = "";
+              alert("Media uploaded!");
+            }
           } catch (err) {
-            console.error("Error reading file", err);
-            alert("Failed to upload photo.");
+            console.error(err);
+            alert("Failed to upload media.");
           }
         }
       };
@@ -426,13 +542,6 @@
         document.getElementById("tab-" + tab).classList.remove("hidden");
       }
 
-      // Initialize Account Settings tab
-      document.getElementById("settings-name").textContent = currentUser.name;
-      document.getElementById("settings-specialty").textContent =
-        currentUser.specialty;
-      document.getElementById("settings-state").textContent =
-        currentUser.state || currentUser.location;
-
       // Delete My Account function
       function deleteMyAccount() {
         if (
@@ -440,17 +549,13 @@
             "Are you sure you want to delete your account? This action cannot be undone."
           )
         ) {
-          if (
-            confirm(
-              "This will permanently remove all your data. Are you absolutely sure?"
-            )
-          ) {
-            DataManager.deleteElectrician(currentUser.id);
-            alert("Your account has been deleted successfully.");
-            window.location.href = "index.html";
-          }
+          // TODO: Implement API delete
+          alert("Feature coming soon via API");
         }
       }
+
+      // Start
+      initDashboard();
     </script>
   </body>
 </html>

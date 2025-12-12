@@ -169,20 +169,11 @@
     <script src="js/data.js"></script>
     <script src="js/nav.js"></script>
     <script>
-      // Check if logged in to show Dashboard link
-      const user = DataManager.getCurrentUser();
-      if (user) {
-        const dashboardLink = document.getElementById("dashboard-link");
-        if (dashboardLink) {
-          dashboardLink.classList.remove("hidden");
-        }
-      }
-
       const container = document.getElementById("electricians-list");
       const countLabel = document.getElementById("results-count");
+      const stateSelect = document.getElementById("state-filter");
 
       // Populate State Filter
-      const stateSelect = document.getElementById("state-filter");
       NIGERIAN_STATES.forEach((state) => {
         const opt = document.createElement("option");
         opt.value = state;
@@ -243,9 +234,9 @@
         });
       }
 
-      function filterElectricians() {
+      async function filterElectricians() {
         const selectedState = stateSelect.value;
-        let all = DataManager.getAllElectricians();
+        let all = await DataManager.getAllElectricians();
 
         // Filter out visitors and admin users
         all = all.filter((e) => {
@@ -263,15 +254,28 @@
         }
       }
 
-      // Initial Render - also filter out visitors and admin
-      let initialList = DataManager.getAllElectricians();
-      initialList = initialList.filter((e) => {
-        const isVisitor =
-          e.specialty && e.specialty.toLowerCase() === "visitor";
-        const isAdmin = e.name && e.name.toLowerCase() === "admin";
-        return !isVisitor && !isAdmin;
-      });
-      renderList(initialList);
+      // Initial Render mechanism
+      async function initList() {
+        // Check if logged in to show Dashboard link (async now)
+        const user = await DataManager.getCurrentUser();
+        if (user) {
+          const dashboardLink = document.getElementById("dashboard-link");
+          if (dashboardLink) {
+            dashboardLink.classList.remove("hidden");
+          }
+        }
+
+        let initialList = await DataManager.getAllElectricians();
+        initialList = initialList.filter((e) => {
+          const isVisitor =
+            e.specialty && e.specialty.toLowerCase() === "visitor";
+          const isAdmin = e.name && e.name.toLowerCase() === "admin";
+          return !isVisitor && !isAdmin;
+        });
+        renderList(initialList);
+      }
+
+      initList();
     </script>
   </body>
 </html>

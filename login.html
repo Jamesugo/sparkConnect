@@ -189,6 +189,16 @@
           </div>
 
           <div class="form-group">
+            <label for="new-email">Email Address</label>
+            <input
+              type="email"
+              id="new-email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <div class="form-group">
             <label for="new-password">Password</label>
             <div class="password-wrapper">
               <input
@@ -343,22 +353,27 @@
       }
 
       // Login Handler
-      document.getElementById("form-login").onsubmit = function (e) {
+      document.getElementById("form-login").onsubmit = async function (e) {
         e.preventDefault();
-        const username = document.getElementById("username").value;
-        const user = DataManager.login(username);
+        const username = document.getElementById("username").value; // Using this as email or name
+        const password = document.getElementById("password").value;
 
-        if (user) {
-          window.location.href = "dashboard.html";
-        } else {
-          alert('User not found. Try "Sarah Johnson" or Sign Up.');
+        try {
+          const user = await DataManager.login(username, password);
+          if (user) {
+            window.location.href = "index.html";
+          }
+        } catch (err) {
+          alert(err.message || "Login failed");
         }
       };
 
       // Signup Handler
-      document.getElementById("form-signup").onsubmit = function (e) {
+      document.getElementById("form-signup").onsubmit = async function (e) {
         e.preventDefault();
         const name = document.getElementById("new-name").value;
+        const email = document.getElementById("new-email").value;
+        const password = document.getElementById("new-password").value;
         const state = document.getElementById("new-state").value;
         const specialty = document.getElementById("new-specialty").value;
 
@@ -367,6 +382,8 @@
 
         const newData = {
           name: name,
+          email: email,
+          password: password,
           state: state,
           location: state + ", Nigeria",
           specialty: specialty,
@@ -376,22 +393,50 @@
           rating: 0,
         };
 
-        const user = DataManager.signup(newData);
-        if (user) {
-          alert("Account created! Redirecting to dashboard...");
-          window.location.href = "dashboard.html";
+        try {
+          const user = await DataManager.signup(newData);
+          if (user) {
+            alert("Account created! Redirecting to dashboard...");
+            window.location.href = "dashboard.html";
+          }
+        } catch (err) {
+          alert("Signup failed: " + err.message);
         }
       };
 
       // Forgot Password Handler
-      document.getElementById("form-forgot").onsubmit = function (e) {
+      document.getElementById("form-forgot").onsubmit = async function (e) {
         e.preventDefault();
         const email = document.getElementById("reset-email").value;
-        // Simulate Code Sending
-        alert(
-          `A reset code has been sent to ${email}. Please check your inbox.`
-        );
-        closeForgotModal();
+        const submitBtn = this.querySelector('button[type="submit"]');
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending...";
+
+        try {
+          const res = await fetch("/api/auth/forgot-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: email }),
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            alert(
+              `✅ ${data.message}\n\nPlease check your email inbox for the reset link.`
+            );
+            closeForgotModal();
+            this.reset();
+          } else {
+            alert(`❌ ${data.error || "Failed to send reset email"}`);
+          }
+        } catch (err) {
+          alert("❌ Network error. Please try again.");
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Send Reset Code";
+        }
       };
 
       // Close modal on outside click
