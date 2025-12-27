@@ -4,12 +4,23 @@ import json
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify, session, send_from_directory
 from flask_mail import Mail, Message
+from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from itsdangerous import URLSafeTimedSerializer
 
 app = Flask(__name__, static_folder='.')
 app.secret_key = 'super_secret_key_change_this_later'
+
+# Configure CORS to allow both localhost and 127.0.0.1 on common ports
+# This resolves issues where the frontend is on localhost:5500 but backend is 127.0.0.1:5000
+allowed_origins = [
+    "http://127.0.0.1:5500",
+    "http://localhost:5500",
+    "http://127.0.0.1:3000",
+    "http://localhost:3000"
+]
+CORS(app, resources={r"/api/*": {"origins": allowed_origins}}, supports_credentials=True)
 
 # Email Configuration (Gmail SMTP)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -97,34 +108,32 @@ def allowed_file(filename):
 
 # --- Routes ---
 
-@app.route('/')
-def serve_index():
-    return send_from_directory('.', 'index.html')
-
-@app.route('/<path:path>')
-def serve_static(path):
-    if os.path.exists(path):
-        return send_from_directory('.', path)
-    return send_from_directory('.', 'index.html') # Fallback-ish
-
 # --- API ---
 
 @app.route('/api/auth/register', methods=['POST'])
 def register():
     data = request.json
-    email = data.get('email')
+    email = data.get('email', '').lower()
     password = data.get('password')
     name = data.get('name')
     specialty = data.get('specialty')
     state = data.get('state')
+    location = data.get('location', state + ", Nigeria" if state else "Nigeria")
+    description = data.get('description', "Hi, I am a new member on Sparkconnect.")
+    image = data.get('image', "assets/images/profile_placeholder.jpg")
+    rating = data.get('rating', 0)
+    reviews = data.get('reviews', 0)
     
     if not email or not password or not name:
         return jsonify({'error': 'Missing required fields'}), 400
     
     db = get_db()
     try:
-        db.execute('INSERT INTO users (email, password, name, specialty, state, gallery, reviews_data) VALUES (?, ?, ?, ?, ?, ?, ?)',
-                   (email, generate_password_hash(password), name, specialty, state, '[]', '[]'))
+        db.execute('''
+            INSERT INTO users 
+            (email, password, name, specialty, state, location, description, image, rating, reviews, gallery, reviews_data) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (email, generate_password_hash(password), name, specialty, state, location, description, image, rating, reviews, '[]', '[]'))
         db.commit()
         return jsonify({'message': 'User created successfully'}), 201
     except sqlite3.IntegrityError:
@@ -506,4 +515,16 @@ def reset_password():
 
 if __name__ == '__main__':
     init_db()
+    
+    # Move static routes here to ensure they don't override API routes
+    @app.route('/')
+    def serve_index():
+        return send_from_directory('.', 'index.html')
+
+    @app.route('/<path:path>')
+    def serve_static(path):
+        if os.path.exists(path):
+            return send_from_directory('.', path)
+        return send_from_directory('.', 'index.html')
+
     app.run(debug=True, port=5000)

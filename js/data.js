@@ -9,13 +9,40 @@ const NIGERIAN_STATES = [
 ];
 
 // Replaced DataManager with API Calls
+// Improved base URL detection for local development
+// We try to match the current hostname (localhost or 127.0.0.1) to avoid CORS mismatches
+const apiHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
+    ? window.location.hostname 
+    : '127.0.0.1';
+
+window.API_BASE_URL = `http://${apiHost}:5000`;
+
+const API_BASE_URL = window.API_BASE_URL;
+
+// Debug Fetch
+console.log("Fetch implementation:", window.fetch ? "native" : "missing");
+
+// Standard fetch wrapper
+async function networkRequest(url, options = {}) {
+    try {
+        // Ensure credentials are sent by default for session management
+        options.credentials = options.credentials || 'include';
+        
+        const response = await fetch(url, options);
+        return response;
+    } catch (error) {
+        console.error("Network request failed:", error);
+        throw error;
+    }
+}
+
 const DataManager = {
     // No init needed
     init: function() { console.log("DataManager init (no-op in API mode)"); },
 
     getAllElectricians: async function() {
         try {
-            const res = await fetch('/api/electricians');
+            const res = await networkRequest(`${API_BASE_URL}/api/electricians`, { credentials: 'include' });
             if (res.ok) return await res.json();
             return [];
         } catch(e) {
@@ -32,46 +59,99 @@ const DataManager = {
     },
 
     // Signup now hits the register endpoint
+    // Signup now hits the register endpoint
+    // Signup - Rewritten for robustness
     signup: async function(data) {
-        const res = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        });
+        console.log("Starting signup process...", data);
         
-        const result = await res.json();
+        const url = `${API_BASE_URL}/api/auth/register`;
         
-        if (res.ok) {
-            // Auto login after signup?
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            console.log("Signup response status:", response.status);
+
+            // parse JSON safely
+            let result;
+            const text = await response.text();
+            try {
+                result = text ? JSON.parse(text) : {};
+            } catch (e) {
+                console.error("Failed to parse signup response:", text);
+                throw new Error("Server Error: Invalid JSON response");
+            }
+
+            if (!response.ok) {
+                throw new Error(result.error || `Signup failed with status ${response.status}`);
+            }
+
+            console.log("Signup successful, logging in...");
+            // Automatically login after success
             return await this.login(data.email, data.password);
-        } else {
-            throw new Error(result.error || "Signup failed");
+
+        } catch (error) {
+            console.error("Signup error:", error);
+            throw error; // Propagate to UI
         }
     },
 
+    // Login - Rewritten for robustness
     login: async function(email, password) {
-        const res = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ email, password })
-        });
+        console.log("Attempting login...");
+        const url = `${API_BASE_URL}/api/auth/login`;
         
-        const result = await res.json();
-        if (res.ok) {
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ email, password }),
+                credentials: 'include' // Important for session cookies
+            });
+
+            // parse JSON safely
+            let result;
+            const text = await response.text();
+            try {
+                result = text ? JSON.parse(text) : {};
+            } catch (e) {
+                console.error("Failed to parse login response:", text);
+                throw new Error("Server Error: Invalid JSON response");
+            }
+
+            if (!response.ok) {
+                throw new Error(result.error || `Login failed with status ${response.status}`);
+            }
+            
+            console.log("Login successful");
             return result.user;
-        } else {
-            throw new Error(result.error || "Login failed");
+
+        } catch (error) {
+            console.error("Login error:", error);
+            throw error;
         }
     },
 
     logout: async function() {
-        await fetch('/api/auth/logout', { method: 'POST' });
+        await networkRequest(`${API_BASE_URL}/api/auth/logout`, { 
+            method: 'POST',
+            credentials: 'include'
+        });
         window.location.href = 'index.html';
     },
 
     getCurrentUser: async function() {
         try {
-            const res = await fetch('/api/auth/me');
+            const res = await networkRequest(`${API_BASE_URL}/api/auth/me`, { credentials: 'include' });
             if (res.ok) {
                 const user = await res.json();
                 return user; // returns null if not logged in
@@ -83,10 +163,11 @@ const DataManager = {
     },
 
     updateElectrician: async function(updates) {
-         const res = await fetch('/api/user/update', {
+         const res = await networkRequest(`${API_BASE_URL}/api/user/update`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(updates)
+            body: JSON.stringify(updates),
+            credentials: 'include'
         });
         return res.ok;
     },
@@ -108,8 +189,9 @@ const DataManager = {
 
     deleteUser: async function(userId) {
         // Admin function to delete a user
-        const res = await fetch(`/api/admin/users/${userId}`, {
-            method: 'DELETE'
+        const res = await networkRequest(`${API_BASE_URL}/api/admin/users/${userId}`, {
+            method: 'DELETE',
+            credentials: 'include'
         });
         
         if (res.ok) {
@@ -133,9 +215,10 @@ const MediaStore = {
         const formData = new FormData();
         formData.append('file', file);
         
-        const res = await fetch('/api/upload', {
+        const res = await networkRequest(`${API_BASE_URL}/api/upload`, {
             method: 'POST',
-            body: formData
+            body: formData,
+            credentials: 'include'
         });
         
         if (res.ok) {
