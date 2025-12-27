@@ -352,9 +352,15 @@
         document.getElementById("forgot-modal").classList.add("hidden");
       }
 
-      // Login Handler
+      // Login Handler - Rewritten
       document.getElementById("form-login").onsubmit = async function (e) {
         e.preventDefault();
+
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerText;
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Signing In...";
+
         const username = document.getElementById("username").value; // Using this as email or name
         const password = document.getElementById("password").value;
 
@@ -364,13 +370,21 @@
             window.location.href = "index.html";
           }
         } catch (err) {
-          alert(err.message || "Login failed");
+          alert("Login Failed: " + (err.message || "Invalid credentials"));
+          submitBtn.disabled = false;
+          submitBtn.innerText = originalText;
         }
       };
 
-      // Signup Handler
+      // Signup Handler - Rewritten
       document.getElementById("form-signup").onsubmit = async function (e) {
         e.preventDefault();
+
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerText;
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Creating Account...";
+
         const name = document.getElementById("new-name").value;
         const email = document.getElementById("new-email").value;
         const password = document.getElementById("new-password").value;
@@ -394,13 +408,16 @@
         };
 
         try {
+          // Call the rewritten signup function
           const user = await DataManager.signup(newData);
           if (user) {
-            alert("Account created! Redirecting to dashboard...");
+            alert("Account created successfully! Redirecting...");
             window.location.href = "dashboard.html";
           }
         } catch (err) {
-          alert("Signup failed: " + err.message);
+          alert("Signup Failed: " + err.message);
+          submitBtn.disabled = false;
+          submitBtn.innerText = originalText;
         }
       };
 

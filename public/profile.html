@@ -112,6 +112,11 @@
     <script>
       const urlParams = new URLSearchParams(window.location.search);
       const id = parseInt(urlParams.get("id")) || 1;
+      // Ensure API_BASE_URL is defined
+      if (typeof API_BASE_URL === "undefined") {
+        window.API_BASE_URL =
+          window.location.port === "5500" ? "http://127.0.0.1:5000" : "";
+      }
       let electrician = null;
 
       async function initProfile() {
@@ -122,7 +127,7 @@
               "<div class='container' style='padding:50px;'>User not found</div>";
             return;
           }
-          renderProfile();
+          await renderProfile();
           loadGalleryImages();
           loadReviews();
         } catch (e) {
@@ -144,8 +149,11 @@
                 <div class="profile-header-container">
                     <div class="container profile-header">
                         <img src="${
-                          electrician.image ||
-                          "assets/images/profile_placeholder.jpg"
+                          electrician.image &&
+                          !electrician.image.startsWith("http")
+                            ? API_BASE_URL + "/" + electrician.image
+                            : electrician.image ||
+                              "assets/images/profile_placeholder.jpg"
                         }" alt="${
           electrician.name
         }" class="profile-avatar" onerror="this.onerror=null; this.src='assets/images/profile_placeholder.jpg'">
@@ -301,7 +309,11 @@
 
         // Just use the strings (URLs from server)
         const renderedItems = gallery.map((item) => {
-          let src = item;
+          let src = item.startsWith("http")
+            ? item
+            : API_BASE_URL
+            ? `${API_BASE_URL}/${item}`
+            : item;
           let isVideo =
             item.endsWith(".mp4") ||
             item.endsWith(".mov") ||
@@ -412,7 +424,7 @@
 
         try {
           const res = await fetch(
-            `/api/electricians/${electrician.id}/review`,
+            `${API_BASE_URL}/api/electricians/${electrician.id}/review`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },

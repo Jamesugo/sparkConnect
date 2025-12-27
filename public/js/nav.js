@@ -20,12 +20,21 @@ const NavManager = {
           currentUser.name
         )}</div>'">`;
       } else {
-        avatarHtml = `<div class="avatar-placeholder" style="font-size:14px;">${DataManager.getInitials(
-          currentUser.name
-        )}</div>`;
+        // Human-like icon for user with no image
+        avatarHtml = `<div class="avatar-placeholder" style="background:#f0f0f0; display:flex; align-items:center; justify-content:center; width:100%; height:100%;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:60%; height:60%;">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>`;
       }
     } else {
-      avatarHtml = `<img src="assets/images/profile_placeholder.jpg" alt="User" style="width: 100%; height: 100%; object-fit: cover;">`;
+      avatarHtml = `<div class="avatar-placeholder" style="background:#f0f0f0; display:flex; align-items:center; justify-content:center; width:100%; height:100%;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:60%; height:60%;">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>`;
     }
 
     // Determine active link
