@@ -245,20 +245,191 @@ textarea:focus {
   }
 
   /* Grid Adjustments */
+  /* Grid Adjustments */
   .electrician-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
   }
 }
 
-@media (max-width: 463px) {
-  .contact-btn {
-    margin-bottom: var(--spacing-md);
-    width: 100%; /* Making it full width usually looks better when stacking/spacing is required on small screens, and ensures margin pushes next element down */
-  }
+/* --- New Home Page Styles --- */
 
-  .profile-info .btn-outline {
-    width: 100%;
-    margin-left: 0 !important; /* Reset the inline margin-left */
-  }
+/* Modern Hero */
+.hero {
+  position: relative;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: var(--white);
+  padding: 0 var(--spacing-md);
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url("../assets/images/hero-bg.png");
+  background-size: cover;
+  background-position: center;
+  margin-bottom: var(--spacing-xxl);
+}
+
+.hero h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: var(--spacing-md);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero p {
+  font-size: 1.25rem;
+  margin-bottom: var(--spacing-xl);
+  max-width: 600px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.search-bar-container {
+  background: var(--white);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+}
+
+.search-bar {
+  display: flex;
+  width: 100%;
+  gap: var(--spacing-sm);
+}
+
+.search-input {
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+}
+
+.search-input:focus {
+  box-shadow: none;
+}
+
+.search-btn {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* How It Works Section */
+.how-it-works {
+  padding: var(--spacing-xxl) 0;
+  background-color: var(--white);
+  text-align: center;
+}
+
+.section-subtitle {
+  color: var(--primary-blue);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-sm);
+  display: block;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-xl);
+}
+
+.step-card {
+  padding: var(--spacing-lg);
+}
+
+.step-icon {
+  width: 64px;
+  height: 64px;
+  background-color: rgba(0, 102, 204, 0.1);
+  color: var(--primary-blue);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  margin: 0 auto var(--spacing-md);
+  font-weight: 700;
+}
+
+.step-title {
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.step-desc {
+  color: var(--text-gray);
+}
+
+/* Stats/Trust Section */
+.trust-section {
+  padding: var(--spacing-xxl) 0;
+  background-color: var(--primary-dark);
+  color: var(--white);
+  text-align: center;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.stat-item h3 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--secondary-orange);
+  margin-bottom: var(--spacing-xs);
+}
+
+.stat-item p {
+  opacity: 0.9;
+}
+
+/* Footer */
+footer {
+  background-color: #111;
+  color: #eee;
+  padding: var(--spacing-xxl) 0 var(--spacing-lg);
+  margin-top: auto;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+  border-bottom: 1px solid #333;
+  padding-bottom: var(--spacing-xl);
+}
+
+.footer-col h4 {
+  color: var(--white);
+  margin-bottom: var(--spacing-lg);
+  font-size: 1.1rem;
+}
+
+.footer-col ul li {
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer-col ul li a:hover {
+  color: var(--primary-blue);
+}
+
+.footer-bottom {
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
 }

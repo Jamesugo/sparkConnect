@@ -1,39 +1,51 @@
-[debug] [2025-12-12T23:00:25.168Z] ----------------------------------------------------------------------
-[debug] [2025-12-12T23:00:25.171Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
-[debug] [2025-12-12T23:00:25.171Z] CLI Version:   15.0.0
-[debug] [2025-12-12T23:00:25.172Z] Platform:      win32
-[debug] [2025-12-12T23:00:25.172Z] Node Version:  v20.5.1
-[debug] [2025-12-12T23:00:25.173Z] Time:          Sat Dec 13 2025 00:00:25 GMT+0100 (West Africa Standard Time)
-[debug] [2025-12-12T23:00:25.173Z] ----------------------------------------------------------------------
+[debug] [2026-01-15T14:53:37.280Z] ----------------------------------------------------------------------
+[debug] [2026-01-15T14:53:37.283Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
+[debug] [2026-01-15T14:53:37.283Z] CLI Version:   15.2.1
+[debug] [2026-01-15T14:53:37.284Z] Platform:      win32
+[debug] [2026-01-15T14:53:37.284Z] Node Version:  v20.5.1
+[debug] [2026-01-15T14:53:37.284Z] Time:          Thu Jan 15 2026 15:53:37 GMT+0100 (West Africa Standard Time)
+[debug] [2026-01-15T14:53:37.284Z] ----------------------------------------------------------------------
 [debug] 
-[debug] [2025-12-12T23:00:27.434Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2025-12-12T23:00:27.434Z] > authorizing via signed-in user (ugochukwujames631@gmail.com)
-[debug] [2025-12-12T23:00:27.435Z] [iam] checking project hosting for permissions ["firebase.projects.get","firebasehosting.sites.update"]
-[debug] [2025-12-12T23:00:27.436Z] Checked if tokens are valid: false, expires at: 1765580986265
-[debug] [2025-12-12T23:00:27.436Z] Checked if tokens are valid: false, expires at: 1765580986265
-[debug] [2025-12-12T23:00:27.436Z] > refreshing access token with scopes: []
-[debug] [2025-12-12T23:00:27.438Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
-[debug] [2025-12-12T23:00:27.439Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
-[debug] [2025-12-12T23:00:28.423Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
-[debug] [2025-12-12T23:00:28.423Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
-[debug] [2025-12-12T23:00:28.430Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hosting:testIamPermissions [none]
-[debug] [2025-12-12T23:00:28.430Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/hosting:testIamPermissions x-goog-quota-user=projects/hosting
-[debug] [2025-12-12T23:00:28.430Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hosting:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
-[debug] [2025-12-12T23:00:29.980Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hosting:testIamPermissions 200
-[debug] [2025-12-12T23:00:29.980Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hosting:testIamPermissions {}
-[debug] [2025-12-12T23:00:29.981Z] [iam] error while checking permissions, command may fail: Authorization failed. This account is missing the following required permissions on project hosting:
-
-  firebase.projects.get
-  firebasehosting.sites.update
-[debug] [2025-12-12T23:00:29.981Z] Checked if tokens are valid: true, expires at: 1765584027423
-[debug] [2025-12-12T23:00:29.981Z] Checked if tokens are valid: true, expires at: 1765584027423
-[debug] [2025-12-12T23:00:29.981Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hosting [none]
-[debug] [2025-12-12T23:00:31.129Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hosting 403
-[debug] [2025-12-12T23:00:31.130Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hosting {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
-[debug] [2025-12-12T23:00:31.130Z] Request to https://firebase.googleapis.com/v1beta1/projects/hosting had HTTP Error: 403, The caller does not have permission
-[debug] [2025-12-12T23:00:31.938Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/hosting had HTTP Error: 403, The caller does not have permission
-    at responseToError (C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\responseToError.js:53:12)
-    at RetryOperation._fn (C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:322:77)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-[error] 
-[error] Error: Failed to get Firebase project hosting. Please make sure the project exists and your account has permission to access it.
+[debug] [2026-01-15T14:53:39.121Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-01-15T14:53:39.121Z] > authorizing via signed-in user (jamesugochukwu194@gmail.com)
+[debug] [2026-01-15T14:53:39.121Z] [iam] checking project sparkconnect-467b3 for permissions ["firebase.projects.get"]
+[debug] [2026-01-15T14:53:39.123Z] Checked if tokens are valid: true, expires at: 1768491770553
+[debug] [2026-01-15T14:53:39.123Z] Checked if tokens are valid: true, expires at: 1768491770553
+[debug] [2026-01-15T14:53:39.125Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/sparkconnect-467b3:testIamPermissions [none]
+[debug] [2026-01-15T14:53:39.125Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/sparkconnect-467b3:testIamPermissions x-goog-quota-user=projects/sparkconnect-467b3
+[debug] [2026-01-15T14:53:39.126Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/sparkconnect-467b3:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2026-01-15T14:53:40.190Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/sparkconnect-467b3:testIamPermissions 200
+[debug] [2026-01-15T14:53:40.191Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/sparkconnect-467b3:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2026-01-15T14:53:40.192Z] Checked if tokens are valid: true, expires at: 1768491770553
+[debug] [2026-01-15T14:53:40.192Z] Checked if tokens are valid: true, expires at: 1768491770553
+[debug] [2026-01-15T14:53:40.193Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/sparkconnect-467b3 [none]
+[debug] [2026-01-15T14:53:40.512Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/sparkconnect-467b3 200
+[debug] [2026-01-15T14:53:40.512Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/sparkconnect-467b3 {"projectNumber":"193412821156","projectId":"sparkconnect-467b3","lifecycleState":"ACTIVE","name":"SparkConnect","labels":{"firebase":"enabled","firebase-core":"disabled"},"createTime":"2026-01-15T13:51:22.404115Z"}
+[info] 
+[info] === Serving from 'C:\Users\User\OneDrive\Desktop\sparkConnect1'...
+[info] 
+[debug] [2026-01-15T14:53:40.523Z] Checked if tokens are valid: true, expires at: 1768491770553
+[debug] [2026-01-15T14:53:40.524Z] Checked if tokens are valid: true, expires at: 1768491770553
+[debug] [2026-01-15T14:53:40.531Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/sparkconnect-467b3/sites 
+[debug] [2026-01-15T14:53:41.831Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/sparkconnect-467b3/sites 200
+[debug] [2026-01-15T14:53:41.831Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/sparkconnect-467b3/sites {"sites":[{"name":"projects/sparkconnect-467b3/sites/sparkconnect-467b3","defaultUrl":"https://sparkconnect-467b3.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2026-01-15T14:53:41.832Z] Checked if tokens are valid: true, expires at: 1768491770553
+[debug] [2026-01-15T14:53:41.832Z] Checked if tokens are valid: true, expires at: 1768491770553
+[debug] [2026-01-15T14:53:41.832Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/sparkconnect-467b3/webApps/-/config [none]
+[debug] [2026-01-15T14:53:42.567Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/sparkconnect-467b3/webApps/-/config 200
+[debug] [2026-01-15T14:53:42.567Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/sparkconnect-467b3/webApps/-/config {"projectId":"sparkconnect-467b3","storageBucket":"sparkconnect-467b3.firebasestorage.app","apiKey":"AIzaSyChUrSaMfPWcsD9DbBuntkeQYzLtWrb1Mk","authDomain":"sparkconnect-467b3.firebaseapp.com","messagingSenderId":"193412821156","projectNumber":"193412821156","version":"2"}
+[debug] [2026-01-15T14:53:42.579Z] Checked if tokens are valid: true, expires at: 1768491770553
+[debug] [2026-01-15T14:53:42.579Z] Checked if tokens are valid: true, expires at: 1768491770553
+[debug] [2026-01-15T14:53:42.580Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/sparkconnect-467b3 [none]
+[debug] [2026-01-15T14:53:42.974Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/sparkconnect-467b3 200
+[debug] [2026-01-15T14:53:42.975Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/sparkconnect-467b3 {"projectId":"sparkconnect-467b3","projectNumber":"193412821156","displayName":"SparkConnect","name":"projects/sparkconnect-467b3","resources":{"hostingSite":"sparkconnect-467b3"},"state":"ACTIVE","etag":"1_3266247b-e838-4596-a294-f726c68a94c1"}
+[info] i  hosting[sparkconnect-467b3]: Serving hosting files from: public {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mpublic\u001b[22m"}}
+[info] +  hosting[sparkconnect-467b3]: Local server: http://localhost:5000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://localhost:5000\u001b[22m\u001b[24m"}}
+[info] i  hosting: ::1 - - [15/Jan/2026:14:54:10 +0000] "GET / HTTP/1.1" 200 - "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"::1 - - [15/Jan/2026:14:54:10 +0000] \"GET / HTTP/1.1\" 200 - \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36\""}}
+[info] i  hosting: ::1 - - [15/Jan/2026:14:54:10 +0000] "GET /css/style.css HTTP/1.1" 200 - "http://localhost:5000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"::1 - - [15/Jan/2026:14:54:10 +0000] \"GET /css/style.css HTTP/1.1\" 200 - \"http://localhost:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36\""}}
+[info] i  hosting: ::1 - - [15/Jan/2026:14:54:21 +0000] "GET /api/electricians HTTP/1.1" 404 - "http://localhost:5000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"::1 - - [15/Jan/2026:14:54:21 +0000] \"GET /api/electricians HTTP/1.1\" 404 - \"http://localhost:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36\""}}
+[info] i  hosting: ::1 - - [15/Jan/2026:14:54:21 +0000] "GET /api/auth/me HTTP/1.1" 404 - "http://localhost:5000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"::1 - - [15/Jan/2026:14:54:21 +0000] \"GET /api/auth/me HTTP/1.1\" 404 - \"http://localhost:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36\""}}
+[info] i  hosting: ::1 - - [15/Jan/2026:14:54:21 +0000] "GET /assets/images/hero-bg.png HTTP/1.1" 200 650812 "http://localhost:5000/css/style.css" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"::1 - - [15/Jan/2026:14:54:21 +0000] \"GET /assets/images/hero-bg.png HTTP/1.1\" 200 650812 \"http://localhost:5000/css/style.css\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36\""}}
+[info] i  hosting: ::1 - - [15/Jan/2026:14:54:25 +0000] "GET /signup.html HTTP/1.1" 200 - "http://localhost:5000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"::1 - - [15/Jan/2026:14:54:25 +0000] \"GET /signup.html HTTP/1.1\" 200 - \"http://localhost:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36\""}}
+[info] i  hosting: ::1 - - [15/Jan/2026:14:54:28 +0000] "GET /api/auth/me HTTP/1.1" 404 - "http://localhost:5000/signup.html" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"::1 - - [15/Jan/2026:14:54:28 +0000] \"GET /api/auth/me HTTP/1.1\" 404 - \"http://localhost:5000/signup.html\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36\""}}
+[info] i  hosting: ::1 - - [15/Jan/2026:14:54:54 +0000] "POST /api/auth/google HTTP/1.1" 404 - "http://localhost:5000/signup.html" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"::1 - - [15/Jan/2026:14:54:54 +0000] \"POST /api/auth/google HTTP/1.1\" 404 - \"http://localhost:5000/signup.html\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36\""}}

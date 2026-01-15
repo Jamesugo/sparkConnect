@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta
+      name="google-site-verification"
+      content="azl39sOHw49JJ2jl0OjO2VBzzZ7m-pYcRttxWolRWEk"
+    />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SparkConnect - Find Electricians</title>
@@ -122,32 +126,142 @@
     <!-- Nav rendered by js/nav.js -->
     <nav></nav>
 
-    <div class="container hero">
-      <h1>Electricians in Your Area</h1>
-      <p style="margin-bottom: var(--spacing-lg); color: var(--text-gray)">
-        Showing results for 'residential wiring' near 90001 (Mock)
-      </p>
+    <!-- Hero Section -->
+    <div class="hero">
+      <div class="container" style="z-index: 2; position: relative">
+        <h1>Find Trusted Electricians<br />in Your Area</h1>
+        <p>
+          Connect with verified professionals for residential and commercial
+          electrical projects. Safe, reliable, and fast.
+        </p>
 
-      <div class="search-bar-container">
-        <form action="electricians.html" class="search-bar">
-          <input
-            type="text"
-            class="search-input"
-            placeholder="Search for electricians..."
-          />
-          <button type="submit" class="btn btn-primary search-btn">
-            Search
-          </button>
-        </form>
+        <div class="search-bar-container">
+          <form action="electricians.html" class="search-bar">
+            <input
+              type="text"
+              name="q"
+              class="search-input"
+              placeholder="What do you need help with? e.g. Wiring, Installation..."
+            />
+            <button type="submit" class="btn btn-primary search-btn">
+              Search
+            </button>
+          </form>
+        </div>
       </div>
     </div>
 
-    <div class="container featured-section">
-      <h2 class="section-title">Top Rated Electricians</h2>
+    <!-- How It Works -->
+    <section class="how-it-works">
+      <div class="container">
+        <span class="section-subtitle">Simple Process</span>
+        <h2 class="section-title">How SparkConnect Works</h2>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-icon">1</div>
+            <h3 class="step-title">Search</h3>
+            <p class="step-desc">
+              Browse top-rated electricians in your location based on specialty.
+            </p>
+          </div>
+          <div class="step-card">
+            <div class="step-icon">2</div>
+            <h3 class="step-title">Compare</h3>
+            <p class="step-desc">
+              View profiles, read verified reviews, and check past project
+              galleries.
+            </p>
+          </div>
+          <div class="step-card">
+            <div class="step-icon">3</div>
+            <h3 class="step-title">Hire</h3>
+            <p class="step-desc">
+              Connect directly via Phone or WhatsApp to get your job done.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Section -->
+    <section class="container featured-section">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: var(--spacing-lg);
+        "
+      >
+        <h2 class="section-title" style="margin-bottom: 0">
+          Top Rated Electricians
+        </h2>
+        <a
+          href="electricians.html"
+          style="color: var(--primary-blue); font-weight: 500"
+          >View All →</a
+        >
+      </div>
+
       <div class="electrician-grid" id="featured-grid">
         <!-- Populated by JS -->
       </div>
-    </div>
+    </section>
+
+    <!-- Trust/Stats Section -->
+    <section class="trust-section">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <h3>500+</h3>
+            <p>Verified Electricians</p>
+          </div>
+          <div class="stat-item">
+            <h3>10k+</h3>
+            <p>Completed Projects</p>
+          </div>
+          <div class="stat-item">
+            <h3>4.9/5</h3>
+            <p>Average Rating</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <h4>SparkConnect</h4>
+            <p style="color: #bbb; line-height: 1.6">
+              Connecting you with the best electrical professionals in Nigeria.
+              Safe, fast, and reliable.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="electricians.html">Find Electricians</a></li>
+              <li><a href="login.html">Login / Sign Up</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Contact</h4>
+            <ul>
+              <li>support@sparkconnect.com</li>
+              <li>+234 800 123 4567</li>
+              <li>Lagos, Nigeria</li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 SparkConnect. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
 
     <script src="js/data.js"></script>
     <script src="js/nav.js"></script>

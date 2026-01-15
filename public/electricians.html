@@ -266,12 +266,35 @@
         }
 
         let initialList = await DataManager.getAllElectricians();
+
+        // Base filter: remove visitors and admin
         initialList = initialList.filter((e) => {
           const isVisitor =
             e.specialty && e.specialty.toLowerCase() === "visitor";
           const isAdmin = e.name && e.name.toLowerCase() === "admin";
           return !isVisitor && !isAdmin;
         });
+
+        // Search Filter
+        const params = new URLSearchParams(window.location.search);
+        const query = params.get("q");
+
+        if (query) {
+          const q = query.toLowerCase();
+          initialList = initialList.filter(
+            (e) =>
+              (e.name && e.name.toLowerCase().includes(q)) ||
+              (e.specialty && e.specialty.toLowerCase().includes(q)) ||
+              (e.location && e.location.toLowerCase().includes(q)) ||
+              (e.state && e.state.toLowerCase().includes(q))
+          );
+          // Update header to show search results
+          document.querySelector(
+            ".results-header h1"
+          ).textContent = `Search Results for "${query}"`;
+          // Pre-select state if query matches a state? (Optional, skipping for now to keep simple)
+        }
+
         renderList(initialList);
       }
 

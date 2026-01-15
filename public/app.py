@@ -8,9 +8,14 @@ from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from itsdangerous import URLSafeTimedSerializer
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
+import requests
 
 app = Flask(__name__, static_folder='.')
+app = Flask(__name__, static_folder='.')
 app.secret_key = 'super_secret_key_change_this_later'
+GOOGLE_CLIENT_ID = "1033822674322-4e9qr40dt8092qjvqqh0n16sjup4tbek.apps.googleusercontent.com" # Placeholder - User must replace or env var
 
 # Configure CORS to allow both localhost and 127.0.0.1 on common ports
 # This resolves issues where the frontend is on localhost:5500 but backend is 127.0.0.1:5000
@@ -165,6 +170,80 @@ def login():
     
     return jsonify({'error': 'Invalid credentials'}), 401
 
+@app.route('/api/auth/google', methods=['POST'])
+def google_auth():
+    data = request.json
+    token = data.get('credential')
+    
+    if not token:
+        return jsonify({'error': 'Missing credential'}), 400
+        
+    try:
+        # Verify the token
+        # You would normally specify your CLIENT_ID here to ensure the token is for your app
+        # idinfo = id_token.verify_oauth2_token(token, google_requests.Request(), GOOGLE_CLIENT_ID)
+        
+        # For development/demo without a strict Client ID env var, we can be more lenient 
+        # OR just decoded it if we trust the source (Not recommended for prod security)
+        # Better: Let's assume we verify it against Google content
+        
+        idinfo = id_token.verify_oauth2_token(token, google_requests.Request(),"1033822674322-4e9qr40dt8092qjvqqh0n16sjup4tbek.apps.googleusercontent.com")
+        
+        # Check issuer
+        if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+            raise ValueError('Wrong issuer.')
+
+        # Get user info
+        email = idinfo['email']
+        name = idinfo.get('name', email.split('@')[0])
+        picture = idinfo.get('picture', "assets/images/profile_placeholder.jpg")
+        
+        db = get_db()
+        user = db.execute('SELECT * FROM users WHERE lower(email) = ?', (email.lower(),)).fetchone()
+        
+        if not user:
+            # Create new user
+            specialty = "Visitor" # Default
+            state = "Lagos" # Default
+            location = "Lagos, Nigeria"
+            description = "Hi, I joined via Google."
+            # Random weak password since they use Google to login, or make it un-login-able via password
+            password_hash = generate_password_hash(token[-20:]) 
+            
+            db.execute('''
+                INSERT INTO users 
+                (email, password, name, specialty, state, location, description, image, rating, reviews, gallery, reviews_data) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (email, password_hash, name, specialty, state, location, description, picture, 0, 0, '[]', '[]'))
+            db.commit()
+            
+            # Fetch again
+            user = db.execute('SELECT * FROM users WHERE lower(email) = ?', (email.lower(),)).fetchone()
+            is_new = True
+        else:
+            is_new = False
+            
+        db.close()
+        
+        # Login
+        session['user_id'] = user['id']
+        return jsonify({
+            'message': 'Logged in via Google',
+            'is_new': is_new,
+            'user': {
+                'id': user['id'],
+                'name': user['name'],
+                'email': user['email']
+            }
+        })
+        
+    except ValueError as e:
+        print(f"Token verification failed: {e}")
+        return jsonify({'error': 'Invalid token'}), 401
+    except Exception as e:
+        print(f"Google auth error: {e}")
+        return jsonify({'error': 'Authentication failed'}), 500
+
 @app.route('/api/auth/logout', methods=['POST'])
 def logout():
     session.pop('user_id', None)
@@ -224,7 +303,7 @@ def update_user():
 @app.route('/api/electricians', methods=['GET'])
 def get_electricians():
     db = get_db()
-    users = db.execute('SELECT id, name, specialty, location, state, image, description, rating, reviews, gallery, reviews_data FROM users').fetchall()
+    users = db.execute("SELECT id, name, specialty, location, state, image, description, rating, reviews, gallery, reviews_data FROM users WHERE specialty NOT IN ('Visitor', 'Administrator')").fetchall()
     db.close()
     
     result = []

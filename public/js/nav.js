@@ -100,7 +100,7 @@ const NavManager = {
                             `
                                 : `
                                 <a href="login.html" style="display: block; padding: 10px 15px; color: var(--text-dark);">Sign In</a>
-                                <a href="login.html?signup=true" style="display: block; padding: 10px 15px; color: var(--primary-blue);">Create Account</a>
+                                <a href="signup.html" style="display: block; padding: 10px 15px; color: var(--primary-blue);">Create Account</a>
                             `
                             }
                         </div>
