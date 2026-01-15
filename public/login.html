@@ -248,9 +248,61 @@
     <script src="js/data.js"></script>
     <script src="js/nav.js"></script>
     <script>
+<<<<<<< HEAD
       // Google Auth callback
       async function handleCredentialResponse(response) {
         console.log("Encoded JWT ID token: " + response.credential);
+=======
+      // Populate States
+      const stateSelect = document.getElementById("new-state");
+      NIGERIAN_STATES.forEach((state) => {
+        const opt = document.createElement("option");
+        opt.value = state;
+        opt.textContent = state;
+        stateSelect.appendChild(opt);
+      });
+
+      function toggleForm(show) {
+        document
+          .getElementById("login-form")
+          .classList.toggle("hidden", show === "signup");
+        document
+          .getElementById("signup-form")
+          .classList.toggle("hidden", show === "login");
+      }
+
+      function togglePassword(inputId, btn) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+          input.type = "text";
+          btn.textContent = "🔒"; // Change icon to lock or cross-eye
+        } else {
+          input.type = "password";
+          btn.textContent = "👁️";
+        }
+      }
+
+      // Modal Logic
+      function showForgotModal() {
+        document.getElementById("forgot-modal").classList.remove("hidden");
+      }
+
+      function closeForgotModal() {
+        document.getElementById("forgot-modal").classList.add("hidden");
+      }
+
+      // Login Handler - Rewritten
+      document.getElementById("form-login").onsubmit = async function (e) {
+        e.preventDefault();
+
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerText;
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Signing In...";
+
+        const username = document.getElementById("username").value; // Using this as email or name
+        const password = document.getElementById("password").value;
+>>>>>>> 26757498f6350e745b4370e76a34b7033b6ea09e
 
         try {
           const res = await DataManager.googleLogin(response.credential);
@@ -260,12 +312,103 @@
             const redirect = urlParams.get("redirect") || "index.html";
             window.location.href = redirect;
           }
+<<<<<<< HEAD
         } catch (e) {
           alert("Login failed: " + e.message);
+=======
+        } catch (err) {
+          alert("Login Failed: " + (err.message || "Invalid credentials"));
+          submitBtn.disabled = false;
+          submitBtn.innerText = originalText;
+>>>>>>> 26757498f6350e745b4370e76a34b7033b6ea09e
         }
       }
 
+<<<<<<< HEAD
       // Email Login Handler
+=======
+      // Signup Handler - Rewritten
+      document.getElementById("form-signup").onsubmit = async function (e) {
+        e.preventDefault();
+
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerText;
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Creating Account...";
+
+        const name = document.getElementById("new-name").value;
+        const email = document.getElementById("new-email").value;
+        const password = document.getElementById("new-password").value;
+        const state = document.getElementById("new-state").value;
+        const specialty = document.getElementById("new-specialty").value;
+
+        // Random default image for new users
+        const defaultImg = "assets/images/profile_placeholder.jpg";
+
+        const newData = {
+          name: name,
+          email: email,
+          password: password,
+          state: state,
+          location: state + ", Nigeria",
+          specialty: specialty,
+          image: defaultImg,
+          description: "Hi, I am a new electrician on Sparkconnect.",
+          reviews: 0,
+          rating: 0,
+        };
+
+        try {
+          // Call the rewritten signup function
+          const user = await DataManager.signup(newData);
+          if (user) {
+            alert("Account created successfully! Redirecting...");
+            window.location.href = "dashboard.html";
+          }
+        } catch (err) {
+          alert("Signup Failed: " + err.message);
+          submitBtn.disabled = false;
+          submitBtn.innerText = originalText;
+        }
+      };
+
+      // Forgot Password Handler
+      document.getElementById("form-forgot").onsubmit = async function (e) {
+        e.preventDefault();
+        const email = document.getElementById("reset-email").value;
+        const submitBtn = this.querySelector('button[type="submit"]');
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending...";
+
+        try {
+          const res = await fetch("/api/auth/forgot-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: email }),
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            alert(
+              `✅ ${data.message}\n\nPlease check your email inbox for the reset link.`
+            );
+            closeForgotModal();
+            this.reset();
+          } else {
+            alert(`❌ ${data.error || "Failed to send reset email"}`);
+          }
+        } catch (err) {
+          alert("❌ Network error. Please try again.");
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Send Reset Code";
+        }
+      };
+
+      // Close modal on outside click
+>>>>>>> 26757498f6350e745b4370e76a34b7033b6ea09e
       document
         .getElementById("email-login-form")
         .addEventListener("submit", async (e) => {

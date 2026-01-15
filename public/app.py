@@ -27,6 +27,16 @@ allowed_origins = [
 ]
 CORS(app, resources={r"/api/*": {"origins": allowed_origins}}, supports_credentials=True)
 
+# Configure CORS to allow both localhost and 127.0.0.1 on common ports
+# This resolves issues where the frontend is on localhost:5500 but backend is 127.0.0.1:5000
+allowed_origins = [
+    "http://127.0.0.1:5500",
+    "http://localhost:5500",
+    "http://127.0.0.1:3000",
+    "http://localhost:3000"
+]
+CORS(app, resources={r"/api/*": {"origins": allowed_origins}}, supports_credentials=True)
+
 # Email Configuration (Gmail SMTP)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587

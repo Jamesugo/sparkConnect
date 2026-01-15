@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [debug] [2026-01-15T14:53:37.280Z] ----------------------------------------------------------------------
 [debug] [2026-01-15T14:53:37.283Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
 [debug] [2026-01-15T14:53:37.283Z] CLI Version:   15.2.1
@@ -49,3 +50,44 @@
 [info] i  hosting: ::1 - - [15/Jan/2026:14:54:25 +0000] "GET /signup.html HTTP/1.1" 200 - "http://localhost:5000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"::1 - - [15/Jan/2026:14:54:25 +0000] \"GET /signup.html HTTP/1.1\" 200 - \"http://localhost:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36\""}}
 [info] i  hosting: ::1 - - [15/Jan/2026:14:54:28 +0000] "GET /api/auth/me HTTP/1.1" 404 - "http://localhost:5000/signup.html" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"::1 - - [15/Jan/2026:14:54:28 +0000] \"GET /api/auth/me HTTP/1.1\" 404 - \"http://localhost:5000/signup.html\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36\""}}
 [info] i  hosting: ::1 - - [15/Jan/2026:14:54:54 +0000] "POST /api/auth/google HTTP/1.1" 404 - "http://localhost:5000/signup.html" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"::1 - - [15/Jan/2026:14:54:54 +0000] \"POST /api/auth/google HTTP/1.1\" 404 - \"http://localhost:5000/signup.html\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36\""}}
+=======
+[debug] [2025-12-12T23:00:25.168Z] ----------------------------------------------------------------------
+[debug] [2025-12-12T23:00:25.171Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2025-12-12T23:00:25.171Z] CLI Version:   15.0.0
+[debug] [2025-12-12T23:00:25.172Z] Platform:      win32
+[debug] [2025-12-12T23:00:25.172Z] Node Version:  v20.5.1
+[debug] [2025-12-12T23:00:25.173Z] Time:          Sat Dec 13 2025 00:00:25 GMT+0100 (West Africa Standard Time)
+[debug] [2025-12-12T23:00:25.173Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-12-12T23:00:27.434Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-12-12T23:00:27.434Z] > authorizing via signed-in user (ugochukwujames631@gmail.com)
+[debug] [2025-12-12T23:00:27.435Z] [iam] checking project hosting for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-12-12T23:00:27.436Z] Checked if tokens are valid: false, expires at: 1765580986265
+[debug] [2025-12-12T23:00:27.436Z] Checked if tokens are valid: false, expires at: 1765580986265
+[debug] [2025-12-12T23:00:27.436Z] > refreshing access token with scopes: []
+[debug] [2025-12-12T23:00:27.438Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-12T23:00:27.439Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T23:00:28.423Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-12T23:00:28.423Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T23:00:28.430Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hosting:testIamPermissions [none]
+[debug] [2025-12-12T23:00:28.430Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/hosting:testIamPermissions x-goog-quota-user=projects/hosting
+[debug] [2025-12-12T23:00:28.430Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hosting:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-12-12T23:00:29.980Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hosting:testIamPermissions 200
+[debug] [2025-12-12T23:00:29.980Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hosting:testIamPermissions {}
+[debug] [2025-12-12T23:00:29.981Z] [iam] error while checking permissions, command may fail: Authorization failed. This account is missing the following required permissions on project hosting:
+
+  firebase.projects.get
+  firebasehosting.sites.update
+[debug] [2025-12-12T23:00:29.981Z] Checked if tokens are valid: true, expires at: 1765584027423
+[debug] [2025-12-12T23:00:29.981Z] Checked if tokens are valid: true, expires at: 1765584027423
+[debug] [2025-12-12T23:00:29.981Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hosting [none]
+[debug] [2025-12-12T23:00:31.129Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hosting 403
+[debug] [2025-12-12T23:00:31.130Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hosting {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2025-12-12T23:00:31.130Z] Request to https://firebase.googleapis.com/v1beta1/projects/hosting had HTTP Error: 403, The caller does not have permission
+[debug] [2025-12-12T23:00:31.938Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/hosting had HTTP Error: 403, The caller does not have permission
+    at responseToError (C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\responseToError.js:53:12)
+    at RetryOperation._fn (C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:322:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to get Firebase project hosting. Please make sure the project exists and your account has permission to access it.
+>>>>>>> 26757498f6350e745b4370e76a34b7033b6ea09e
