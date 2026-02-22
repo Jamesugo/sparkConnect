@@ -15,8 +15,8 @@ const apiHost = (window.location.hostname === 'localhost' || window.location.hos
     : `https://${window.location.hostname}`;
 
 window.API_BASE_URL = apiHost;
-
 const API_BASE_URL = window.API_BASE_URL;
+console.log("SparkConnect API Host:", API_BASE_URL);
 
 // Debug Fetch
 console.log("Fetch implementation:", window.fetch ? "native" : "missing");
@@ -35,7 +35,8 @@ async function networkRequest(url, options = {}) {
     }
 }
 
-const DataManager = {
+// SparkConnect Core Data Management
+window.DataManager = {
     // No init needed
     init: function() { console.log("DataManager init (no-op in API mode)"); },
 
@@ -246,6 +247,13 @@ const DataManager = {
     }
 };
 
+// Verify DataManager is live
+console.log("SparkConnect DataManager Load Check:", {
+    loaded: !!window.DataManager,
+    googleLogin: !!window.DataManager?.googleLogin,
+    timestamp: new Date().toLocaleTimeString()
+});
+
 // MediaStore deprecated in favor of API uploads, but keeping stub if needed for logic transition
 const MediaStore = {
     saveMedia: async function(file) {
@@ -269,4 +277,4 @@ const MediaStore = {
         // Just return the url directly as it's now a server path
         return url;
     }
-}
+};

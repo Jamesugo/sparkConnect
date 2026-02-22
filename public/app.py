@@ -23,13 +23,8 @@ client = MongoClient(MONGO_URI)
 db = client.get_database()
 
 # Configure CORS
-allowed_origins = [
-    "http://127.0.0.1:5500",
-    "http://localhost:5500",
-    "http://127.0.0.1:3000",
-    "http://localhost:3000"
-]
-CORS(app, resources={r"/api/*": {"origins": allowed_origins}}, supports_credentials=True)
+# Allow localhost (standard ports) and the Vercel production URL
+CORS(app, supports_credentials=True)
 
 mail = Mail(app)
 serializer = URLSafeTimedSerializer(app.secret_key)
@@ -157,12 +152,14 @@ def google_auth():
         return jsonify({'error': 'Missing credential'}), 400
         
     try:
-        idinfo = id_token.verify_oauth2_token(token, google_requests.Request(),"1033822674322-4e9qr40dt8092qjvqqh0n16sjup4tbek.apps.googleusercontent.com")
+        idinfo = id_token.verify_oauth2_token(token, google_requests.Request(), GOOGLE_CLIENT_ID)
         
         if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
             raise ValueError('Wrong issuer.')
 
         email = idinfo['email']
+        print(f"DEBUG: Google Auth success for {email}")
+        
         name = idinfo.get('name', email.split('@')[0])
         picture = idinfo.get('picture', "assets/images/profile_placeholder.jpg")
         
@@ -202,6 +199,7 @@ def google_auth():
             }
         })
     except Exception as e:
+        print(f"DEBUG: Google Auth Error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/auth/logout', methods=['POST'])
