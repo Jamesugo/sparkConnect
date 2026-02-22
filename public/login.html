@@ -252,29 +252,12 @@
     <script src="js/data.js"></script>
     <script src="js/nav.js"></script>
     <script>
-      // Populate States
-      const stateSelect = document.getElementById("new-state");
-      NIGERIAN_STATES.forEach((state) => {
-        const opt = document.createElement("option");
-        opt.value = state;
-        opt.textContent = state;
-        stateSelect.appendChild(opt);
-      });
-
-      function toggleForm(show) {
-        document
-          .getElementById("login-form")
-          .classList.toggle("hidden", show === "signup");
-        document
-          .getElementById("signup-form")
-          .classList.toggle("hidden", show === "login");
-      }
-
+      // Toggle Password Visibility
       function togglePassword(inputId, btn) {
         const input = document.getElementById(inputId);
         if (input.type === "password") {
           input.type = "text";
-          btn.textContent = "🔒"; // Change icon to lock or cross-eye
+          btn.textContent = "🔒";
         } else {
           input.type = "password";
           btn.textContent = "👁️";
@@ -295,87 +278,39 @@
         try {
           const res = await DataManager.googleLogin(response.credential);
           if (res.user) {
-            // Determine redirect
             const urlParams = new URLSearchParams(window.location.search);
             const redirect = urlParams.get("redirect") || "index.html";
             window.location.href = redirect;
           }
         } catch (e) {
-          alert("Login failed: " + e.message);
+          alert("Google Login failed: " + e.message);
         }
       }
 
-      // Login Handler - Rewritten
-      document.getElementById("form-login").onsubmit = async function (e) {
-        e.preventDefault();
+      // Form Login Handler
+      document
+        .getElementById("email-login-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = e.target.querySelector('button[type="submit"]');
+          const originalText = btn.innerText;
+          btn.innerText = "Signing in...";
+          btn.disabled = true;
 
-        const submitBtn = this.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerText;
-        submitBtn.disabled = true;
-        submitBtn.innerText = "Signing In...";
+          const email = document.getElementById("login-email").value;
+          const password = document.getElementById("login-password").value;
 
-        const username = document.getElementById("username").value; // Using this as email or name
-        const password = document.getElementById("password").value;
-
-        try {
-          const res = await DataManager.googleLogin(response.credential);
-          if (res.user) {
-            // Determine redirect
+          try {
+            await DataManager.login(email, password);
             const urlParams = new URLSearchParams(window.location.search);
             const redirect = urlParams.get("redirect") || "index.html";
             window.location.href = redirect;
+          } catch (error) {
+            alert("Login failed: " + error.message);
+            btn.innerText = originalText;
+            btn.disabled = false;
           }
-        } catch (err) {
-          alert("Login Failed: " + (err.message || "Invalid credentials"));
-          submitBtn.disabled = false;
-          submitBtn.innerText = originalText;
-        }
-      };
-
-      // Signup Handler - Rewritten
-      document.getElementById("form-signup").onsubmit = async function (e) {
-        e.preventDefault();
-
-        const submitBtn = this.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerText;
-        submitBtn.disabled = true;
-        submitBtn.innerText = "Creating Account...";
-
-        const name = document.getElementById("new-name").value;
-        const email = document.getElementById("new-email").value;
-        const password = document.getElementById("new-password").value;
-        const state = document.getElementById("new-state").value;
-        const specialty = document.getElementById("new-specialty").value;
-
-        // Random default image for new users
-        const defaultImg = "assets/images/profile_placeholder.jpg";
-
-        const newData = {
-          name: name,
-          email: email,
-          password: password,
-          state: state,
-          location: state + ", Nigeria",
-          specialty: specialty,
-          image: defaultImg,
-          description: "Hi, I am a new electrician on Sparkconnect.",
-          reviews: 0,
-          rating: 0,
-        };
-
-        try {
-          // Call the rewritten signup function
-          const user = await DataManager.signup(newData);
-          if (user) {
-            alert("Account created successfully! Redirecting...");
-            window.location.href = "dashboard.html";
-          }
-        } catch (err) {
-          alert("Signup Failed: " + err.message);
-          submitBtn.disabled = false;
-          submitBtn.innerText = originalText;
-        }
-      };
+        });
 
       // Forgot Password Handler
       document.getElementById("form-forgot").onsubmit = async function (e) {
@@ -411,33 +346,6 @@
           submitBtn.textContent = "Send Reset Code";
         }
       };
-
-      // Close modal on outside click
-      document
-        .getElementById("email-login-form")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const btn = e.target.querySelector('button[type="submit"]');
-          const originalText = btn.innerText;
-          btn.innerText = "Signing in...";
-          btn.disabled = true;
-
-          const email = document.getElementById("login-email").value;
-          const password = document.getElementById("login-password").value;
-
-          try {
-            await DataManager.login(email, password);
-
-            // Redirect
-            const urlParams = new URLSearchParams(window.location.search);
-            const redirect = urlParams.get("redirect") || "index.html";
-            window.location.href = redirect;
-          } catch (error) {
-            alert(error.message);
-            btn.innerText = originalText;
-            btn.disabled = false;
-          }
-        });
     </script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
   </body>

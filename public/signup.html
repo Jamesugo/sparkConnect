@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -204,7 +204,7 @@
       const stateSelect = document.getElementById("state");
       if (typeof NIGERIAN_STATES !== "undefined") {
         stateSelect.innerHTML = NIGERIAN_STATES.map(
-          (s) => `<option value="${s}">${s}</option>`
+          (s) => `<option value="${s}">${s}</option>`,
         ).join("");
         stateSelect.value = "Lagos";
       }
@@ -229,35 +229,28 @@
 
           try {
             await DataManager.signup(data);
-            // Redirect to Dashboard on success to fill info
             window.location.href = "dashboard.html";
           } catch (error) {
-            alert(error.message);
+            alert("Signup failed: " + error.message);
             btn.innerText = originalText;
             btn.disabled = false;
           }
         });
 
-      // Google Auth callback
+      // Google Auth callback (Handles both signup and login)
       async function handleCredentialResponse(response) {
         try {
           const res = await DataManager.googleLogin(response.credential);
           if (res.user) {
             if (res.is_new) {
-              // New user -> Dashboard
               window.location.href = "dashboard.html";
             } else {
-              // Existing user trying to signup again -> Error
-              await DataManager.logout(false); // Ensure they aren't logged in, but don't redirect
-
-              const errDiv = document.getElementById("signup-error");
-              errDiv.innerHTML =
-                'Account already exists. Please <a href="login.html">Sign In</a> here.';
-              errDiv.classList.remove("hidden");
+              // If they chose signup but already have an account, just log them in
+              window.location.href = "index.html";
             }
           }
         } catch (e) {
-          alert("Signup failed: " + e.message);
+          alert("Google Auth failed: " + e.message);
         }
       }
     </script>
