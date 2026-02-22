@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -103,7 +103,11 @@
               <label for="login-password" style="margin: 0">Password</label>
               <a
                 href="#"
-                onclick="document.getElementById('forgot-modal').classList.remove('hidden')"
+                onclick="
+                  document
+                    .getElementById('forgot-modal')
+                    .classList.remove('hidden')
+                "
                 style="font-size: 0.85rem; color: var(--primary-blue)"
                 >Forgot?</a
               >
@@ -140,7 +144,7 @@
           <!-- Google Sign-In Button Container -->
           <div
             id="g_id_onload"
-            data-client_id="796761192360-gtma2r1vs3m9dkb2sarka33qqmf7pcg6.apps.googleusercontent.com"
+            data-client_id="1033822674322-4e9qr40dt8092qjvqqh0n16sjup4tbek.apps.googleusercontent.com"
             data-context="signin"
             data-ux_mode="popup"
             data-callback="handleCredentialResponse"
@@ -248,11 +252,6 @@
     <script src="js/data.js"></script>
     <script src="js/nav.js"></script>
     <script>
-<<<<<<< HEAD
-      // Google Auth callback
-      async function handleCredentialResponse(response) {
-        console.log("Encoded JWT ID token: " + response.credential);
-=======
       // Populate States
       const stateSelect = document.getElementById("new-state");
       NIGERIAN_STATES.forEach((state) => {
@@ -291,6 +290,21 @@
         document.getElementById("forgot-modal").classList.add("hidden");
       }
 
+      // Google Auth callback
+      async function handleCredentialResponse(response) {
+        try {
+          const res = await DataManager.googleLogin(response.credential);
+          if (res.user) {
+            // Determine redirect
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirect = urlParams.get("redirect") || "index.html";
+            window.location.href = redirect;
+          }
+        } catch (e) {
+          alert("Login failed: " + e.message);
+        }
+      }
+
       // Login Handler - Rewritten
       document.getElementById("form-login").onsubmit = async function (e) {
         e.preventDefault();
@@ -302,7 +316,6 @@
 
         const username = document.getElementById("username").value; // Using this as email or name
         const password = document.getElementById("password").value;
->>>>>>> 26757498f6350e745b4370e76a34b7033b6ea09e
 
         try {
           const res = await DataManager.googleLogin(response.credential);
@@ -312,21 +325,13 @@
             const redirect = urlParams.get("redirect") || "index.html";
             window.location.href = redirect;
           }
-<<<<<<< HEAD
-        } catch (e) {
-          alert("Login failed: " + e.message);
-=======
         } catch (err) {
           alert("Login Failed: " + (err.message || "Invalid credentials"));
           submitBtn.disabled = false;
           submitBtn.innerText = originalText;
->>>>>>> 26757498f6350e745b4370e76a34b7033b6ea09e
         }
-      }
+      };
 
-<<<<<<< HEAD
-      // Email Login Handler
-=======
       // Signup Handler - Rewritten
       document.getElementById("form-signup").onsubmit = async function (e) {
         e.preventDefault();
@@ -392,7 +397,7 @@
 
           if (res.ok) {
             alert(
-              `✅ ${data.message}\n\nPlease check your email inbox for the reset link.`
+              `✅ ${data.message}\n\nPlease check your email inbox for the reset link.`,
             );
             closeForgotModal();
             this.reset();
@@ -408,7 +413,6 @@
       };
 
       // Close modal on outside click
->>>>>>> 26757498f6350e745b4370e76a34b7033b6ea09e
       document
         .getElementById("email-login-form")
         .addEventListener("submit", async (e) => {

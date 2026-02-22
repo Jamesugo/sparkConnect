@@ -1,3 +1,8 @@
 flask
 flask-mail
 itsdangerous
+flask-cors
+google-auth
+requests
+pymongo
+dnspython

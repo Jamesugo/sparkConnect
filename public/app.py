@@ -1,5 +1,4 @@
 import os
-import sqlite3
 import json
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify, session, send_from_directory
@@ -11,14 +10,19 @@ from itsdangerous import URLSafeTimedSerializer
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 import requests
+from pymongo import MongoClient
+from bson import ObjectId
 
-app = Flask(__name__, static_folder='.')
 app = Flask(__name__, static_folder='.')
 app.secret_key = 'super_secret_key_change_this_later'
-GOOGLE_CLIENT_ID = "1033822674322-4e9qr40dt8092qjvqqh0n16sjup4tbek.apps.googleusercontent.com" # Placeholder - User must replace or env var
+GOOGLE_CLIENT_ID = "1033822674322-4e9qr40dt8092qjvqqh0n16sjup4tbek.apps.googleusercontent.com"
 
-# Configure CORS to allow both localhost and 127.0.0.1 on common ports
-# This resolves issues where the frontend is on localhost:5500 but backend is 127.0.0.1:5000
+# MongoDB Configuration
+MONGO_URI = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/sparkconnect')
+client = MongoClient(MONGO_URI)
+db = client.get_database()
+
+# Configure CORS
 allowed_origins = [
     "http://127.0.0.1:5500",
     "http://localhost:5500",
@@ -26,29 +30,10 @@ allowed_origins = [
     "http://localhost:3000"
 ]
 CORS(app, resources={r"/api/*": {"origins": allowed_origins}}, supports_credentials=True)
-
-# Configure CORS to allow both localhost and 127.0.0.1 on common ports
-# This resolves issues where the frontend is on localhost:5500 but backend is 127.0.0.1:5000
-allowed_origins = [
-    "http://127.0.0.1:5500",
-    "http://localhost:5500",
-    "http://127.0.0.1:3000",
-    "http://localhost:3000"
-]
-CORS(app, resources={r"/api/*": {"origins": allowed_origins}}, supports_credentials=True)
-
-# Email Configuration (Gmail SMTP)
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME', 'your-email@gmail.com')  # Set via environment variable
-app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD', 'your-app-password')  # Set via environment variable
-app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME', 'your-email@gmail.com')
 
 mail = Mail(app)
 serializer = URLSafeTimedSerializer(app.secret_key)
 
-DATABASE = 'sparkconnect.db'
 UPLOAD_FOLDER = 'assets/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp4', 'mov', 'webm'}
 
@@ -56,67 +41,41 @@ if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 def get_db():
-    conn = sqlite3.connect(DATABASE)
-    conn.row_factory = sqlite3.Row
-    return conn
+    return db
+
+def serialize_doc(doc):
+    """Helper to convert MongoDB ObjectId to string id"""
+    if doc:
+        doc['id'] = str(doc['_id'])
+        del doc['_id']
+    return doc
 
 def init_db():
-    with app.app_context():
-        db = get_db()
-        # Users table
-        db.execute('''
-            CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                email TEXT UNIQUE NOT NULL,
-                password TEXT NOT NULL,
-                name TEXT NOT NULL,
-                specialty TEXT,
-                location TEXT,
-                state TEXT,
-                phone TEXT,
-                whatsapp TEXT,
-                description TEXT,
-                image TEXT,
-                gallery TEXT,
-                reviews_data TEXT,
-                rating REAL DEFAULT 0,
-                reviews INTEGER DEFAULT 0,
-                reset_token TEXT,
-                reset_token_expiry TIMESTAMP
-            )
-        ''')
-        
-        # Check if we have default users, if not, create them (optional for seed)
-        cur = db.execute('SELECT count(*) FROM users')
-        if cur.fetchone()[0] == 0:
-            # Seed basic users if empty
-            defaults = [
-                 {
-                    "name": "Sarah Johnson", "specialty": "Residential Wiring", "rating": 4.8, "reviews": 120,
-                    "location": "Lagos", "state": "Lagos", "image": "assets/images/profile1.jpg", 
-                    "description": "Expert in residential wiring and lighting installations.", "email": "sarah@example.com"
-                },
-                {
-                    "name": "Michael Chen", "specialty": "Commercial Systems", "rating": 4.9, "reviews": 150,
-                    "location": "Abuja", "state": "FCT - Abuja", "image": "assets/images/profile2.jpg",
-                    "description": "Specializes in commercial electrical systems.", "email": "michael@example.com"
-                },
-                {
-                    "name": "Admin", "specialty": "Administrator", "rating": 0, "reviews": 0,
-                    "location": "Nigeria", "state": "FCT - Abuja", "image": "assets/images/profile_placeholder.jpg",
-                    "description": "SparkConnect Administrator", "email": "admin@sparkconnect.com"
-                }
-            ]
-            for u in defaults:
-                # Admin gets password 'admin123', others get 'password'
-                pwd = 'admin123' if u['email'] == 'admin@sparkconnect.com' else 'password'
-                db.execute('INSERT INTO users (name, email, password, specialty, location, state, image, description, rating, reviews, gallery, reviews_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                           (u['name'], u['email'], generate_password_hash(pwd), u['specialty'], u['location'], u['state'], u['image'], u['description'], u['rating'], u['reviews'], '[]', '[]'))
-            db.commit()
-            print("Seeded database with default users (including admin).")
-
-        db.commit()
-        db.close()
+    """Seed data if collections are empty"""
+    users_col = db.users
+    if users_col.count_documents({}) == 0:
+        defaults = [
+             {
+                "name": "Sarah Johnson", "specialty": "Residential Wiring", "rating": 4.8, "reviews": 120,
+                "location": "Lagos", "state": "Lagos", "image": "assets/images/profile1.jpg", 
+                "description": "Expert in residential wiring and lighting installations.", "email": "sarah@example.com",
+                "password": generate_password_hash("password"), "gallery": [], "reviews_data": []
+            },
+            {
+                "name": "Michael Chen", "specialty": "Commercial Systems", "rating": 4.9, "reviews": 150,
+                "location": "Abuja", "state": "FCT - Abuja", "image": "assets/images/profile2.jpg",
+                "description": "Specializes in commercial electrical systems.", "email": "michael@example.com",
+                "password": generate_password_hash("password"), "gallery": [], "reviews_data": []
+            },
+            {
+                "name": "Admin", "specialty": "Administrator", "rating": 0, "reviews": 0,
+                "location": "Nigeria", "state": "FCT - Abuja", "image": "assets/images/profile_placeholder.jpg",
+                "description": "SparkConnect Administrator", "email": "admin@sparkconnect.com",
+                "password": generate_password_hash("admin123"), "gallery": [], "reviews_data": []
+            }
+        ]
+        users_col.insert_many(defaults)
+        print("Seeded database with default users.")
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -142,19 +101,29 @@ def register():
     if not email or not password or not name:
         return jsonify({'error': 'Missing required fields'}), 400
     
-    db = get_db()
-    try:
-        db.execute('''
-            INSERT INTO users 
-            (email, password, name, specialty, state, location, description, image, rating, reviews, gallery, reviews_data) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (email, generate_password_hash(password), name, specialty, state, location, description, image, rating, reviews, '[]', '[]'))
-        db.commit()
-        return jsonify({'message': 'User created successfully'}), 201
-    except sqlite3.IntegrityError:
+    users_col = db.users
+    if users_col.find_one({'email': email}):
         return jsonify({'error': 'Email already exists'}), 409
-    finally:
-        db.close()
+        
+    try:
+        new_user = {
+            'email': email,
+            'password': generate_password_hash(password),
+            'name': name,
+            'specialty': specialty,
+            'state': state,
+            'location': location,
+            'description': description,
+            'image': image,
+            'rating': rating,
+            'reviews': reviews,
+            'gallery': [],
+            'reviews_data': []
+        }
+        users_col.insert_one(new_user)
+        return jsonify({'message': 'User created successfully'}), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/auth/login', methods=['POST'])
 def login():
@@ -162,17 +131,16 @@ def login():
     email = data.get('email', '').lower()
     password = data.get('password')
     
-    db = get_db()
-    # Support username login for legacy/demo feel or email
-    user = db.execute('SELECT * FROM users WHERE lower(email) = ? OR lower(name) = ?', (email, email)).fetchone()
-    db.close()
+    users_col = db.users
+    # Support email or name login
+    user = users_col.find_one({'$or': [{'email': email}, {'name': email}]})
     
     if user and check_password_hash(user['password'], password):
-        session['user_id'] = user['id']
+        session['user_id'] = str(user['_id'])
         return jsonify({
             'message': 'Logged in',
             'user': {
-                'id': user['id'],
+                'id': str(user['_id']),
                 'name': user['name'],
                 'email': user['email']
             }
@@ -189,70 +157,52 @@ def google_auth():
         return jsonify({'error': 'Missing credential'}), 400
         
     try:
-        # Verify the token
-        # You would normally specify your CLIENT_ID here to ensure the token is for your app
-        # idinfo = id_token.verify_oauth2_token(token, google_requests.Request(), GOOGLE_CLIENT_ID)
-        
-        # For development/demo without a strict Client ID env var, we can be more lenient 
-        # OR just decoded it if we trust the source (Not recommended for prod security)
-        # Better: Let's assume we verify it against Google content
-        
         idinfo = id_token.verify_oauth2_token(token, google_requests.Request(),"1033822674322-4e9qr40dt8092qjvqqh0n16sjup4tbek.apps.googleusercontent.com")
         
-        # Check issuer
         if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
             raise ValueError('Wrong issuer.')
 
-        # Get user info
         email = idinfo['email']
         name = idinfo.get('name', email.split('@')[0])
         picture = idinfo.get('picture', "assets/images/profile_placeholder.jpg")
         
-        db = get_db()
-        user = db.execute('SELECT * FROM users WHERE lower(email) = ?', (email.lower(),)).fetchone()
+        users_col = db.users
+        user = users_col.find_one({'email': email.lower()})
         
         if not user:
             # Create new user
-            specialty = "Visitor" # Default
-            state = "Lagos" # Default
-            location = "Lagos, Nigeria"
-            description = "Hi, I joined via Google."
-            # Random weak password since they use Google to login, or make it un-login-able via password
-            password_hash = generate_password_hash(token[-20:]) 
-            
-            db.execute('''
-                INSERT INTO users 
-                (email, password, name, specialty, state, location, description, image, rating, reviews, gallery, reviews_data) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (email, password_hash, name, specialty, state, location, description, picture, 0, 0, '[]', '[]'))
-            db.commit()
-            
-            # Fetch again
-            user = db.execute('SELECT * FROM users WHERE lower(email) = ?', (email.lower(),)).fetchone()
+            new_user = {
+                'email': email.lower(),
+                'password': generate_password_hash(token[-20:]),
+                'name': name,
+                'specialty': "Visitor",
+                'state': "Lagos",
+                'location': "Lagos, Nigeria",
+                'description': "Hi, I joined via Google.",
+                'image': picture,
+                'rating': 0,
+                'reviews': 0,
+                'gallery': [],
+                'reviews_data': []
+            }
+            result = users_col.insert_one(new_user)
+            user = users_col.find_one({'_id': result.inserted_id})
             is_new = True
         else:
             is_new = False
             
-        db.close()
-        
-        # Login
-        session['user_id'] = user['id']
+        session['user_id'] = str(user['_id'])
         return jsonify({
             'message': 'Logged in via Google',
             'is_new': is_new,
             'user': {
-                'id': user['id'],
+                'id': str(user['_id']),
                 'name': user['name'],
                 'email': user['email']
             }
         })
-        
-    except ValueError as e:
-        print(f"Token verification failed: {e}")
-        return jsonify({'error': 'Invalid token'}), 401
     except Exception as e:
-        print(f"Google auth error: {e}")
-        return jsonify({'error': 'Authentication failed'}), 500
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/auth/logout', methods=['POST'])
 def logout():
@@ -262,26 +212,14 @@ def logout():
 @app.route('/api/auth/me', methods=['GET'])
 def get_current_user():
     if 'user_id' not in session:
-        return jsonify(None), 200 # No user logged in
+        return jsonify(None), 200
     
-    db = get_db()
-    user = db.execute('SELECT id, name, email, specialty, location, state, phone, whatsapp, description, image, gallery, reviews_data FROM users WHERE id = ?', (session['user_id'],)).fetchone()
-    db.close()
-    
-    if user:
-        # Parse JSON fields
-        u_dict = dict(user)
-        try:
-            u_dict['gallery'] = json.loads(user['gallery']) if user['gallery'] else []
-        except:
-            u_dict['gallery'] = []
-        try:
-             u_dict['reviewsList'] = json.loads(user['reviews_data']) if user['reviews_data'] else []
-        except:
-             u_dict['reviewsList'] = []
-             
-        del u_dict['reviews_data']
-        return jsonify(u_dict)
+    try:
+        user = db.users.find_one({'_id': ObjectId(session['user_id'])})
+        if user:
+            return jsonify(serialize_doc(user))
+    except:
+        pass
     return jsonify(None), 200
 
 @app.route('/api/user/update', methods=['PUT'])
@@ -290,49 +228,30 @@ def update_user():
         return jsonify({'error': 'Unauthorized'}), 401
     
     data = request.json
-    db = get_db()
-    
     # Whitelist fields to update
     fields = ['name', 'specialty', 'location', 'state', 'phone', 'whatsapp', 'description', 'image', 'email']
-    query_parts = []
-    params = []
+    updates = {}
     
     for field in fields:
         if field in data:
-            query_parts.append(f"{field} = ?")
-            params.append(data[field])
+            updates[field] = data[field]
             
-    if query_parts:
-        params.append(session['user_id'])
-        db.execute(f"UPDATE users SET {', '.join(query_parts)} WHERE id = ?", params)
-        db.commit()
+    if updates:
+        db.users.update_one({'_id': ObjectId(session['user_id'])}, {'$set': updates})
     
-    db.close()
     return jsonify({'message': 'Profile updated'})
 
 @app.route('/api/electricians', methods=['GET'])
 def get_electricians():
-    db = get_db()
-    users = db.execute("SELECT id, name, specialty, location, state, image, description, rating, reviews, gallery, reviews_data FROM users WHERE specialty NOT IN ('Visitor', 'Administrator')").fetchall()
-    db.close()
+    users = db.users.find({'specialty': {'$nin': ['Visitor', 'Administrator']}})
     
     result = []
     for u in users:
-        u_dict = dict(u)
-        try:
-            u_dict['gallery'] = json.loads(u['gallery']) if u['gallery'] else []
-        except:
-            u_dict['gallery'] = []
-        try:
-             u_dict['reviewsList'] = json.loads(u['reviews_data']) if u['reviews_data'] else []
-        except:
-             u_dict['reviewsList'] = []
-        del u_dict['reviews_data']
-        result.append(u_dict)
+        result.append(serialize_doc(u))
         
     return jsonify(result)
 
-@app.route('/api/electricians/<int:id>/review', methods=['POST'])
+@app.route('/api/electricians/<string:id>/review', methods=['POST'])
 def add_review(id):
     data = request.json
     rating = data.get('rating')
@@ -342,39 +261,38 @@ def add_review(id):
     if not rating or not name:
         return jsonify({'error': 'Missing rating or name'}), 400
         
-    db = get_db()
-    user = db.execute('SELECT reviews_data, rating, reviews FROM users WHERE id = ?', (id,)).fetchone()
-    
-    if not user:
-        db.close()
-        return jsonify({'error': 'Electrician not found'}), 404
-        
     try:
-        reviews_list = json.loads(user['reviews_data']) if user['reviews_data'] else []
-    except:
-        reviews_list = []
+        user = db.users.find_one({'_id': ObjectId(id)})
+        if not user:
+            return jsonify({'error': 'Electrician not found'}), 404
+            
+        new_review = {
+            'rating': rating,
+            'name': name,
+            'comment': comment,
+            'date': data.get('date') or datetime.now().isoformat()
+        }
         
-    new_review = {
-        'rating': rating,
-        'name': name,
-        'comment': comment,
-        'date': data.get('date') # pass through or generate server side
-    }
-    
-    reviews_list.append(new_review)
-    
-    # Recalculate
-    total_rating = sum(r['rating'] for r in reviews_list)
-    new_avg = round(total_rating / len(reviews_list), 1)
-    new_count = len(reviews_list)
-    
-    db.execute('UPDATE users SET reviews_data = ?, rating = ?, reviews = ? WHERE id = ?', 
-               (json.dumps(reviews_list), new_avg, new_count, id))
-    db.commit()
-    db.close()
-    
-    return jsonify({'message': 'Review added', 'rating': new_avg, 'reviews': new_count})
-
+        reviews_list = user.get('reviews_data', [])
+        reviews_list.append(new_review)
+        
+        # Recalculate
+        total_rating = sum(r['rating'] for r in reviews_list)
+        new_avg = round(total_rating / len(reviews_list), 1)
+        new_count = len(reviews_list)
+        
+        db.users.update_one(
+            {'_id': ObjectId(id)},
+            {'$set': {
+                'reviews_data': reviews_list,
+                'rating': new_avg,
+                'reviews': new_count
+            }}
+        )
+        
+        return jsonify({'message': 'Review added', 'rating': new_avg, 'reviews': new_count})
+    except:
+        return jsonify({'error': 'Invalid ID'}), 400
 
 @app.route('/api/upload', methods=['POST'])
 def upload_file():
@@ -408,27 +326,13 @@ def add_to_gallery():
     if not new_item:
         return jsonify({'error': 'Missing url'}), 400
         
-    db = get_db()
-    user = db.execute('SELECT gallery FROM users WHERE id = ?', (session['user_id'],)).fetchone()
-    
-    if user:
-        try:
-            gallery = json.loads(user['gallery']) if user['gallery'] else []
-        except:
-            gallery = []
+    if isinstance(new_item, list):
+        db.users.update_one({'_id': ObjectId(session['user_id'])}, {'$push': {'gallery': {'$each': new_item}}})
+    else:
+        db.users.update_one({'_id': ObjectId(session['user_id'])}, {'$push': {'gallery': new_item}})
         
-        if isinstance(new_item, list):
-             gallery.extend(new_item)
-        else:
-             gallery.append(new_item)
-             
-        db.execute('UPDATE users SET gallery = ? WHERE id = ?', (json.dumps(gallery), session['user_id']))
-        db.commit()
-        db.close()
-        return jsonify({'gallery': gallery})
-        
-    db.close()
-    return jsonify({'error': 'User not found'}), 404
+    user = db.users.find_one({'_id': ObjectId(session['user_id'])})
+    return jsonify({'gallery': user.get('gallery', [])})
 
 @app.route('/api/user/gallery', methods=['DELETE'])
 def remove_from_gallery():
@@ -438,56 +342,33 @@ def remove_from_gallery():
     data = request.json
     item_to_remove = data.get('url')
     
-    db = get_db()
-    user = db.execute('SELECT gallery FROM users WHERE id = ?', (session['user_id'],)).fetchone()
-    
-    if user:
-        try:
-            gallery = json.loads(user['gallery']) if user['gallery'] else []
-        except:
-            gallery = []
-            
-        if item_to_remove in gallery:
-            gallery.remove(item_to_remove)
-            
-            # Optional: Delete actual file from disk if we want to be clean
-            # but that requires parsing the URL to path. Skip for now.
-            
-            db.execute('UPDATE users SET gallery = ? WHERE id = ?', (json.dumps(gallery), session['user_id']))
-            db.commit()
-            
-        db.close()
-        return jsonify({'gallery': gallery})
-    
-    db.close()
-    return jsonify({'error': 'User not found'}), 404
+    db.users.update_one({'_id': ObjectId(session['user_id'])}, {'$pull': {'gallery': item_to_remove}})
+    user = db.users.find_one({'_id': ObjectId(session['user_id'])})
+    return jsonify({'gallery': user.get('gallery', [])})
 
 
-@app.route('/api/admin/users/<int:user_id>', methods=['DELETE'])
+@app.route('/api/admin/users/<string:user_id>', methods=['DELETE'])
 def admin_delete_user(user_id):
     """Admin endpoint to delete a user account"""
     if 'user_id' not in session:
         return jsonify({'error': 'Unauthorized'}), 401
     
-    db = get_db()
     # Check if current user is admin
-    current_user = db.execute('SELECT email FROM users WHERE id = ?', (session['user_id'],)).fetchone()
+    current_user = db.users.find_one({'_id': ObjectId(session['user_id'])})
     
     if not current_user or current_user['email'] != 'admin@sparkconnect.com':
-        db.close()
         return jsonify({'error': 'Admin access required'}), 403
     
     # Don't allow admin to delete themselves
     if user_id == session['user_id']:
-        db.close()
         return jsonify({'error': 'Cannot delete your own account'}), 400
     
     # Delete the user
-    db.execute('DELETE FROM users WHERE id = ?', (user_id,))
-    db.commit()
-    db.close()
-    
-    return jsonify({'message': 'User deleted successfully'})
+    try:
+        db.users.delete_one({'_id': ObjectId(user_id)})
+        return jsonify({'message': 'User deleted successfully'})
+    except:
+        return jsonify({'error': 'Invalid ID'}), 400
 
 
 @app.route('/api/auth/forgot-password', methods=['POST'])
@@ -499,64 +380,37 @@ def forgot_password():
     if not email:
         return jsonify({'error': 'Email is required'}), 400
     
-    db = get_db()
-    user = db.execute('SELECT id, name, email FROM users WHERE lower(email) = ?', (email,)).fetchone()
+    user = db.users.find_one({'email': email})
     
     if not user:
-        # Don't reveal if email exists or not (security best practice)
+        # Don't reveal if email exists or not
         return jsonify({'message': 'If that email exists, a reset link has been sent'}), 200
     
     # Generate reset token
     token = serializer.dumps(user['email'], salt='password-reset-salt')
-    expiry = datetime.now() + timedelta(hours=1)  # Token valid for 1 hour
+    expiry = datetime.now() + timedelta(hours=1)
     
     # Save token to database
-    db.execute('UPDATE users SET reset_token = ?, reset_token_expiry = ? WHERE id = ?',
-               (token, expiry, user['id']))
-    db.commit()
-    db.close()
+    db.users.update_one(
+        {'_id': user['_id']},
+        {'$set': {
+            'reset_token': token,
+            'reset_token_expiry': expiry
+        }}
+    )
     
     # Send email
     try:
-        reset_url = f"http://127.0.0.1:5000/reset-password.html?token={token}"
+        base_url = request.host_url.rstrip('/')
+        reset_url = f"{base_url}/reset-password.html?token={token}"
         msg = Message(
             'Password Reset Request - SparkConnect',
             recipients=[user['email']]
         )
-        msg.body = f"""Hello {user['name']},
-
-You requested to reset your password for your SparkConnect account.
-
-Click the link below to reset your password (valid for 1 hour):
-{reset_url}
-
-If you didn't request this, please ignore this email.
-
-Best regards,
-SparkConnect Team
-"""
-        msg.html = f"""
-        <html>
-        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-            <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-                <h2 style="color: #2563eb;">Password Reset Request</h2>
-                <p>Hello {user['name']},</p>
-                <p>You requested to reset your password for your SparkConnect account.</p>
-                <p>Click the button below to reset your password (valid for 1 hour):</p>
-                <a href="{reset_url}" style="display: inline-block; padding: 12px 24px; background-color: #2563eb; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0;">Reset Password</a>
-                <p>Or copy and paste this link into your browser:</p>
-                <p style="color: #666; word-break: break-all;">{reset_url}</p>
-                <p>If you didn't request this, please ignore this email.</p>
-                <p style="margin-top: 30px; color: #666;">Best regards,<br>SparkConnect Team</p>
-            </div>
-        </body>
-        </html>
-        """
+        msg.body = f"Hello {user['name']},\n\nClick here to reset your password: {reset_url}"
         mail.send(msg)
-        print(f"Password reset email sent to {user['email']}")
     except Exception as e:
         print(f"Failed to send email: {e}")
-        # Still return success to user (don't reveal email sending issues)
     
     return jsonify({'message': 'If that email exists, a reset link has been sent'}), 200
 
@@ -571,33 +425,31 @@ def reset_password():
     if not token or not new_password:
         return jsonify({'error': 'Token and new password are required'}), 400
     
-    # Verify token
     try:
-        email = serializer.loads(token, salt='password-reset-salt', max_age=3600)  # 1 hour
+        email = serializer.loads(token, salt='password-reset-salt', max_age=3600)
     except:
         return jsonify({'error': 'Invalid or expired reset token'}), 400
     
-    db = get_db()
-    user = db.execute('SELECT id, reset_token, reset_token_expiry FROM users WHERE lower(email) = ?', 
-                      (email.lower(),)).fetchone()
+    user = db.users.find_one({'email': email.lower(), 'reset_token': token})
     
-    if not user or user['reset_token'] != token:
-        db.close()
+    if not user:
         return jsonify({'error': 'Invalid reset token'}), 400
     
     # Check if token expired
-    if user['reset_token_expiry']:
-        expiry = datetime.fromisoformat(user['reset_token_expiry'])
-        if datetime.now() > expiry:
-            db.close()
+    if user.get('reset_token_expiry'):
+        if datetime.now() > user['reset_token_expiry']:
             return jsonify({'error': 'Reset token has expired'}), 400
     
     # Update password and clear reset token
     hashed_password = generate_password_hash(new_password)
-    db.execute('UPDATE users SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE id = ?',
-               (hashed_password, user['id']))
-    db.commit()
-    db.close()
+    db.users.update_one(
+        {'_id': user['_id']},
+        {'$set': {
+            'password': hashed_password,
+            'reset_token': None,
+            'reset_token_expiry': None
+        }}
+    )
     
     return jsonify({'message': 'Password reset successfully'}), 200
 

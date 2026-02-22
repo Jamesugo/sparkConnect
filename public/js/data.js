@@ -9,13 +9,12 @@ const NIGERIAN_STATES = [
 ];
 
 // Replaced DataManager with API Calls
-// Improved base URL detection for local development
-// We try to match the current hostname (localhost or 127.0.0.1) to avoid CORS mismatches
+// Improved base URL detection for local development and Vercel
 const apiHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
-    ? window.location.hostname 
-    : '127.0.0.1';
+    ? `http://${window.location.hostname}:5000`
+    : `https://${window.location.hostname}`;
 
-window.API_BASE_URL = `http://${apiHost}:5000`;
+window.API_BASE_URL = apiHost;
 
 const API_BASE_URL = window.API_BASE_URL;
 
@@ -137,6 +136,44 @@ const DataManager = {
 
         } catch (error) {
             console.error("Login error:", error);
+            throw error;
+        }
+    },
+
+    googleLogin: async function(credential) {
+        console.log("Attempting Google login...");
+        const url = `${API_BASE_URL}/api/auth/google`;
+        
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ credential }),
+                credentials: 'include'
+            });
+
+            // parse JSON safely
+            let result;
+            const text = await response.text();
+            try {
+                result = text ? JSON.parse(text) : {};
+            } catch (e) {
+                console.error("Failed to parse Google login response:", text);
+                throw new Error("Server Error: Invalid JSON response");
+            }
+
+            if (!response.ok) {
+                throw new Error(result.error || `Google login failed with status ${response.status}`);
+            }
+            
+            console.log("Google login successful");
+            return result;
+
+        } catch (error) {
+            console.error("Google login error:", error);
             throw error;
         }
     },
