@@ -13,14 +13,12 @@ const NavManager = {
         currentUser.image &&
         currentUser.image !== "assets/images/profile_placeholder.jpg"
       ) {
-        // Determine if it's base64/url, try to show it, fallback to initials on error
         avatarHtml = `<img src="${
           currentUser.image
         }" alt="User" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\\'avatar-placeholder\\' style=\\'font-size:14px;\\'>${DataManager.getInitials(
           currentUser.name
         )}</div>'">`;
       } else {
-        // Human-like icon for user with no image
         avatarHtml = `<div class="avatar-placeholder" style="background:#f0f0f0; display:flex; align-items:center; justify-content:center; width:100%; height:100%;">
           <svg viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:60%; height:60%;">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>

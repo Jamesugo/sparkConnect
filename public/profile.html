@@ -109,9 +109,10 @@
 
     <script src="js/data.js"></script>
     <script src="js/nav.js"></script>
+    <script src="js/modal.js"></script>
     <script>
       const urlParams = new URLSearchParams(window.location.search);
-      const id = parseInt(urlParams.get("id")) || 1;
+      const id = urlParams.get("id");
       // Ensure API_BASE_URL is defined
       if (typeof API_BASE_URL === "undefined") {
         window.API_BASE_URL =
@@ -199,7 +200,7 @@
                         ? `<div id="admin-panel" style="margin-top: var(--spacing-xxl); padding-top: var(--spacing-xl); border-top: 1px solid var(--border-color);">
                              <h3 style="color: #dc3545; margin-bottom: var(--spacing-md);">Admin: Danger Zone</h3>
                              <p style="color: var(--text-gray); margin-bottom: var(--spacing-md);">Permanently delete this account and remove all data.</p>
-                             <button onclick="deleteAccount(${electrician.id})" class="btn" style="background-color: #dc3545; color: white;">Delete Account</button>
+                             <button onclick="deleteAccount('${electrician.id}')" class="btn" style="background-color: #dc3545; color: white;">Delete Account</button>
                     </div>`
                         : ""
                     }
@@ -271,28 +272,24 @@
           window.location.href = "tel:" + electrician.phone;
         } else if (electrician.email) {
           window.location.href = "mailto:" + electrician.email;
-        } else {
-          alert("No contact information available for this user.");
+        }
+        if (!electrician.email && !electrician.phone && !electrician.whatsapp) {
+          ModalManager.alert("No contact information available for this user.", "Notice");
+          return;
         }
       }
 
       // Admin function to delete account
-      async function deleteAccount(userId) {
-        if (
-          !confirm(
-            `Are you sure you want to permanently delete this user account? This action cannot be undone.`
-          )
-        ) {
-          return;
-        }
-
-        try {
-          await DataManager.deleteUser(userId);
-          alert("User account deleted successfully");
-          window.location.href = "/electricians.html";
-        } catch (err) {
-          alert("Failed to delete account: " + err.message);
-        }
+      function deleteAccount(userId) {
+        ModalManager.confirm("Are you sure you want to permanently delete this user account? This action cannot be undone.", "Delete Account", async () => {
+          try {
+            await DataManager.deleteUser(userId);
+            ModalManager.alert("User account deleted successfully", "Success");
+            setTimeout(() => window.location.href = "index.html", 1500);
+          } catch (err) {
+            ModalManager.alert("Failed to delete account: " + err.message, "Error");
+          }
+        });
       }
 
       // Async Gallery Loader
@@ -414,38 +411,35 @@
 
         const ratingInput = document.getElementById("rating-value");
         const rating = parseInt(ratingInput.value);
-        const name = document.getElementById("reviewer-name").value;
+        const name = document.getElementById("reviewer-name").value; // This 'name' is not used in the new API call
         const comment = document.getElementById("review-comment").value;
 
-        if (!rating) {
-          alert("Please select a rating");
+        if (rating === 0) {
+          ModalManager.alert("Please select a rating", "Notice");
           return;
         }
 
         try {
-          const res = await fetch(
-            `${API_BASE_URL}/api/electricians/${electrician.id}/review`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                rating: rating,
-                name: name,
-                comment: comment,
-                date: new Date().toISOString(),
-              }),
-            }
-          );
+          const res = await fetch(`${API_BASE_URL}/api/reviews`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              targetUserId: electrician.id,
+              rating: rating,
+              comment: comment,
+            }),
+            credentials: "include", // Need session to post
+          });
 
           if (res.ok) {
-            alert("Thank you for your review!");
-            location.reload();
+            ModalManager.alert("Thank you for your review!", "Success");
+            setTimeout(() => location.reload(), 1500);
           } else {
-            alert("Failed to submit review");
+            ModalManager.alert("Failed to submit review", "Error");
           }
         } catch (err) {
-          console.error(err);
-          alert("Error submitting review");
+          console.error("Error submitting review:", err);
+          ModalManager.alert("Error submitting review", "Error");
         }
       });
 

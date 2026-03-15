@@ -16,10 +16,7 @@ const apiHost = (window.location.hostname === 'localhost' || window.location.hos
 
 window.API_BASE_URL = apiHost;
 const API_BASE_URL = window.API_BASE_URL;
-console.log("SparkConnect API Host:", API_BASE_URL);
 
-// Debug Fetch
-console.log("Fetch implementation:", window.fetch ? "native" : "missing");
 
 // Standard fetch wrapper
 async function networkRequest(url, options = {}) {
@@ -58,14 +55,9 @@ window.DataManager = {
         return all.find(e => e.id == id);
     },
 
-    // Signup now hits the register endpoint
-    // Signup now hits the register endpoint
-    // Signup - Rewritten for robustness
     signup: async function(data) {
         console.log("Starting signup process...", data);
-        
         const url = `${API_BASE_URL}/api/auth/register`;
-        
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -75,10 +67,7 @@ window.DataManager = {
                 },
                 body: JSON.stringify(data)
             });
-
             console.log("Signup response status:", response.status);
-
-            // parse JSON safely
             let result;
             const text = await response.text();
             try {
@@ -87,26 +76,20 @@ window.DataManager = {
                 console.error("Failed to parse signup response:", text);
                 throw new Error("Server Error: Invalid JSON response");
             }
-
             if (!response.ok) {
                 throw new Error(result.error || `Signup failed with status ${response.status}`);
             }
-
             console.log("Signup successful, logging in...");
-            // Automatically login after success
             return await this.login(data.email, data.password);
-
         } catch (error) {
             console.error("Signup error:", error);
-            throw error; // Propagate to UI
+            throw error;
         }
     },
 
-    // Login - Rewritten for robustness
     login: async function(email, password) {
         console.log("Attempting login...");
         const url = `${API_BASE_URL}/api/auth/login`;
-        
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -115,10 +98,8 @@ window.DataManager = {
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({ email, password }),
-                credentials: 'include' // Important for session cookies
+                credentials: 'include'
             });
-
-            // parse JSON safely
             let result;
             const text = await response.text();
             try {
@@ -127,54 +108,13 @@ window.DataManager = {
                 console.error("Failed to parse login response:", text);
                 throw new Error("Server Error: Invalid JSON response");
             }
-
             if (!response.ok) {
                 throw new Error(result.error || `Login failed with status ${response.status}`);
             }
-            
             console.log("Login successful");
             return result.user;
-
         } catch (error) {
             console.error("Login error:", error);
-            throw error;
-        }
-    },
-
-    googleLogin: async function(credential) {
-        console.log("Attempting Google login...");
-        const url = `${API_BASE_URL}/api/auth/google`;
-        
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({ credential }),
-                credentials: 'include'
-            });
-
-            // parse JSON safely
-            let result;
-            const text = await response.text();
-            try {
-                result = text ? JSON.parse(text) : {};
-            } catch (e) {
-                console.error("Failed to parse Google login response:", text);
-                throw new Error("Server Error: Invalid JSON response");
-            }
-
-            if (!response.ok) {
-                throw new Error(result.error || `Google login failed with status ${response.status}`);
-            }
-            
-            console.log("Google login successful");
-            return result;
-
-        } catch (error) {
-            console.error("Google login error:", error);
             throw error;
         }
     },
@@ -246,13 +186,6 @@ window.DataManager = {
         return user && user.email === 'admin@sparkconnect.com';
     }
 };
-
-// Verify DataManager is live
-console.log("SparkConnect DataManager Load Check:", {
-    loaded: !!window.DataManager,
-    googleLogin: !!window.DataManager?.googleLogin,
-    timestamp: new Date().toLocaleTimeString()
-});
 
 // MediaStore deprecated in favor of API uploads, but keeping stub if needed for logic transition
 const MediaStore = {

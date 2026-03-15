@@ -7,20 +7,23 @@ from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from itsdangerous import URLSafeTimedSerializer
-from google.oauth2 import id_token
-from google.auth.transport import requests as google_requests
 import requests
 from pymongo import MongoClient
 from bson import ObjectId
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__, static_folder='.')
 app.secret_key = 'super_secret_key_change_this_later'
-GOOGLE_CLIENT_ID = "1033822674322-4e9qr40dt8092qjvqqh0n16sjup4tbek.apps.googleusercontent.com"
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # MongoDB Configuration
 MONGO_URI = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/sparkconnect')
 client = MongoClient(MONGO_URI)
-db = client.get_database()
+# Explicitly get the 'sparkconnect' database if the URI doesn't specify one
+db = client.get_database('sparkconnect' if 'mongodb+srv' in MONGO_URI else None)
 
 # Configure CORS
 # Allow localhost (standard ports) and the Vercel production URL
@@ -29,7 +32,7 @@ CORS(app, supports_credentials=True)
 mail = Mail(app)
 serializer = URLSafeTimedSerializer(app.secret_key)
 
-UPLOAD_FOLDER = 'assets/uploads'
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'assets', 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp4', 'mov', 'webm'}
 
 if not os.path.exists(UPLOAD_FOLDER):
@@ -86,6 +89,12 @@ def register():
     password = data.get('password')
     name = data.get('name')
     specialty = data.get('specialty')
+    role = data.get('role')
+
+    # Map role to specialty if specialty isn't provided (for the new signup form)
+    if not specialty and role:
+        specialty = role
+
     state = data.get('state')
     location = data.get('location', state + ", Nigeria" if state else "Nigeria")
     description = data.get('description', "Hi, I am a new member on Sparkconnect.")
@@ -137,70 +146,13 @@ def login():
             'user': {
                 'id': str(user['_id']),
                 'name': user['name'],
-                'email': user['email']
+                'email': user['email'],
+                'specialty': user.get('specialty'),
+                'image': user.get('image')
             }
         })
     
     return jsonify({'error': 'Invalid credentials'}), 401
-
-@app.route('/api/auth/google', methods=['POST'])
-def google_auth():
-    data = request.json
-    token = data.get('credential')
-    
-    if not token:
-        return jsonify({'error': 'Missing credential'}), 400
-        
-    try:
-        idinfo = id_token.verify_oauth2_token(token, google_requests.Request(), GOOGLE_CLIENT_ID)
-        
-        if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
-            raise ValueError('Wrong issuer.')
-
-        email = idinfo['email']
-        print(f"DEBUG: Google Auth success for {email}")
-        
-        name = idinfo.get('name', email.split('@')[0])
-        picture = idinfo.get('picture', "assets/images/profile_placeholder.jpg")
-        
-        users_col = db.users
-        user = users_col.find_one({'email': email.lower()})
-        
-        if not user:
-            # Create new user
-            new_user = {
-                'email': email.lower(),
-                'password': generate_password_hash(token[-20:]),
-                'name': name,
-                'specialty': "Visitor",
-                'state': "Lagos",
-                'location': "Lagos, Nigeria",
-                'description': "Hi, I joined via Google.",
-                'image': picture,
-                'rating': 0,
-                'reviews': 0,
-                'gallery': [],
-                'reviews_data': []
-            }
-            result = users_col.insert_one(new_user)
-            user = users_col.find_one({'_id': result.inserted_id})
-            is_new = True
-        else:
-            is_new = False
-            
-        session['user_id'] = str(user['_id'])
-        return jsonify({
-            'message': 'Logged in via Google',
-            'is_new': is_new,
-            'user': {
-                'id': str(user['_id']),
-                'name': user['name'],
-                'email': user['email']
-            }
-        })
-    except Exception as e:
-        print(f"DEBUG: Google Auth Error: {str(e)}")
-        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/auth/logout', methods=['POST'])
 def logout():
@@ -219,6 +171,8 @@ def get_current_user():
     except:
         pass
     return jsonify(None), 200
+
+@app.route('/api/user/update', methods=['PUT'])
 
 @app.route('/api/user/update', methods=['PUT'])
 def update_user():
@@ -369,87 +323,7 @@ def admin_delete_user(user_id):
         return jsonify({'error': 'Invalid ID'}), 400
 
 
-@app.route('/api/auth/forgot-password', methods=['POST'])
-def forgot_password():
-    """Send password reset email"""
-    data = request.json
-    email = data.get('email', '').lower()
-    
-    if not email:
-        return jsonify({'error': 'Email is required'}), 400
-    
-    user = db.users.find_one({'email': email})
-    
-    if not user:
-        # Don't reveal if email exists or not
-        return jsonify({'message': 'If that email exists, a reset link has been sent'}), 200
-    
-    # Generate reset token
-    token = serializer.dumps(user['email'], salt='password-reset-salt')
-    expiry = datetime.now() + timedelta(hours=1)
-    
-    # Save token to database
-    db.users.update_one(
-        {'_id': user['_id']},
-        {'$set': {
-            'reset_token': token,
-            'reset_token_expiry': expiry
-        }}
-    )
-    
-    # Send email
-    try:
-        base_url = request.host_url.rstrip('/')
-        reset_url = f"{base_url}/reset-password.html?token={token}"
-        msg = Message(
-            'Password Reset Request - SparkConnect',
-            recipients=[user['email']]
-        )
-        msg.body = f"Hello {user['name']},\n\nClick here to reset your password: {reset_url}"
-        mail.send(msg)
-    except Exception as e:
-        print(f"Failed to send email: {e}")
-    
-    return jsonify({'message': 'If that email exists, a reset link has been sent'}), 200
-
-
-@app.route('/api/auth/reset-password', methods=['POST'])
-def reset_password():
-    """Reset password with token"""
-    data = request.json
-    token = data.get('token')
-    new_password = data.get('password')
-    
-    if not token or not new_password:
-        return jsonify({'error': 'Token and new password are required'}), 400
-    
-    try:
-        email = serializer.loads(token, salt='password-reset-salt', max_age=3600)
-    except:
-        return jsonify({'error': 'Invalid or expired reset token'}), 400
-    
-    user = db.users.find_one({'email': email.lower(), 'reset_token': token})
-    
-    if not user:
-        return jsonify({'error': 'Invalid reset token'}), 400
-    
-    # Check if token expired
-    if user.get('reset_token_expiry'):
-        if datetime.now() > user['reset_token_expiry']:
-            return jsonify({'error': 'Reset token has expired'}), 400
-    
-    # Update password and clear reset token
-    hashed_password = generate_password_hash(new_password)
-    db.users.update_one(
-        {'_id': user['_id']},
-        {'$set': {
-            'password': hashed_password,
-            'reset_token': None,
-            'reset_token_expiry': None
-        }}
-    )
-    
-    return jsonify({'message': 'Password reset successfully'}), 200
+# Forgot/Reset password routes removed
 
 
 if __name__ == '__main__':
@@ -458,12 +332,14 @@ if __name__ == '__main__':
     # Move static routes here to ensure they don't override API routes
     @app.route('/')
     def serve_index():
-        return send_from_directory('.', 'index.html')
+        return send_from_directory(BASE_DIR, 'index.html')
 
     @app.route('/<path:path>')
     def serve_static(path):
-        if os.path.exists(path):
-            return send_from_directory('.', path)
-        return send_from_directory('.', 'index.html')
+        full_path = os.path.join(BASE_DIR, path)
+        if os.path.exists(full_path):
+            return send_from_directory(BASE_DIR, path)
+        return send_from_directory(BASE_DIR, 'index.html')
 
-    app.run(debug=True, port=5000)
+    print("Starting SparkConnect Backend on http://localhost:5000")
+    app.run(debug=True, host='0.0.0.0', port=5000)
