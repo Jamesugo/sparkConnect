@@ -12,12 +12,15 @@ from pymongo import MongoClient
 from bson import ObjectId
 from dotenv import load_dotenv
 
-load_dotenv()
+# Try to load .env from public folder for local development
+load_dotenv(os.path.join(os.path.dirname(__file__), '..', 'public', '.env'))
 
-app = Flask(__name__, static_folder='.')
-app.secret_key = 'super_secret_key_change_this_later'
+app = Flask(__name__)
+app.secret_key = os.environ.get('SECRET_KEY', 'super_secret_key_change_this_later')
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Resolve paths relative to this file
+API_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.join(API_DIR, '..', 'public')
 
 # MongoDB Configuration
 MONGO_URI = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/sparkconnect')
@@ -26,7 +29,6 @@ client = MongoClient(MONGO_URI)
 db = client.get_database('sparkconnect' if 'mongodb+srv' in MONGO_URI else None)
 
 # Configure CORS
-# Allow localhost (standard ports) and the Vercel production URL
 CORS(app, supports_credentials=True)
 
 mail = Mail(app)
@@ -36,7 +38,10 @@ UPLOAD_FOLDER = os.path.join(BASE_DIR, 'assets', 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp4', 'mov', 'webm'}
 
 if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+    try:
+        os.makedirs(UPLOAD_FOLDER)
+    except:
+        pass # Might fail on read-only serverless environments
 
 def get_db():
     return db
@@ -50,37 +55,38 @@ def serialize_doc(doc):
 
 def init_db():
     """Seed data if collections are empty"""
-    users_col = db.users
-    if users_col.count_documents({}) == 0:
-        defaults = [
-             {
-                "name": "Sarah Johnson", "specialty": "Residential Wiring", "rating": 4.8, "reviews": 120,
-                "location": "Lagos", "state": "Lagos", "image": "assets/images/profile1.jpg", 
-                "description": "Expert in residential wiring and lighting installations.", "email": "sarah@example.com",
-                "password": generate_password_hash("password"), "gallery": [], "reviews_data": []
-            },
-            {
-                "name": "Michael Chen", "specialty": "Commercial Systems", "rating": 4.9, "reviews": 150,
-                "location": "Abuja", "state": "FCT - Abuja", "image": "assets/images/profile2.jpg",
-                "description": "Specializes in commercial electrical systems.", "email": "michael@example.com",
-                "password": generate_password_hash("password"), "gallery": [], "reviews_data": []
-            },
-            {
-                "name": "Admin", "specialty": "Administrator", "rating": 0, "reviews": 0,
-                "location": "Nigeria", "state": "FCT - Abuja", "image": "assets/images/profile_placeholder.jpg",
-                "description": "SparkConnect Administrator", "email": "admin@sparkconnect.com",
-                "password": generate_password_hash("admin123"), "gallery": [], "reviews_data": []
-            }
-        ]
-        users_col.insert_many(defaults)
-        print("Seeded database with default users.")
+    try:
+        users_col = db.users
+        if users_col.count_documents({}) == 0:
+            defaults = [
+                 {
+                    "name": "Sarah Johnson", "specialty": "Residential Wiring", "rating": 4.8, "reviews": 120,
+                    "location": "Lagos", "state": "Lagos", "image": "assets/images/profile1.jpg", 
+                    "description": "Expert in residential wiring and lighting installations.", "email": "sarah@example.com",
+                    "password": generate_password_hash("password"), "gallery": [], "reviews_data": []
+                },
+                {
+                    "name": "Michael Chen", "specialty": "Commercial Systems", "rating": 4.9, "reviews": 150,
+                    "location": "Abuja", "state": "FCT - Abuja", "image": "assets/images/profile2.jpg",
+                    "description": "Specializes in commercial electrical systems.", "email": "michael@example.com",
+                    "password": generate_password_hash("password"), "gallery": [], "reviews_data": []
+                },
+                {
+                    "name": "Admin", "specialty": "Administrator", "rating": 0, "reviews": 0,
+                    "location": "Nigeria", "state": "FCT - Abuja", "image": "assets/images/profile_placeholder.jpg",
+                    "description": "SparkConnect Administrator", "email": "admin@sparkconnect.com",
+                    "password": generate_password_hash("admin123"), "gallery": [], "reviews_data": []
+                }
+            ]
+            users_col.insert_many(defaults)
+            print("Seeded database with default users.")
+    except Exception as e:
+        print(f"Init DB error: {e}")
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # --- Routes ---
-
-# --- API ---
 
 @app.route('/api/auth/register', methods=['POST'])
 def register():
@@ -91,7 +97,6 @@ def register():
     specialty = data.get('specialty')
     role = data.get('role')
 
-    # Map role to specialty if specialty isn't provided (for the new signup form)
     if not specialty and role:
         specialty = role
 
@@ -136,7 +141,6 @@ def login():
     password = data.get('password')
     
     users_col = db.users
-    # Support email or name login
     user = users_col.find_one({'$or': [{'email': email}, {'name': email}]})
     
     if user and check_password_hash(user['password'], password):
@@ -173,14 +177,11 @@ def get_current_user():
     return jsonify(None), 200
 
 @app.route('/api/user/update', methods=['PUT'])
-
-@app.route('/api/user/update', methods=['PUT'])
 def update_user():
     if 'user_id' not in session:
         return jsonify({'error': 'Unauthorized'}), 401
     
     data = request.json
-    # Whitelist fields to update
     fields = ['name', 'specialty', 'location', 'state', 'phone', 'whatsapp', 'description', 'image', 'email']
     updates = {}
     
@@ -196,11 +197,9 @@ def update_user():
 @app.route('/api/electricians', methods=['GET'])
 def get_electricians():
     users = db.users.find({'specialty': {'$nin': ['Visitor', 'Administrator']}})
-    
     result = []
     for u in users:
         result.append(serialize_doc(u))
-        
     return jsonify(result)
 
 @app.route('/api/electricians/<string:id>/review', methods=['POST'])
@@ -228,7 +227,6 @@ def add_review(id):
         reviews_list = user.get('reviews_data', [])
         reviews_list.append(new_review)
         
-        # Recalculate
         total_rating = sum(r['rating'] for r in reviews_list)
         new_avg = round(total_rating / len(reviews_list), 1)
         new_count = len(reviews_list)
@@ -255,34 +253,25 @@ def upload_file():
         return jsonify({'error': 'No selected file'}), 400
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        # Unique name
         import time
         filename = f"{int(time.time())}_{filename}"
         filepath = os.path.join(UPLOAD_FOLDER, filename)
         file.save(filepath)
-        
-        # Return the web path
         return jsonify({'url': f"assets/uploads/{filename}"})
-    
     return jsonify({'error': 'Invalid file type'}), 400
 
 @app.route('/api/user/gallery', methods=['POST'])
 def add_to_gallery():
-    """Add an item to the user's gallery list (after upload)"""
     if 'user_id' not in session:
         return jsonify({'error': 'Unauthorized'}), 401
-    
     data = request.json
     new_item = data.get('url')
-    
     if not new_item:
         return jsonify({'error': 'Missing url'}), 400
-        
     if isinstance(new_item, list):
         db.users.update_one({'_id': ObjectId(session['user_id'])}, {'$push': {'gallery': {'$each': new_item}}})
     else:
         db.users.update_one({'_id': ObjectId(session['user_id'])}, {'$push': {'gallery': new_item}})
-        
     user = db.users.find_one({'_id': ObjectId(session['user_id'])})
     return jsonify({'gallery': user.get('gallery', [])})
 
@@ -290,46 +279,32 @@ def add_to_gallery():
 def remove_from_gallery():
     if 'user_id' not in session:
         return jsonify({'error': 'Unauthorized'}), 401
-        
     data = request.json
     item_to_remove = data.get('url')
-    
     db.users.update_one({'_id': ObjectId(session['user_id'])}, {'$pull': {'gallery': item_to_remove}})
     user = db.users.find_one({'_id': ObjectId(session['user_id'])})
     return jsonify({'gallery': user.get('gallery', [])})
 
-
 @app.route('/api/admin/users/<string:user_id>', methods=['DELETE'])
 def admin_delete_user(user_id):
-    """Admin endpoint to delete a user account"""
     if 'user_id' not in session:
         return jsonify({'error': 'Unauthorized'}), 401
-    
-    # Check if current user is admin
     current_user = db.users.find_one({'_id': ObjectId(session['user_id'])})
-    
     if not current_user or current_user['email'] != 'admin@sparkconnect.com':
         return jsonify({'error': 'Admin access required'}), 403
-    
-    # Don't allow admin to delete themselves
     if user_id == session['user_id']:
         return jsonify({'error': 'Cannot delete your own account'}), 400
-    
-    # Delete the user
     try:
         db.users.delete_one({'_id': ObjectId(user_id)})
         return jsonify({'message': 'User deleted successfully'})
     except:
         return jsonify({'error': 'Invalid ID'}), 400
 
-
-# Forgot/Reset password routes removed
-
-
+# Vercel doesn't need the __main__ block for execution, but it helps for local testing
 if __name__ == '__main__':
     init_db()
     
-    # Move static routes here to ensure they don't override API routes
+    # In local testing, index.py can serve static files
     @app.route('/')
     def serve_index():
         return send_from_directory(BASE_DIR, 'index.html')
@@ -341,5 +316,4 @@ if __name__ == '__main__':
             return send_from_directory(BASE_DIR, path)
         return send_from_directory(BASE_DIR, 'index.html')
 
-    print("Starting SparkConnect Backend on http://localhost:5000")
     app.run(debug=True, host='0.0.0.0', port=5000)

@@ -1,11 +1,11 @@
 {
   "version": 2,
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "public/app.py" },
+    { "source": "/api/(.*)", "destination": "/api/index.py" },
     { "source": "/(.*)", "destination": "public/$1" }
   ],
   "functions": {
-    "public/app.py": {
+    "api/index.py": {
       "runtime": "@vercel/python"
     }
   }
