@@ -1,0 +1,8 @@
+flask
+flask-mail
+itsdangerous
+flask-cors
+requests
+pymongo
+dnspython
+python-dotenv
