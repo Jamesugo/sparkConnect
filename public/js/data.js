@@ -9,7 +9,7 @@ const NIGERIAN_STATES = [
 ];
 
 // Replaced DataManager with API Calls
-// Improved base URL detection for local development and Vercel
+// Improved base URL detection for local development and cloud deployments
 const apiHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
     ? `http://${window.location.hostname}:5000`
     : `https://${window.location.hostname}`;

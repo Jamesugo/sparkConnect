@@ -300,7 +300,7 @@ def admin_delete_user(user_id):
     except:
         return jsonify({'error': 'Invalid ID'}), 400
 
-# Vercel doesn't need the __main__ block for execution, but it helps for local testing
+# Local testing execution block
 if __name__ == '__main__':
     init_db()
     
