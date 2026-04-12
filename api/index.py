@@ -140,23 +140,27 @@ def login():
     email = data.get('email', '').lower()
     password = data.get('password')
     
-    users_col = db.users
-    user = users_col.find_one({'$or': [{'email': email}, {'name': email}]})
-    
-    if user and check_password_hash(user['password'], password):
-        session['user_id'] = str(user['_id'])
-        return jsonify({
-            'message': 'Logged in',
-            'user': {
-                'id': str(user['_id']),
-                'name': user['name'],
-                'email': user['email'],
-                'specialty': user.get('specialty'),
-                'image': user.get('image')
-            }
-        })
-    
-    return jsonify({'error': 'Invalid credentials'}), 401
+    try:
+        users_col = db.users
+        user = users_col.find_one({'$or': [{'email': email}, {'name': email}]})
+        
+        if user and check_password_hash(user['password'], password):
+            session['user_id'] = str(user['_id'])
+            return jsonify({
+                'message': 'Logged in',
+                'user': {
+                    'id': str(user['_id']),
+                    'name': user['name'],
+                    'email': user['email'],
+                    'specialty': user.get('specialty'),
+                    'image': user.get('image')
+                }
+            })
+        
+        return jsonify({'error': 'Invalid credentials'}), 401
+    except Exception as e:
+        return jsonify({'error': f"Database connection error: {str(e)}"}), 500
+
 
 @app.route('/api/auth/logout', methods=['POST'])
 def logout():
