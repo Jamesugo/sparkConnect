@@ -3,5 +3,5 @@ flask-mail
 itsdangerous
 flask-cors
 requests
-pymongo
+pymongo[srv]
 dnspython

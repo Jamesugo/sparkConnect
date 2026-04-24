@@ -304,6 +304,26 @@ def admin_delete_user(user_id):
     except:
         return jsonify({'error': 'Invalid ID'}), 400
 
+@app.route('/api/debug/config', methods=['GET'])
+def debug_config():
+    uri = os.environ.get('MONGO_URI', 'NOT SET')
+    # Redact password for security
+    redacted_uri = uri
+    if '@' in uri:
+        prefix = uri.split('@')[0]
+        suffix = uri.split('@')[1]
+        if ':' in prefix:
+            user_part = prefix.split(':')[0]
+            redacted_uri = f"{user_part}:****@{suffix}"
+    
+    return jsonify({
+        'mongo_uri_configured': uri != 'NOT SET',
+        'mongo_uri_redacted': redacted_uri,
+        'is_srv': 'mongodb+srv' in uri,
+        'base_dir': BASE_DIR,
+        'api_dir': API_DIR
+    })
+
 # Local testing execution block
 if __name__ == '__main__':
     init_db()
