@@ -6,3 +6,4 @@ requests
 pymongo[srv]
 dnspython
 python-dotenv
+google-auth

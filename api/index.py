@@ -11,6 +11,8 @@ import requests
 from pymongo import MongoClient
 from bson import ObjectId
 from dotenv import load_dotenv
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
 
 # Try to load .env from public folder for local development
 load_dotenv(os.path.join(os.path.dirname(__file__), '..', 'public', '.env'))
@@ -166,6 +168,68 @@ def login():
 def logout():
     session.pop('user_id', None)
     return jsonify({'message': 'Logged out'})
+
+@app.route('/api/auth/google', methods=['POST'])
+def google_auth():
+    data = request.json
+    token = data.get('idToken')
+    client_id = os.environ.get('GOOGLE_CLIENT_ID')
+
+    if not token:
+        return jsonify({'error': 'Missing ID Token'}), 400
+
+    try:
+        # Verify the ID token
+        idinfo = id_token.verify_oauth2_token(token, google_requests.Request(), client_id)
+
+        # ID token is valid. Get the user's Google ID and email.
+        email = idinfo['email'].lower()
+        name = idinfo.get('name', 'Google User')
+        picture = idinfo.get('picture', 'assets/images/profile_placeholder.jpg')
+
+        users_col = db.users
+        user = users_col.find_one({'email': email})
+
+        if not user:
+            # Create new user if they don't exist
+            new_user = {
+                'email': email,
+                'name': name,
+                'image': picture,
+                'specialty': 'Visitor', # Default role
+                'state': 'Not Specified',
+                'location': 'Nigeria',
+                'description': 'Joined via Google',
+                'rating': 0,
+                'reviews': 0,
+                'gallery': [],
+                'reviews_data': []
+            }
+            # Note: No password for Google users
+            result = users_col.insert_one(new_user)
+            user_id = str(result.inserted_id)
+            user = new_user
+            user['_id'] = result.inserted_id
+        else:
+            user_id = str(user['_id'])
+
+        session['user_id'] = user_id
+        return jsonify({
+            'message': 'Logged in with Google',
+            'user': {
+                'id': user_id,
+                'name': user['name'],
+                'email': user['email'],
+                'specialty': user.get('specialty'),
+                'image': user.get('image')
+            }
+        })
+
+    except ValueError:
+        # Invalid token
+        return jsonify({'error': 'Invalid Google ID Token'}), 401
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/auth/me', methods=['GET'])
 def get_current_user():

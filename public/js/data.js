@@ -119,6 +119,38 @@ window.DataManager = {
         }
     },
 
+    loginWithGoogle: async function(idToken) {
+        console.log("Attempting Google login...");
+        const url = `${API_BASE_URL}/api/auth/google`;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ idToken }),
+                credentials: 'include'
+            });
+            let result;
+            const text = await response.text();
+            try {
+                result = text ? JSON.parse(text) : {};
+            } catch (e) {
+                console.error("Failed to parse Google login response:", text);
+                throw new Error("Server Error: Invalid JSON response");
+            }
+            if (!response.ok) {
+                throw new Error(result.error || `Google login failed with status ${response.status}`);
+            }
+            console.log("Google login successful");
+            return result.user;
+        } catch (error) {
+            console.error("Google login error:", error);
+            throw error;
+        }
+    },
+
     logout: async function() {
         await networkRequest(`${API_BASE_URL}/api/auth/logout`, { 
             method: 'POST',

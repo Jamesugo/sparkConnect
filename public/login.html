@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log In - SparkConnect</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         .auth-container {
             max-width: 400px;
@@ -64,6 +65,25 @@
             </div>
             <button type="submit" class="submit-btn" style="background-color: var(--primary-blue);">Log In</button>
         </form>
+        <div style="margin: 20px 0; text-align: center; position: relative;">
+            <hr style="border: 0; border-top: 1px solid #ddd;">
+            <span style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: white; padding: 0 10px; color: #888; font-size: 14px;">OR</span>
+        </div>
+        <div id="google-btn-container" style="display: flex; justify-content: center;">
+            <div id="g_id_onload"
+                 data-client_id="1033822674322-a0oo27de2al2j9ss2qo0tutruuovjv1j.apps.googleusercontent.com"
+                 data-callback="handleCredentialResponse"
+                 data-auto_prompt="false">
+            </div>
+            <div class="g_id_signin"
+                 data-type="standard"
+                 data-size="large"
+                 data-theme="outline"
+                 data-text="sign_in_with"
+                 data-shape="rectangular"
+                 data-logo_alignment="left">
+            </div>
+        </div>
         <div class="auth-links">
             <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
         </div>
@@ -115,6 +135,18 @@
                 });
             }
         });
+
+        async function handleCredentialResponse(response) {
+            console.log("Encoded JWT ID token: " + response.credential);
+            try {
+                const user = await DataManager.loginWithGoogle(response.credential);
+                if (user) {
+                    window.location.href = 'index.html';
+                }
+            } catch (error) {
+                ModalManager.alert(error.message || 'Google login failed.', 'Error');
+            }
+        }
     </script>
 </body>
 </html>
