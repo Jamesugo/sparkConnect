@@ -19,19 +19,19 @@ def seed_db():
             "name": "Sarah Johnson", "specialty": "Residential Wiring", "rating": 4.8, "reviews": 120,
             "location": "Lagos", "state": "Lagos", "image": "assets/images/profile1.jpg", 
             "description": "Expert in residential wiring and lighting installations.", "email": "sarah@example.com",
-            "password": generate_password_hash("password"), "gallery": [], "reviews_data": []
+            "password": generate_password_hash("password"), "signup_method": "email", "gallery": [], "reviews_data": []
         },
         {
             "name": "Michael Chen", "specialty": "Commercial Systems", "rating": 4.9, "reviews": 150,
             "location": "Abuja", "state": "FCT - Abuja", "image": "assets/images/profile2.jpg",
             "description": "Specializes in commercial electrical systems.", "email": "michael@example.com",
-            "password": generate_password_hash("password"), "gallery": [], "reviews_data": []
+            "password": generate_password_hash("password"), "signup_method": "email", "gallery": [], "reviews_data": []
         },
         {
             "name": "Admin", "specialty": "Administrator", "rating": 0, "reviews": 0,
             "location": "Nigeria", "state": "FCT - Abuja", "image": "assets/images/profile_placeholder.jpg",
             "description": "SparkConnect Administrator", "email": "admin@sparkconnect.com",
-            "password": generate_password_hash("admin123"), "gallery": [], "reviews_data": []
+            "password": generate_password_hash("admin123"), "signup_method": "email", "gallery": [], "reviews_data": []
         }
     ]
     users_col.insert_many(defaults)

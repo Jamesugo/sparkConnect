@@ -287,6 +287,19 @@
         // Search Filter
         const params = new URLSearchParams(window.location.search);
         const query = params.get("q");
+        const stateParam = params.get("state");
+
+        if (stateParam) {
+          // Pre-select the state filter dropdown
+          const matchedState = NIGERIAN_STATES.find(s => s.toLowerCase() === stateParam.toLowerCase());
+          if (matchedState) {
+            stateSelect.value = matchedState;
+          }
+          
+          initialList = initialList.filter(
+            (e) => e.state && e.state.toLowerCase() === stateParam.toLowerCase()
+          );
+        }
 
         if (query) {
           const q = query.toLowerCase();
@@ -297,11 +310,15 @@
               (e.location && e.location.toLowerCase().includes(q)) ||
               (e.state && e.state.toLowerCase().includes(q))
           );
-          // Update header to show search results
-          document.querySelector(
-            ".results-header h1"
-          ).textContent = `Search Results for "${query}"`;
-          // Pre-select state if query matches a state? (Optional, skipping for now to keep simple)
+        }
+
+        // Update header based on active filters
+        if (query && stateParam) {
+          document.querySelector(".results-header h1").textContent = `Search Results for "${query}" in ${stateParam}`;
+        } else if (query) {
+          document.querySelector(".results-header h1").textContent = `Search Results for "${query}"`;
+        } else if (stateParam) {
+          document.querySelector(".results-header h1").textContent = `Electricians in ${stateParam}`;
         }
 
         renderList(initialList);
