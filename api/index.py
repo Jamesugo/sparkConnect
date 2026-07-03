@@ -53,6 +53,8 @@ def serialize_doc(doc):
     if doc:
         doc['id'] = str(doc['_id'])
         del doc['_id']
+        if 'reviews_data' in doc:
+            doc['reviewsList'] = doc['reviews_data']
     return doc
 
 def init_db():

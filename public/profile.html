@@ -288,7 +288,7 @@
                                 </div>
                                 <div style="margin-bottom: var(--spacing-md);">
                                     <label style="display: block; margin-bottom: var(--spacing-sm); font-weight: 500;">Your Name</label>
-                                    <input type="text" id="reviewer-name" placeholder="Enter your name" required style="width: 100%; max-width: 400px;">
+                                    <input type="text" id="reviewer-name" placeholder="Enter your name" value="${currentUser ? currentUser.name : ''}" required style="width: 100%; max-width: 400px;">
                                 </div>
                                 <div style="margin-bottom: var(--spacing-md);">
                                     <label style="display: block; margin-bottom: var(--spacing-sm); font-weight: 500;">Comment (Optional)</label>
@@ -456,7 +456,7 @@
 
         const ratingInput = document.getElementById("rating-value");
         const rating = parseInt(ratingInput.value);
-        const name = document.getElementById("reviewer-name").value; // This 'name' is not used in the new API call
+        const name = document.getElementById("reviewer-name").value;
         const comment = document.getElementById("review-comment").value;
 
         if (rating === 0) {
@@ -465,12 +465,12 @@
         }
 
         try {
-          const res = await fetch(`${API_BASE_URL}/api/reviews`, {
+          const res = await fetch(`${API_BASE_URL}/api/electricians/${electrician.id}/review`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              targetUserId: electrician.id,
               rating: rating,
+              name: name,
               comment: comment,
             }),
             credentials: "include", // Need session to post

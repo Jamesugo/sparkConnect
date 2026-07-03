@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD479W7GGP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-CD479W7GGP');
+    </script>
+    <meta
+      name="google-site-verification"
+      content="azl39sOHw49JJ2jl0OjO2VBzzZ7m-pYcRttxWolRWEk"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us - SparkConnect | Find Verified Electricians in Nigeria</title>
+    <meta name="description" content="Learn more about SparkConnect's mission to bridge the gap between home owners, commercial entities, and verified, professional electricians in Nigeria." />
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      /* Hero styling */
+      .about-hero {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
+        color: var(--white);
+        padding: var(--spacing-xxl) 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .about-hero h1 {
+        font-size: var(--font-size-3xl);
+        font-weight: 800;
+        margin-bottom: var(--spacing-md);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+      .about-hero p {
+        font-size: var(--font-size-lg);
+        max-width: 700px;
+        margin: 0 auto;
+        opacity: 0.9;
+        line-height: 1.6;
+      }
+
+      /* Sections General */
+      .about-section {
+        padding: var(--spacing-xxl) 0;
+      }
+      .section-subtitle {
+        color: var(--primary-blue);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.9rem;
+        margin-bottom: var(--spacing-sm);
+        display: block;
+        text-align: center;
+      }
+      .section-title {
+        font-size: var(--font-size-2xl);
+        margin-bottom: var(--spacing-lg);
+        font-weight: 700;
+        text-align: center;
+      }
+
+      /* Mission/Journey Box */
+      .mission-container {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: var(--spacing-xl);
+        align-items: center;
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-xl);
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+      }
+      @media (max-width: 768px) {
+        .mission-container {
+          grid-template-columns: 1fr;
+        }
+      }
+      .mission-text h2 {
+        font-size: var(--font-size-xl);
+        margin-bottom: var(--spacing-md);
+        font-weight: 700;
+        color: var(--text-dark);
+      }
+      .mission-text p {
+        color: var(--text-gray);
+        line-height: 1.7;
+        margin-bottom: var(--spacing-md);
+      }
+      .mission-stats {
+        background: var(--bg-light);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-lg);
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+        text-align: center;
+      }
+      .mission-stat-item h3 {
+        font-size: var(--font-size-2xl);
+        color: var(--primary-blue);
+        font-weight: 800;
+        margin-bottom: var(--spacing-xs);
+      }
+      .mission-stat-item p {
+        font-size: var(--font-size-sm);
+        color: var(--text-gray);
+        font-weight: 500;
+      }
+
+      /* Core Values Grid */
+      .about-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: var(--spacing-xl);
+        margin-top: var(--spacing-lg);
+      }
+      .value-card {
+        background: var(--white);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-xl);
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        text-align: center;
+      }
+      .value-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        border-color: var(--primary-blue);
+      }
+      .value-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(0, 102, 204, 0.08);
+        color: var(--primary-blue);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin: 0 auto var(--spacing-md);
+      }
+      .value-title {
+        font-size: var(--font-size-lg);
+        font-weight: 700;
+        margin-bottom: var(--spacing-sm);
+        color: var(--text-dark);
+      }
+      .value-desc {
+        color: var(--text-gray);
+        font-size: var(--font-size-sm);
+        line-height: 1.6;
+      }
+
+      /* CTA styling */
+      .cta-section {
+        background: linear-gradient(135deg, #f0f4f8 0%, #dbeafe 100%);
+        text-align: center;
+        padding: var(--spacing-xxl) 0;
+        border-top: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
+      }
+      .cta-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-md);
+      }
+      .cta-title {
+        font-size: var(--font-size-2xl);
+        font-weight: 800;
+        margin-bottom: var(--spacing-md);
+        color: var(--text-dark);
+      }
+      .cta-desc {
+        color: var(--text-gray);
+        font-size: var(--font-size-base);
+        margin-bottom: var(--spacing-lg);
+        line-height: 1.6;
+      }
+      .cta-buttons {
+        display: flex;
+        justify-content: center;
+        gap: var(--spacing-md);
+      }
+      @media (max-width: 480px) {
+        .cta-buttons {
+          flex-direction: column;
+          gap: var(--spacing-sm);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Nav rendered by js/nav.js -->
+    <nav></nav>
+
+    <!-- Hero Section -->
+    <header class="about-hero">
+      <div class="container">
+        <h1>About SparkConnect</h1>
+        <p>
+          We are Nigeria's leading platform connecting households and commercial businesses with verified, reliable, and professional electricians.
+        </p>
+      </div>
+    </header>
+
+    <!-- Mission & Journey Section -->
+    <section class="about-section">
+      <div class="container">
+        <span class="section-subtitle">Our Journey</span>
+        <h2 class="section-title">Bridging the Gap in Electrical Solutions</h2>
+        <div class="mission-container">
+          <div class="mission-text">
+            <h2>Making Electrical Connections Safe and Simple</h2>
+            <p>
+              SparkConnect was founded with a single mission: to create a trusted network of verified electrical professionals in Nigeria. We recognized the challenges that homeowners and businesses face when searching for skilled electricians, as well as the difficulty honest electricians have in finding clients.
+            </p>
+            <p>
+              By offering a simple, transparent, and direct directory platform, we eliminate intermediate booking fees and allow clients to connect directly with professionals via Phone Call or WhatsApp.
+            </p>
+          </div>
+          <div class="mission-stats">
+            <div class="mission-stat-item">
+              <h3>500+</h3>
+              <p>Verified Electricians</p>
+            </div>
+            <div class="mission-stat-item">
+              <h3>10k+</h3>
+              <p>Completed Projects</p>
+            </div>
+            <div class="mission-stat-item">
+              <h3>36</h3>
+              <p>States Covered</p>
+            </div>
+            <div class="mission-stat-item">
+              <h3>4.9/5</h3>
+              <p>Average Rating</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Core Values Section -->
+    <section class="about-section" style="background-color: var(--bg-light); border-top: 1px solid var(--border-color);">
+      <div class="container">
+        <span class="section-subtitle">Our Values</span>
+        <h2 class="section-title">What Drives Us Every Day</h2>
+        <div class="about-grid">
+          <!-- Value Card 1 -->
+          <div class="value-card">
+            <div class="value-icon">🛡️</div>
+            <h3 class="value-title">Safety First</h3>
+            <p class="value-desc">Electrical work is critical and requires caution. We prioritize safety by registering only qualified professionals.</p>
+          </div>
+          <!-- Value Card 2 -->
+          <div class="value-card">
+            <div class="value-icon">🤝</div>
+            <h3 class="value-title">Reliability</h3>
+            <p class="value-desc">We build trust through verified customer reviews and honest communication channels.</p>
+          </div>
+          <!-- Value Card 3 -->
+          <div class="value-card">
+            <div class="value-icon">👁️</div>
+            <h3 class="value-title">Transparency</h3>
+            <p class="value-desc">Zero hidden charges. Negotiate directly with the electricians and get fair pricing without middlewares.</p>
+          </div>
+          <!-- Value Card 4 -->
+          <div class="value-card">
+            <div class="value-icon">⭐</div>
+            <h3 class="value-title">Professionalism</h3>
+            <p class="value-desc">From residential wiring to heavy industrial setups, our electricians represent the peak of local expertise.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+      <div class="cta-container">
+        <h2 class="cta-title">Ready to Get Started?</h2>
+        <p class="cta-desc">
+          Whether you need a quick repair or a complete solar installation, SparkConnect is here to help you find the perfect electrician for the job.
+        </p>
+        <div class="cta-buttons">
+          <a href="electricians.html" class="btn btn-primary">Find an Electrician</a>
+          <a href="signup.html" class="btn btn-outline">Join as an Electrician</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <h4>SparkConnect</h4>
+            <p style="color: #bbb; line-height: 1.6">
+              Connecting you with the best electrical professionals in Nigeria.
+              Safe, fast, and reliable.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="electricians.html">Find Electricians</a></li>
+              <li><a href="about.html">About Us</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Contact</h4>
+            <ul>
+              <li>support@sparkconnect.com</li>
+              <li>+234 800 123 4567</li>
+              <li>Lagos, Nigeria</li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 SparkConnect. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/nav.js"></script>
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+  </body>
+</html>
