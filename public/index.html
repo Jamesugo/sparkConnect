@@ -18,356 +18,297 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SparkConnect - Find Electricians</title>
     <link rel="stylesheet" href="css/style.css" />
-    <style>
-      .hero {
-        padding: var(--spacing-xxl) 0;
-        background-color: var(--white);
-        text-align: center;
-      }
-
-      .hero h1 {
-        font-size: var(--font-size-3xl);
-        margin-bottom: var(--spacing-md);
-      }
-
-      .search-bar-container {
-        max-width: 600px;
-        margin: 0 auto;
-        position: relative;
-      }
-
-      .search-bar {
-        display: flex;
-        gap: var(--spacing-sm);
-      }
-
-      .search-input {
-        flex: 1;
-        padding: var(--spacing-md);
-        border-radius: var(--radius-md);
-        background-color: #f0f4f8;
-        border: none;
-      }
-
-      .search-btn {
-        padding: 0 var(--spacing-lg);
-      }
-
-      .featured-section {
-        padding: var(--spacing-xxl) 0;
-      }
-
-      .section-title {
-        font-size: var(--font-size-2xl);
-        margin-bottom: var(--spacing-lg);
-        font-weight: 700;
-      }
-
-      .electrician-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: var(--spacing-lg);
-      }
-
-      .electrician-card {
-        background: var(--white);
-        border-radius: var(--radius-lg);
-        overflow: hidden;
-        transition: transform 0.2s, box-shadow 0.2s;
-        cursor: pointer;
-        border: 1px solid transparent;
-      }
-
-      .electrician-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        border-color: var(--border-color);
-      }
-
-      .card-img {
-        height: 200px;
-        background-color: #e0e0e0; /* Placeholder color */
-        width: 100%;
-        object-fit: cover;
-      }
-
-      .card-body {
-        padding: var(--spacing-md);
-      }
-
-      .card-name {
-        font-weight: 700;
-        font-size: var(--font-size-lg);
-        margin-bottom: var(--spacing-xs);
-      }
-
-      .card-specialty {
-        color: var(--primary-blue);
-        font-size: var(--font-size-sm);
-        font-weight: 500;
-        margin-bottom: var(--spacing-sm);
-      }
-
-      .card-desc {
-        font-size: var(--font-size-sm);
-        color: var(--text-gray);
-        margin-bottom: var(--spacing-md);
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-
-      .card-rating {
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-xs);
-        font-size: var(--font-size-sm);
-        color: var(--text-dark);
-      }
-
-      .star {
-        color: var(--secondary-orange);
-      }
-    </style>
   </head>
   <body>
     <!-- Nav rendered by js/nav.js -->
     <nav></nav>
 
     <!-- Hero Section -->
-    <div class="hero">
-      <div class="container" style="z-index: 2; position: relative">
-        <h1>Find Trusted Electricians<br />in Your Area</h1>
-        <p>
-          Connect with verified professionals for residential and commercial
-          electrical projects. Safe, reliable, and fast.
-        </p>
-
-        <div class="search-bar-container" style="position: relative;">
+    <section class="hero" id="hero-section">
+      <div class="hero-slides">
+        <div class="hero-slide active"></div>
+        <div class="hero-slide"></div>
+        <div class="hero-slide"></div>
+        <div class="hero-slide"></div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-badge">⚡ Nigeria's #1 Electrician Platform</div>
+        <h1>Find Trusted Electricians<br /><span>In Your Area</span></h1>
+        <p>Connect with verified professionals for residential and commercial electrical projects. Safe, reliable, and fast — across all 36 states.</p>
+        <div class="search-bar-container" style="position:relative;">
           <form action="electricians.html" class="search-bar search-bar-dual">
             <div class="search-input-wrapper">
-              <input
-                type="text"
-                name="q"
-                id="search-input"
-                class="search-input"
-                placeholder="What do you need help with? e.g. Wiring, Installation..."
-                autocomplete="off"
-              />
+              <input type="text" name="q" id="search-input" class="search-input" placeholder="Search for Wiring, Solar, Generator..." autocomplete="off" />
               <div class="search-suggestions" id="suggestions-box"></div>
             </div>
             <div class="search-divider"></div>
             <div class="search-select-wrapper">
-              <select name="state" id="state-select">
-                <option value="">All States</option>
-              </select>
+              <select name="state" id="state-select"><option value="">All States</option></select>
             </div>
-            <button type="submit" class="btn btn-primary search-btn">
-              Search
-            </button>
+            <button type="submit" class="btn btn-primary search-btn">Search ⚡</button>
           </form>
         </div>
 
-        <div class="category-tags">
-          <span class="category-chip" data-query="Wiring">Wiring</span>
-          <span class="category-chip" data-query="Solar">Solar Panels</span>
-          <span class="category-chip" data-query="Inverter">Inverters</span>
-          <span class="category-chip" data-query="Commercial">Commercial</span>
-          <span class="category-chip" data-query="Fault Finding">Fault Finding</span>
-          <span class="category-chip" data-query="Generator">Generators</span>
-        </div>
       </div>
-    </div>
+      <div class="scroll-arrow" onclick="document.querySelector('.how-it-works').scrollIntoView({behavior:'smooth'})">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="hero-indicators" id="hero-indicators">
+        <div class="hero-dot active" data-idx="0"></div>
+        <div class="hero-dot" data-idx="1"></div>
+        <div class="hero-dot" data-idx="2"></div>
+        <div class="hero-dot" data-idx="3"></div>
+      </div>
+    </section>
 
-    <!-- How It Works -->
-    <section class="how-it-works">
+
+    <!-- Overlapping Service Cards -->
+    <section class="overlap-cards-section">
       <div class="container">
-        <span class="section-subtitle">Simple Process</span>
-        <h2 class="section-title">How SparkConnect Works</h2>
-
-        <div class="steps-grid">
-          <div class="step-card">
-            <div class="step-icon">1</div>
-            <h3 class="step-title">Search</h3>
-            <p class="step-desc">
-              Browse top-rated electricians in your location based on specialty.
-            </p>
+        <div class="overlap-cards-grid">
+          <div class="overlap-card">
+            <div class="overlap-card-img" style="background-image: url('assets/images/wiring_work.png')"></div>
+            <div class="overlap-card-content">
+              <h3 style="color: #0066cc;">HOUSE WIRING</h3>
+              <p>Professional residential and commercial electrical wiring setups to highest standards.</p>
+              <button class="overlap-btn" onclick="window.location.href='electricians.html?q=Residential Electrician'">View details</button>
+            </div>
           </div>
-          <div class="step-card">
-            <div class="step-icon">2</div>
-            <h3 class="step-title">Compare</h3>
-            <p class="step-desc">
-              View profiles, read verified reviews, and check past project
-              galleries.
-            </p>
+          <div class="overlap-card">
+            <div class="overlap-card-img" style="background-image: url('assets/images/solar_panel.png')"></div>
+            <div class="overlap-card-content">
+              <h3 style="color: #ff9900;">SOLAR & INVERTER</h3>
+              <p>Energy efficient solar setups to maximize power retention and reduce reliance on fuel.</p>
+              <button class="overlap-btn" onclick="window.location.href='electricians.html?q=Solar Panel Installer'">View details</button>
+            </div>
           </div>
-          <div class="step-card">
-            <div class="step-icon">3</div>
-            <h3 class="step-title">Hire</h3>
-            <p class="step-desc">
-              Connect directly via Phone or WhatsApp to get your job done.
-            </p>
+          <div class="overlap-card">
+            <div class="overlap-card-img" style="background-image: url('assets/images/generator_service.png')"></div>
+            <div class="overlap-card-content">
+              <h3 style="color: #0066cc;">INDUSTRIAL ELECTRICIANS</h3>
+              <p>Expert installation, maintenance, and repair of all industrial electrical systems.</p>
+              <button class="overlap-btn" onclick="window.location.href='electricians.html?q=Industrial Electrician'">View details</button>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Featured Section -->
-    <section class="container featured-section">
-      <div
-        style="
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: var(--spacing-lg);
-        "
-      >
-        <h2 class="section-title" style="margin-bottom: 0">
-          Top Rated Electricians
-        </h2>
-        <a
-          href="electricians.html"
-          style="color: var(--primary-blue); font-weight: 500"
-          >View All →</a
-        >
-      </div>
-
-      <div class="electrician-grid" id="featured-grid">
-        <!-- Populated by JS -->
+    <!-- How It Works Section -->
+    <section class="how-it-works" style="background-color: #f8f9fa;">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: 2.5rem;">
+          <h2 style="font-size: 2rem; font-weight: 800; color: #1a1a1a;">
+            HOW IT <span style="color: #ff9900;">WORKS</span>
+          </h2>
+          <p style="color: #666; max-width: 600px; margin: 10px auto;">Connecting with a certified electrician is as simple as 1-2-3.</p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: center;">
+          <div style="background: white; padding: 36px 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 12px 30px rgba(0,102,204,0.12)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(0,0,0,0.06)';">
+            <div style="width: 72px; height: 72px; background: linear-gradient(135deg, #0066cc, #004499); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 8px 24px rgba(0,102,204,0.3);">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; color: #1a1a1a;">1. Search &amp; Filter</h3>
+            <p style="color: #666; font-size: 0.95rem; line-height: 1.6;">Find the right specialty in your state. Whether it's residential wiring, solar, or commercial repairs.</p>
+          </div>
+          <div style="background: white; padding: 36px 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 12px 30px rgba(255,153,0,0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(0,0,0,0.06)';">
+            <div style="width: 72px; height: 72px; background: linear-gradient(135deg, #ff9900, #e68a00); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 8px 24px rgba(255,153,0,0.3);">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; color: #1a1a1a;">2. Compare Profiles</h3>
+            <p style="color: #666; font-size: 0.95rem; line-height: 1.6;">Check out ratings, read reviews from past clients, and view their portfolio of previous work.</p>
+          </div>
+          <div style="background: white; padding: 36px 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 12px 30px rgba(40,167,69,0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(0,0,0,0.06)';">
+            <div style="width: 72px; height: 72px; background: linear-gradient(135deg, #28a745, #1a7a32); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 8px 24px rgba(40,167,69,0.3);">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.78h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 10.4a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; color: #1a1a1a;">3. Get Connected</h3>
+            <p style="color: #666; font-size: 0.95rem; line-height: 1.6;">Contact the professional directly via WhatsApp or phone call and get your job done safely.</p>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Cost Estimator Section -->
-    <section class="estimator-section">
+    <!-- Fresher Than Ever Section (Power Your World) -->
+    <section class="power-world-section">
       <div class="container">
-        <span class="section-subtitle" style="text-align: center;">Budget Estimator</span>
-        <h2 class="section-title" style="text-align: center;">Quick Cost Estimator & Match Maker</h2>
+        <div class="power-world-grid">
+          <div class="power-world-left">
+            <!-- <h4 style="color: #0066cc; font-weight: 700; margin-bottom: 8px;"></h4> -->
+            <h2 style="font-size: 2.5rem; font-weight: 800; color: #1a1a1a; line-height: 1.1; margin-bottom: 1rem;">
+              LET'S POWER YOUR WORLD<br/>
+              <span style="color: #ff9900;">SAFER THAN EVER</span>
+            </h2>
+            <p style="color: #666; font-size: 0.95rem; line-height: 1.7; margin-bottom: 2rem;">
+              Electrical work isn't just about making things turn on—it's about safety, efficiency, and future-proofing your home. SparkConnect connects you with top-tier professionals seamlessly.
+            </p>
+            <div class="power-features">
+              <div class="power-feature">
+                <div class="pf-icon" style="width:48px;height:48px;background:linear-gradient(135deg,#0066cc,#004499);border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,102,204,0.3);flex-shrink:0;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div class="pf-text">
+                  <h5>Verified Professionals</h5>
+                  <p>Every electrician is vetted through past project reviews and checks.</p>
+                </div>
+              </div>
+              <div class="power-feature">
+                <div class="pf-icon" style="width:48px;height:48px;background:linear-gradient(135deg,#ff9900,#e68a00);border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(255,153,0,0.3);flex-shrink:0;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><bolt/><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <div class="pf-text">
+                  <h5>Rapid Response</h5>
+                  <p>Filter by your state and connect instantly via WhatsApp or Phone call.</p>
+                </div>
+              </div>
+              <div class="power-feature">
+                <div class="pf-icon" style="width:48px;height:48px;background:linear-gradient(135deg,#28a745,#1a7a32);border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(40,167,69,0.3);flex-shrink:0;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+                <div class="pf-text">
+                  <h5>No Hidden Fees</h5>
+                  <p>Zero booking commissions. Connect directly with the professional.</p>
+                </div>
+              </div>
+              <div class="power-feature">
+                <div class="pf-icon" style="width:48px;height:48px;background:linear-gradient(135deg,#6f42c1,#4b2d8a);border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(111,66,193,0.3);flex-shrink:0;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.78h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 10.4a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                </div>
+                <div class="pf-text">
+                  <h5>Direct Communication</h5>
+                  <p>Chat and negotiate rates safely with verified experts.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="power-world-right">
+            <img src="assets/images/electrician_work.png" alt="Professional Electrician" style="width: 100%; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);"/>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blue Stats Banner -->
+    <section class="blue-stats-banner" id="stats-section">
+      <div class="container">
+        <div class="blue-stats-grid">
+          <div class="b-stat">
+            <div class="b-stat-info">
+              <div class="b-stat-num" data-target="500">0+</div>
+              <div class="b-stat-label">VERIFIED PROS</div>
+            </div>
+          </div>
+          <div class="b-stat">
+            <div class="b-stat-info">
+              <div class="b-stat-num" data-target="10000">0k+</div>
+              <div class="b-stat-label">PROJECTS</div>
+            </div>
+          </div>
+          <div class="b-stat">
+            <div class="b-stat-info">
+              <div class="b-stat-num" data-target="36">0</div>
+              <div class="b-stat-label">STATES COVERED</div>
+            </div>
+          </div>
+          <div class="b-stat">
+            <div class="b-stat-info">
+              <div class="b-stat-num" data-target="4.9" data-decimals="1">0.0</div>
+              <div class="b-stat-label">AVG RATING</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Portfolio / Featured Section -->
+    <section class="portfolio-section">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: 2rem;">
+          <h2 style="font-size: 2rem; font-weight: 800; color: #1a1a1a;">
+            <span style="color: #ff9900;">OUR</span> PORTFOLIO
+          </h2>
+          <p style="color: #666; max-width: 600px; margin: 10px auto;">Browse profiles of our top-rated electricians available across Nigeria.</p>
+        </div>
         
-        <div class="estimator-container">
-          <!-- Left: User inputs -->
-          <div class="estimator-form">
-            <div class="estimator-group">
-              <label>Select Electrical Project Task</label>
-              <div class="estimator-options" id="estimator-task-options">
-                <div class="estimator-card-select active" data-value="wiring" data-price-base="80000" data-price-var="40000">House Rewiring</div>
-                <div class="estimator-card-select" data-value="solar" data-price-base="150000" data-price-var="70000">Solar & Inverter Installation</div>
-                <div class="estimator-card-select" data-value="fault" data-price-base="15000" data-price-var="8000">Fault Finding / Repair</div>
-                <div class="estimator-card-select" data-value="appliance" data-price-base="12000" data-price-var="5000">AC / Appliance Installation</div>
-              </div>
-            </div>
-            
-            <div class="estimator-group">
-              <label>Select Scale / Size of Building</label>
-              <div class="estimator-options" id="estimator-scale-options">
-                <div class="estimator-card-select active" data-multiplier="1.0">1 - 2 Bedroom Flat</div>
-                <div class="estimator-card-select" data-multiplier="1.8">3 - 4 Bedroom House</div>
-                <div class="estimator-card-select" data-multiplier="2.5">Duplex / Large Building</div>
-                <div class="estimator-card-select" data-multiplier="3.5">Commercial Office / Facility</div>
-              </div>
-            </div>
-            
-            <div class="estimator-group">
-              <label>Your State Location</label>
-              <select id="estimator-state-select" class="filter-select">
-                <option value="">Select State...</option>
-                <!-- Populated dynamically -->
-              </select>
-            </div>
-          </div>
-          
-          <!-- Right: Cost breakdown & matches -->
-          <div class="estimator-results">
-            <div>
-              <div class="estimator-price-title">Estimated Cost Range</div>
-              <div class="estimator-price-value" id="estimator-cost-display">₦80,000 - ₦120,000</div>
-              <p style="font-size: 12px; opacity: 0.7; margin-bottom: 20px; line-height: 1.4;">
-                *Estimates are approximate baseline market rates in Nigeria. Final pricing is negotiated with the selected electrician.
-              </p>
-            </div>
-            
-            <div>
-              <div class="estimator-matches-title" id="estimator-matches-header">Matching Local Electricians</div>
-              <div class="estimator-matches-grid" id="estimator-matches-grid">
-                <p style="font-size: 13px; opacity: 0.8; margin-top: 10px;">Select your location state to find matches in your area.</p>
-              </div>
-            </div>
-          </div>
+        <div class="portfolio-filter-bar">
+          <button class="pf-btn active" data-filter="All">All</button>
+          <button class="pf-btn" data-filter="Residential Electrician">Residential</button>
+          <button class="pf-btn" data-filter="Solar Panel Installer">Solar</button>
+          <button class="pf-btn" data-filter="Commercial Electrician">Commercial</button>
+        </div>
+        
+        <div class="portfolio-grid" id="portfolio-grid">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="portfolio-nav">
+          <button class="p-nav-btn">❮</button>
+          <button class="p-nav-btn active">❯</button>
         </div>
       </div>
     </section>
 
-    <!-- Trust/Stats Section -->
-    <section class="trust-section" id="stats-section">
+    <!-- Why Choose SparkConnect -->
+    <section style="padding: 90px 0; background: #0a1628;">
       <div class="container">
-        <div class="stats-grid">
-          <div class="stat-item">
-            <h3 data-target="500">0+</h3>
-            <p>Verified Electricians</p>
+        <div style="text-align: center; margin-bottom: 3rem;">
+          <span style="color: #ff9900; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem;">Built for Nigeria</span>
+          <h2 style="font-size: 2rem; font-weight: 800; color: #fff; margin-top: 10px;">
+            WHY CHOOSE <span style="color: #ff9900;">SPARKCONNECT?</span>
+          </h2>
+          <p style="color: #aab; max-width: 600px; margin: 12px auto; line-height: 1.7;">We built SparkConnect to solve a real Nigerian problem — finding trustworthy, skilled electricians without the guesswork.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px;">
+
+          <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 30px; transition: all 0.3s;" onmouseover="this.style.background='rgba(0,102,204,0.15)'; this.style.borderColor='#0066cc';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.borderColor='rgba(255,255,255,0.1)';">
+            <div style="width:56px;height:56px;background:linear-gradient(135deg,#0066cc,#004499);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 6px 20px rgba(0,102,204,0.4);">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            </div>
+            <h3 style="color: #fff; font-size: 1.1rem; font-weight: 700; margin-bottom: 10px;">100% Verified Electricians</h3>
+            <p style="color: #aab; font-size: 0.9rem; line-height: 1.6;">Every professional on our platform is manually reviewed through past project checks before being listed.</p>
           </div>
-          <div class="stat-item">
-            <h3 data-target="10000">0+</h3>
-            <p>Completed Projects</p>
+
+          <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 30px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,153,0,0.1)'; this.style.borderColor='#ff9900';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.borderColor='rgba(255,255,255,0.1)';">
+            <div style="width:56px;height:56px;background:linear-gradient(135deg,#ff9900,#e68a00);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 6px 20px rgba(255,153,0,0.4);">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <h3 style="color: #fff; font-size: 1.1rem; font-weight: 700; margin-bottom: 10px;">Zero Middleman Fees</h3>
+            <p style="color: #aab; font-size: 0.9rem; line-height: 1.6;">Connect and negotiate directly with the professional. No hidden commissions, no booking fees — ever.</p>
           </div>
-          <div class="stat-item">
-            <h3 data-target="4.9" data-decimals="1">0/5</h3>
-            <p>Average Rating</p>
+
+          <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 30px; transition: all 0.3s;" onmouseover="this.style.background='rgba(40,167,69,0.1)'; this.style.borderColor='#28a745';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.borderColor='rgba(255,255,255,0.1)';">
+            <div style="width:56px;height:56px;background:linear-gradient(135deg,#28a745,#1a7a32);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 6px 20px rgba(40,167,69,0.4);">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+            </div>
+            <h3 style="color: #fff; font-size: 1.1rem; font-weight: 700; margin-bottom: 10px;">All 36 States Covered</h3>
+            <p style="color: #aab; font-size: 0.9rem; line-height: 1.6;">From Lagos to Maiduguri, our platform has nationwide coverage so you can find a pro wherever you are.</p>
           </div>
+
+          <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 30px; transition: all 0.3s;" onmouseover="this.style.background='rgba(220,53,69,0.1)'; this.style.borderColor='#dc3545';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.borderColor='rgba(255,255,255,0.1)';">
+            <div style="width:56px;height:56px;background:linear-gradient(135deg,#dc3545,#a71d2a);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 6px 20px rgba(220,53,69,0.4);">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <h3 style="color: #fff; font-size: 1.1rem; font-weight: 700; margin-bottom: 10px;">Emergency Services</h3>
+            <p style="color: #aab; font-size: 0.9rem; line-height: 1.6;">Power fault at midnight? Many of our listed pros are available for urgent callouts and emergency repairs.</p>
+          </div>
+
         </div>
       </div>
     </section>
 
-    <!-- FAQ Section -->
-    <section class="faq-section">
+    <!-- Blog / Tips Section -->
+    <section style="padding: 90px 0; background: #f8f9fa;">
       <div class="container">
-        <span class="section-subtitle" style="text-align: center;">Got Questions?</span>
-        <h2 class="section-title" style="text-align: center;">Frequently Asked Questions</h2>
-        <div class="faq-container">
-          <div class="faq-item">
-            <div class="faq-header">
-              <span>How do I contact an electrician?</span>
-              <span class="faq-icon">+</span>
-            </div>
-            <div class="faq-content">
-              <div class="faq-content-inner">
-                You can browse electrician profiles, select a professional, and connect with them directly via Phone Call or WhatsApp message. No intermediate booking fees are required!
-              </div>
-            </div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-header">
-              <span>Are the electricians on SparkConnect verified?</span>
-              <span class="faq-icon">+</span>
-            </div>
-            <div class="faq-content">
-              <div class="faq-content-inner">
-                Yes! We verify our registered electricians by checking their past project galleries, customer ratings, and contact details. Look for the "Top Rated" or verified badges on their profiles.
-              </div>
-            </div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-header">
-              <span>How much does it cost to hire an electrician?</span>
-              <span class="faq-icon">+</span>
-            </div>
-            <div class="faq-content">
-              <div class="faq-content-inner">
-                Pricing varies depending on the complexity and size of the job. You can use our "Quick Cost Estimator" widget above to get a baseline market rate estimation for typical tasks in Nigeria.
-              </div>
-            </div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-header">
-              <span>Can I register as an electrician?</span>
-              <span class="faq-icon">+</span>
-            </div>
-            <div class="faq-content">
-              <div class="faq-content-inner">
-                Absolutely! Click "Create Account" or "Sign In" in the navigation menu, fill in your details, select your specialty and state, and build your profile portfolio to start receiving client calls.
-              </div>
-            </div>
-          </div>
+        <div style="text-align: center; margin-bottom: 3rem;">
+          <span style="color: #ff9900; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem;">Knowledge Base</span>
+          <h2 style="font-size: 2rem; font-weight: 800; color: #1a1a1a; margin-top: 10px;">
+            ELECTRICAL <span style="color: #ff9900;">SAFETY TIPS</span>
+          </h2>
+          <p style="color: #666; max-width: 600px; margin: 12px auto; line-height: 1.7;">Stay informed. Our experts share practical advice to keep your home and business electrically safe.</p>
         </div>
+        <!-- Article cards rendered dynamically by js/articles.js based on publishDate -->
+        <div id="articles-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px;"></div>
       </div>
     </section>
 
@@ -388,6 +329,7 @@
               <li><a href="index.html">Home</a></li>
               <li><a href="electricians.html">Find Electricians</a></li>
               <li><a href="about.html">About Us</a></li>
+              <li><a href="contact.html">Contact Us</a></li>
             </ul>
           </div>
           <div class="footer-col">
@@ -420,18 +362,55 @@
     <script src="js/data.js"></script>
     <script src="js/nav.js"></script>
     <script>
-      const grid = document.getElementById("featured-grid");
+      const grid = document.getElementById("portfolio-grid");
+
+      // HERO SLIDESHOW
+      (function() {
+        var slides = document.querySelectorAll('.hero-slide');
+        var dots = document.querySelectorAll('.hero-dot');
+        var current = 0;
+        var timer;
+        function goTo(idx) {
+          slides[current].classList.remove('active');
+          dots[current].classList.remove('active');
+          current = (idx + slides.length) % slides.length;
+          slides[current].classList.add('active');
+          dots[current].classList.add('active');
+        }
+        function autoplay() { timer = setInterval(function() { goTo(current + 1); }, 5000); }
+        dots.forEach(function(dot) {
+          dot.addEventListener('click', function() { clearInterval(timer); goTo(parseInt(this.dataset.idx)); autoplay(); });
+        });
+        autoplay();
+      })();
+
+      // SCROLL REVEAL
+      (function() {
+        var els = document.querySelectorAll('.reveal');
+        var io = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        els.forEach(function(el) { io.observe(el); });
+      })();
 
       // Async function to load featured electricians
-      async function loadFeatured() {
+      async function loadFeatured(filter = "All") {
         const electricians = await DataManager.getAllElectricians();
 
         // Base filter: remove visitors and admins
-        const activeElectricians = electricians.filter((e) => {
+        let activeElectricians = electricians.filter((e) => {
           const isVisitor = e.specialty && e.specialty.toLowerCase() === "visitor";
           const isAdmin = e.name && e.name.toLowerCase() === "admin";
           return !isVisitor && !isAdmin;
         });
+
+        if (filter !== "All") {
+          const q = filter.toLowerCase();
+          activeElectricians = activeElectricians.filter((e) => {
+            return (e.specialty && e.specialty.toLowerCase().includes(q)) ||
+                   (e.description && e.description.toLowerCase().includes(q));
+          });
+        }
 
         // Filter top rated (mock logic: rating >= 4.5)
         const featured = activeElectricians.filter((e) => e.rating >= 4.5);
@@ -439,9 +418,11 @@
         // If no featured, fallback to show some
         const listToDisplay = featured.length > 0 ? featured : activeElectricians.slice(0, 4);
 
+        grid.innerHTML = "";
+
         listToDisplay.forEach((el) => {
           const card = document.createElement("div");
-          card.className = "electrician-card";
+          card.className = "electrician-card reveal";
           card.onclick = (e) => {
             if (e.target.classList.contains("card-quickview-btn")) {
               e.stopPropagation();
@@ -479,6 +460,11 @@
             `;
           grid.appendChild(card);
         });
+
+        var io2 = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); io2.unobserve(e.target); } });
+        }, { threshold: 0.1 });
+        grid.querySelectorAll('.reveal').forEach(function(el) { io2.observe(el); });
       }
 
       // Typewriter effect in search placeholder
@@ -869,16 +855,26 @@
       async function init() {
         populateStates();
         await loadFeatured();
+        
+        // Add portfolio filter listeners
+        document.querySelectorAll('.pf-btn').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            document.querySelectorAll('.pf-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            const filter = e.target.getAttribute('data-filter');
+            await loadFeatured(filter);
+          });
+        });
+
         typePlaceholder();
         calculateEstimate();
         animateCounters();
+        renderArticleCards('articles-grid');
       }
 
       init();
     </script>
-    <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    </script>
+    <script src="js/articles.js"></script>
     <script defer src="/_vercel/insights/script.js"></script>
   </body>
 </html>

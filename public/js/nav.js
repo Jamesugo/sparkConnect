@@ -39,6 +39,7 @@ const NavManager = {
     const path = window.location.pathname;
     const isHome = path.includes("index.html") || path.endsWith("/");
     const isList = path.includes("electricians.html");
+    const isAbout = path.includes("about.html");
     // Dashboard link is hidden in main Nav if not logged in, but we handle that dynamically below
 
     nav.innerHTML = `
@@ -61,6 +62,9 @@ const NavManager = {
                     <a href="electricians.html" class="${
                       isList ? "active" : ""
                     }">Find Electricians</a>
+                    <a href="about.html" class="${
+                      isAbout ? "active" : ""
+                    }">About</a>
                     ${
                       currentUser
                         ? `<a href="dashboard.html" class="${
@@ -120,6 +124,9 @@ const NavManager = {
                     <a href="electricians.html" class="${
                       isList ? "active" : ""
                     }" style="font-size: 1.1rem; color: var(--text-dark);">Find Electricians</a>
+                    <a href="about.html" class="${
+                      isAbout ? "active" : ""
+                    }" style="font-size: 1.1rem; color: var(--text-dark);">About Us</a>
                     ${
                       currentUser
                         ? `<a href="dashboard.html" class="${
