@@ -7,230 +7,249 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-CD479W7GGP');
     </script>
-    <meta
-      name="google-site-verification"
-      content="azl39sOHw49JJ2jl0OjO2VBzzZ7m-pYcRttxWolRWEk"
-    />
+    <meta name="google-site-verification" content="azl39sOHw49JJ2jl0OjO2VBzzZ7m-pYcRttxWolRWEk" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SparkConnect - Find Electricians</title>
+    <title>SparkConnect - Find Trusted Electricians</title>
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   </head>
   <body>
     <!-- Nav rendered by js/nav.js -->
     <nav></nav>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero-section">
-      <div class="hero-slides">
-        <div class="hero-slide active"></div>
-        <div class="hero-slide"></div>
-        <div class="hero-slide"></div>
-        <div class="hero-slide"></div>
+    <!-- NEW HERO SECTION -->
+    <section class="premium-hero">
+      <div class="hero-bg">
+        <div class="hero-image" style="background-image: url('assets/images/hero-bg.png');"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-graphics">
+          <div class="graphic-line gl-1"></div>
+          <div class="graphic-line gl-2"></div>
+          <div class="graphic-glow"></div>
+        </div>
       </div>
-      <div class="hero-content">
-        <div class="hero-badge">⚡ Nigeria's #1 Electrician Platform</div>
-        <h1>Find Trusted Electricians<br /><span>In Your Area</span></h1>
-        <p>Connect with verified professionals for residential and commercial electrical projects. Safe, reliable, and fast — across all 36 states.</p>
-        <div class="search-bar-container" style="position:relative;">
-          <form action="electricians.html" class="search-bar search-bar-dual">
-            <div class="search-input-wrapper">
-              <input type="text" name="q" id="search-input" class="search-input" placeholder="Search for Wiring, Solar, Generator..." autocomplete="off" />
-              <div class="search-suggestions" id="suggestions-box"></div>
-            </div>
-            <div class="search-divider"></div>
-            <div class="search-select-wrapper">
-              <select name="state" id="state-select"><option value="">All States</option></select>
-            </div>
-            <button type="submit" class="btn btn-primary search-btn">Search ⚡</button>
-          </form>
+      
+      <div class="container hero-content-premium">
+        <div class="hero-text-wrap reveal">
+          <h1>Connecting You With <span class="text-accent">Trusted Electricians</span> in Minutes</h1>
+          <p>Whether it's emergency repairs, installations, inspections, or commercial projects, SparkConnect helps you find verified professionals quickly and securely.</p>
+          
+          <div class="hero-ctas">
+            <a href="electricians.html" class="btn btn-primary btn-large">Find an Electrician</a>
+            <a href="signup.html" class="btn btn-outline btn-large btn-light">Join as an Electrician</a>
+          </div>
         </div>
 
-      </div>
-      <div class="scroll-arrow" onclick="document.querySelector('.how-it-works').scrollIntoView({behavior:'smooth'})">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
-      </div>
-      <div class="hero-indicators" id="hero-indicators">
-        <div class="hero-dot active" data-idx="0"></div>
-        <div class="hero-dot" data-idx="1"></div>
-        <div class="hero-dot" data-idx="2"></div>
-        <div class="hero-dot" data-idx="3"></div>
-      </div>
-    </section>
-
-
-    <!-- Overlapping Service Cards -->
-    <section class="overlap-cards-section">
-      <div class="container">
-        <div class="overlap-cards-grid">
-          <div class="overlap-card">
-            <div class="overlap-card-img" style="background-image: url('assets/images/wiring_work.png')"></div>
-            <div class="overlap-card-content">
-              <h3 style="color: #0066cc;">HOUSE WIRING</h3>
-              <p>Professional residential and commercial electrical wiring setups to highest standards.</p>
-              <button class="overlap-btn" onclick="window.location.href='electricians.html?q=Residential Electrician'">View details</button>
-            </div>
+        <div class="hero-stats reveal reveal-delay-2" id="stats-section">
+          <div class="stat-box glass-card">
+            <div class="stat-num" data-target="10000" data-suffix="+">0</div>
+            <div class="stat-label">Jobs Completed</div>
           </div>
-          <div class="overlap-card">
-            <div class="overlap-card-img" style="background-image: url('assets/images/solar_panel.png')"></div>
-            <div class="overlap-card-content">
-              <h3 style="color: #ff9900;">SOLAR & INVERTER</h3>
-              <p>Energy efficient solar setups to maximize power retention and reduce reliance on fuel.</p>
-              <button class="overlap-btn" onclick="window.location.href='electricians.html?q=Solar Panel Installer'">View details</button>
-            </div>
+          <div class="stat-box glass-card">
+            <div class="stat-num" data-target="5000" data-suffix="+">0</div>
+            <div class="stat-label">Verified Electricians</div>
           </div>
-          <div class="overlap-card">
-            <div class="overlap-card-img" style="background-image: url('assets/images/generator_service.png')"></div>
-            <div class="overlap-card-content">
-              <h3 style="color: #0066cc;">INDUSTRIAL ELECTRICIANS</h3>
-              <p>Expert installation, maintenance, and repair of all industrial electrical systems.</p>
-              <button class="overlap-btn" onclick="window.location.href='electricians.html?q=Industrial Electrician'">View details</button>
-            </div>
+          <div class="stat-box glass-card">
+            <div class="stat-num" data-target="98" data-suffix="%">0</div>
+            <div class="stat-label">Customer Satisfaction</div>
+          </div>
+          <div class="stat-box glass-card">
+            <div class="stat-num" data-target="24" data-suffix="/7">0</div>
+            <div class="stat-label">Available Support</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section class="how-it-works" style="background-color: #f8f9fa;">
+    <!-- THE STORY SECTION -->
+    <section class="story-section section-padding bg-light">
       <div class="container">
-        <div style="text-align: center; margin-bottom: 2.5rem;">
-          <h2 style="font-size: 2rem; font-weight: 800; color: #1a1a1a;">
-            HOW IT <span style="color: #ff9900;">WORKS</span>
-          </h2>
-          <p style="color: #666; max-width: 600px; margin: 10px auto;">Connecting with a certified electrician is as simple as 1-2-3.</p>
+        <div class="section-header text-center reveal">
+          <h2>Electrical Problems <span class="text-accent">Shouldn't Be Stressful</span></h2>
+          <p class="subtitle">SparkConnect was built to remove uncertainty by giving homeowners and businesses instant access to skilled, verified electricians.</p>
         </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: center;">
-          <div style="background: white; padding: 36px 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 12px 30px rgba(0,102,204,0.12)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(0,0,0,0.06)';">
-            <div style="width: 72px; height: 72px; background: linear-gradient(135deg, #0066cc, #004499); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 8px 24px rgba(0,102,204,0.3);">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+
+        <div class="story-comparison reveal reveal-delay-1">
+          <div class="comparison-card without-spark">
+            <div class="comp-header">
+              <h3>Without SparkConnect</h3>
+              <div class="comp-icon error-icon"><i class="fa-solid fa-xmark"></i></div>
             </div>
-            <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; color: #1a1a1a;">1. Search &amp; Filter</h3>
-            <p style="color: #666; font-size: 0.95rem; line-height: 1.6;">Find the right specialty in your state. Whether it's residential wiring, solar, or commercial repairs.</p>
+            <ul class="comp-list">
+              <li>Finding trustworthy electricians is hard</li>
+              <li>Waiting days for responses</li>
+              <li>Unclear pricing and hidden fees</li>
+              <li>Poor workmanship & no guarantees</li>
+            </ul>
           </div>
-          <div style="background: white; padding: 36px 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 12px 30px rgba(255,153,0,0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(0,0,0,0.06)';">
-            <div style="width: 72px; height: 72px; background: linear-gradient(135deg, #ff9900, #e68a00); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 8px 24px rgba(255,153,0,0.3);">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+
+          <div class="comparison-vs">VS</div>
+
+          <div class="comparison-card with-spark">
+            <div class="comp-header">
+              <h3>With SparkConnect</h3>
+              <div class="comp-icon success-icon"><i class="fa-solid fa-check"></i></div>
             </div>
-            <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; color: #1a1a1a;">2. Compare Profiles</h3>
-            <p style="color: #666; font-size: 0.95rem; line-height: 1.6;">Check out ratings, read reviews from past clients, and view their portfolio of previous work.</p>
-          </div>
-          <div style="background: white; padding: 36px 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 12px 30px rgba(40,167,69,0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(0,0,0,0.06)';">
-            <div style="width: 72px; height: 72px; background: linear-gradient(135deg, #28a745, #1a7a32); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 8px 24px rgba(40,167,69,0.3);">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.78h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 10.4a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            </div>
-            <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; color: #1a1a1a;">3. Get Connected</h3>
-            <p style="color: #666; font-size: 0.95rem; line-height: 1.6;">Contact the professional directly via WhatsApp or phone call and get your job done safely.</p>
+            <ul class="comp-list">
+              <li>Instant access to verified professionals</li>
+              <li>Real-time availability and fast responses</li>
+              <li>Transparent pricing & direct negotiation</li>
+              <li>Ratings, reviews, and quality assurance</li>
+            </ul>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Fresher Than Ever Section (Power Your World) -->
-    <section class="power-world-section">
+    <!-- HOW SPARKCONNECT WORKS -->
+    <section class="how-it-works-premium section-padding">
       <div class="container">
-        <div class="power-world-grid">
-          <div class="power-world-left">
-            <!-- <h4 style="color: #0066cc; font-weight: 700; margin-bottom: 8px;"></h4> -->
-            <h2 style="font-size: 2.5rem; font-weight: 800; color: #1a1a1a; line-height: 1.1; margin-bottom: 1rem;">
-              LET'S POWER YOUR WORLD<br/>
-              <span style="color: #ff9900;">SAFER THAN EVER</span>
-            </h2>
-            <p style="color: #666; font-size: 0.95rem; line-height: 1.7; margin-bottom: 2rem;">
-              Electrical work isn't just about making things turn on—it's about safety, efficiency, and future-proofing your home. SparkConnect connects you with top-tier professionals seamlessly.
-            </p>
-            <div class="power-features">
-              <div class="power-feature">
-                <div class="pf-icon" style="width:48px;height:48px;background:linear-gradient(135deg,#0066cc,#004499);border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,102,204,0.3);flex-shrink:0;">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>
-                <div class="pf-text">
-                  <h5>Verified Professionals</h5>
-                  <p>Every electrician is vetted through past project reviews and checks.</p>
-                </div>
-              </div>
-              <div class="power-feature">
-                <div class="pf-icon" style="width:48px;height:48px;background:linear-gradient(135deg,#ff9900,#e68a00);border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(255,153,0,0.3);flex-shrink:0;">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><bolt/><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                </div>
-                <div class="pf-text">
-                  <h5>Rapid Response</h5>
-                  <p>Filter by your state and connect instantly via WhatsApp or Phone call.</p>
-                </div>
-              </div>
-              <div class="power-feature">
-                <div class="pf-icon" style="width:48px;height:48px;background:linear-gradient(135deg,#28a745,#1a7a32);border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(40,167,69,0.3);flex-shrink:0;">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                </div>
-                <div class="pf-text">
-                  <h5>No Hidden Fees</h5>
-                  <p>Zero booking commissions. Connect directly with the professional.</p>
-                </div>
-              </div>
-              <div class="power-feature">
-                <div class="pf-icon" style="width:48px;height:48px;background:linear-gradient(135deg,#6f42c1,#4b2d8a);border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(111,66,193,0.3);flex-shrink:0;">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.78h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 10.4a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                </div>
-                <div class="pf-text">
-                  <h5>Direct Communication</h5>
-                  <p>Chat and negotiate rates safely with verified experts.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="power-world-right">
-            <img src="assets/images/electrician_work.png" alt="Professional Electrician" style="width: 100%; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);"/>
-          </div>
+        <div class="section-header text-center reveal">
+          <h2>How <span class="text-accent">SparkConnect</span> Works</h2>
+          <p class="subtitle">Your electrical solutions sorted in 4 simple steps.</p>
         </div>
-      </div>
-    </section>
 
-    <!-- Blue Stats Banner -->
-    <section class="blue-stats-banner" id="stats-section">
-      <div class="container">
-        <div class="blue-stats-grid">
-          <div class="b-stat">
-            <div class="b-stat-info">
-              <div class="b-stat-num" data-target="500">0+</div>
-              <div class="b-stat-label">VERIFIED PROS</div>
+        <div class="timeline-steps">
+          <div class="timeline-step reveal">
+            <div class="step-marker">1</div>
+            <div class="step-content glass-card">
+              <h3>Search</h3>
+              <p>Find the exact service you need across residential, commercial, or industrial electrical fields.</p>
             </div>
           </div>
-          <div class="b-stat">
-            <div class="b-stat-info">
-              <div class="b-stat-num" data-target="10000">0k+</div>
-              <div class="b-stat-label">PROJECTS</div>
+          <div class="timeline-step reveal reveal-delay-1">
+            <div class="step-marker">2</div>
+            <div class="step-content glass-card">
+              <h3>Compare</h3>
+              <p>Review verified electrician profiles, read past customer reviews, and check their ratings.</p>
             </div>
           </div>
-          <div class="b-stat">
-            <div class="b-stat-info">
-              <div class="b-stat-num" data-target="36">0</div>
-              <div class="b-stat-label">STATES COVERED</div>
+          <div class="timeline-step reveal reveal-delay-2">
+            <div class="step-marker">3</div>
+            <div class="step-content glass-card">
+              <h3>Connect</h3>
+              <p>Contact them directly via phone or WhatsApp to discuss pricing and book instantly.</p>
             </div>
           </div>
-          <div class="b-stat">
-            <div class="b-stat-info">
-              <div class="b-stat-num" data-target="4.9" data-decimals="1">0.0</div>
-              <div class="b-stat-label">AVG RATING</div>
+          <div class="timeline-step reveal reveal-delay-3">
+            <div class="step-marker">4</div>
+            <div class="step-content glass-card">
+              <h3>Track & Review</h3>
+              <p>Get the job done safely, and leave a review to help maintain our high quality standards.</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Portfolio / Featured Section -->
-    <section class="portfolio-section">
+    <!-- SERVICES SECTION -->
+    <section class="services-premium section-padding bg-light">
       <div class="container">
-        <div style="text-align: center; margin-bottom: 2rem;">
-          <h2 style="font-size: 2rem; font-weight: 800; color: #1a1a1a;">
-            <span style="color: #ff9900;">OUR</span> PORTFOLIO
-          </h2>
-          <p style="color: #666; max-width: 600px; margin: 10px auto;">Browse profiles of our top-rated electricians available across Nigeria.</p>
+        <div class="section-header text-center reveal">
+          <h2>Premium <span class="text-accent">Electrical Services</span></h2>
+          <p class="subtitle">Whatever the issue, we have a verified expert ready to help.</p>
+        </div>
+
+        <div class="services-grid-premium">
+          <a href="electricians.html?q=Residential Electrician" class="service-premium-card reveal" style="text-decoration:none; color:inherit; display:block;">
+            <div class="sp-icon"><i class="fa-solid fa-house-chimney"></i></div>
+            <h3>Residential Electrician</h3>
+            <p>Expert electrical work for homes and residential properties.</p>
+          </a>
+          <a href="electricians.html?q=Commercial Electrician" class="service-premium-card reveal" style="text-decoration:none; color:inherit; display:block;">
+            <div class="sp-icon"><i class="fa-solid fa-building"></i></div>
+            <h3>Commercial Electrician</h3>
+            <p>Heavy-duty electrical solutions tailored for businesses.</p>
+          </a>
+          <a href="electricians.html?q=Industrial Electrician" class="service-premium-card reveal" style="text-decoration:none; color:inherit; display:block;">
+            <div class="sp-icon"><i class="fa-solid fa-industry"></i></div>
+            <h3>Industrial Electrician</h3>
+            <p>Factory-grade installations, maintenance, and compliance.</p>
+          </a>
+          <a href="electricians.html?q=Maintenance Electrician" class="service-premium-card reveal" style="text-decoration:none; color:inherit; display:block;">
+            <div class="sp-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+            <h3>Maintenance Electrician</h3>
+            <p>Ongoing support and servicing to keep your systems running.</p>
+          </a>
+          <a href="electricians.html?q=Installation Electrician" class="service-premium-card reveal" style="text-decoration:none; color:inherit; display:block;">
+            <div class="sp-icon"><i class="fa-solid fa-plug-circle-bolt"></i></div>
+            <h3>Installation Electrician</h3>
+            <p>Complete setups for new builds, renovations, and upgrades.</p>
+          </a>
+          <a href="electricians.html?q=Emergency Electrician" class="service-premium-card reveal" style="text-decoration:none; color:inherit; display:block;">
+            <div class="sp-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <h3>Emergency Electrician</h3>
+            <p>24/7 rapid response for urgent and critical electrical issues.</p>
+          </a>
+          <a href="electricians.html?q=Smart Home Specialist" class="service-premium-card reveal" style="text-decoration:none; color:inherit; display:block;">
+            <div class="sp-icon"><i class="fa-solid fa-house-signal"></i></div>
+            <h3>Smart Home Specialist</h3>
+            <p>Automation for lighting, security, CCTV, and climate control.</p>
+          </a>
+          <a href="electricians.html?q=Solar Panel Installer" class="service-premium-card reveal" style="text-decoration:none; color:inherit; display:block;">
+            <div class="sp-icon"><i class="fa-solid fa-solar-panel"></i></div>
+            <h3>Solar Panel Installer</h3>
+            <p>Energy-efficient solar panels and inverter system setups.</p>
+          </a>
+      </div>
+    </section>
+
+    <!-- WHY CUSTOMERS TRUST US -->
+    <section class="trust-premium section-padding">
+      <div class="container">
+        <div class="section-header text-center reveal">
+          <h2>Why Customers <span class="text-accent">Trust Us</span></h2>
+          <p class="subtitle">We prioritize safety, reliability, and peace of mind.</p>
         </div>
         
-        <div class="portfolio-filter-bar">
+        <div class="trust-grid-premium">
+          <div class="trust-card-glass reveal">
+            <div class="tc-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <h4>Verified Professionals</h4>
+            <p>Every electrician is vetted and verified before joining.</p>
+          </div>
+          <div class="trust-card-glass reveal reveal-delay-1">
+            <div class="tc-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+            <h4>Background Checked</h4>
+            <p>Strict background checks for your safety and security.</p>
+          </div>
+          <div class="trust-card-glass reveal reveal-delay-2">
+            <div class="tc-icon"><i class="fa-solid fa-bolt"></i></div>
+            <h4>Fast Booking</h4>
+            <p>Connect instantly with available professionals in your area.</p>
+          </div>
+          <div class="trust-card-glass reveal reveal-delay-3">
+            <div class="tc-icon"><i class="fa-solid fa-tag"></i></div>
+            <h4>Transparent Pricing</h4>
+            <p>No hidden fees. Negotiate directly with the professional.</p>
+          </div>
+          <div class="trust-card-glass reveal">
+            <div class="tc-icon"><i class="fa-solid fa-star"></i></div>
+            <h4>Ratings &amp; Reviews</h4>
+            <p>Real feedback from previous customers ensures quality.</p>
+          </div>
+          <div class="trust-card-glass reveal reveal-delay-1">
+            <div class="tc-icon"><i class="fa-solid fa-earth-africa"></i></div>
+            <h4>Nationwide Coverage</h4>
+            <p>Available across all 36 states in Nigeria.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MEET THE PROFESSIONALS -->
+    <section class="portfolio-section section-padding bg-light">
+      <div class="container">
+        <div class="section-header text-center reveal">
+          <h2>Meet The <span class="text-accent">Professionals</span></h2>
+          <p class="subtitle">Top-rated electricians ready to solve your problems.</p>
+        </div>
+        
+        <div class="portfolio-filter-bar reveal">
           <button class="pf-btn active" data-filter="All">All</button>
           <button class="pf-btn" data-filter="Residential Electrician">Residential</button>
           <button class="pf-btn" data-filter="Solar Panel Installer">Solar</button>
@@ -240,84 +259,154 @@
         <div class="portfolio-grid" id="portfolio-grid">
           <!-- Populated by JS -->
         </div>
-
-        <div class="portfolio-nav">
-          <button class="p-nav-btn">❮</button>
-          <button class="p-nav-btn active">❯</button>
+        
+        <div class="text-center mt-4">
+          <a href="electricians.html" class="btn btn-primary">View All Professionals</a>
         </div>
       </div>
     </section>
 
-    <!-- Why Choose SparkConnect -->
-    <section style="padding: 90px 0; background: #0a1628;">
+    <!-- SAFETY & VERIFICATION -->
+    <section class="safety-timeline section-padding">
       <div class="container">
-        <div style="text-align: center; margin-bottom: 3rem;">
-          <span style="color: #ff9900; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem;">Built for Nigeria</span>
-          <h2 style="font-size: 2rem; font-weight: 800; color: #fff; margin-top: 10px;">
-            WHY CHOOSE <span style="color: #ff9900;">SPARKCONNECT?</span>
-          </h2>
-          <p style="color: #aab; max-width: 600px; margin: 12px auto; line-height: 1.7;">We built SparkConnect to solve a real Nigerian problem — finding trustworthy, skilled electricians without the guesswork.</p>
+        <div class="section-header text-center reveal">
+          <h2>Our <span class="text-accent">Verification</span> Process</h2>
+          <p class="subtitle">How we ensure every electrician meets our strict standards.</p>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px;">
-
-          <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 30px; transition: all 0.3s;" onmouseover="this.style.background='rgba(0,102,204,0.15)'; this.style.borderColor='#0066cc';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.borderColor='rgba(255,255,255,0.1)';">
-            <div style="width:56px;height:56px;background:linear-gradient(135deg,#0066cc,#004499);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 6px 20px rgba(0,102,204,0.4);">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        <div class="ver-timeline">
+          <div class="ver-item reveal">
+            <div class="ver-icon">1</div>
+            <div class="ver-content glass-card">
+              <h4>Identity Verification</h4>
+              <p>Government ID and physical address checks.</p>
             </div>
-            <h3 style="color: #fff; font-size: 1.1rem; font-weight: 700; margin-bottom: 10px;">100% Verified Electricians</h3>
-            <p style="color: #aab; font-size: 0.9rem; line-height: 1.6;">Every professional on our platform is manually reviewed through past project checks before being listed.</p>
           </div>
-
-          <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 30px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,153,0,0.1)'; this.style.borderColor='#ff9900';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.borderColor='rgba(255,255,255,0.1)';">
-            <div style="width:56px;height:56px;background:linear-gradient(135deg,#ff9900,#e68a00);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 6px 20px rgba(255,153,0,0.4);">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <div class="ver-item reveal">
+            <div class="ver-icon">2</div>
+            <div class="ver-content glass-card">
+              <h4>Skill Assessment</h4>
+              <p>Review of past projects and technical capabilities.</p>
             </div>
-            <h3 style="color: #fff; font-size: 1.1rem; font-weight: 700; margin-bottom: 10px;">Zero Middleman Fees</h3>
-            <p style="color: #aab; font-size: 0.9rem; line-height: 1.6;">Connect and negotiate directly with the professional. No hidden commissions, no booking fees — ever.</p>
           </div>
-
-          <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 30px; transition: all 0.3s;" onmouseover="this.style.background='rgba(40,167,69,0.1)'; this.style.borderColor='#28a745';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.borderColor='rgba(255,255,255,0.1)';">
-            <div style="width:56px;height:56px;background:linear-gradient(135deg,#28a745,#1a7a32);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 6px 20px rgba(40,167,69,0.4);">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+          <div class="ver-item reveal">
+            <div class="ver-icon">3</div>
+            <div class="ver-content glass-card">
+              <h4>Background Check</h4>
+              <p>Security clearance and character evaluation.</p>
             </div>
-            <h3 style="color: #fff; font-size: 1.1rem; font-weight: 700; margin-bottom: 10px;">All 36 States Covered</h3>
-            <p style="color: #aab; font-size: 0.9rem; line-height: 1.6;">From Lagos to Maiduguri, our platform has nationwide coverage so you can find a pro wherever you are.</p>
           </div>
-
-          <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 30px; transition: all 0.3s;" onmouseover="this.style.background='rgba(220,53,69,0.1)'; this.style.borderColor='#dc3545';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.borderColor='rgba(255,255,255,0.1)';">
-            <div style="width:56px;height:56px;background:linear-gradient(135deg,#dc3545,#a71d2a);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 6px 20px rgba(220,53,69,0.4);">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <div class="ver-item reveal">
+            <div class="ver-icon">4</div>
+            <div class="ver-content glass-card">
+              <h4>Verified Badge</h4>
+              <p>Only the best receive the SparkConnect Verified status.</p>
             </div>
-            <h3 style="color: #fff; font-size: 1.1rem; font-weight: 700; margin-bottom: 10px;">Emergency Services</h3>
-            <p style="color: #aab; font-size: 0.9rem; line-height: 1.6;">Power fault at midnight? Many of our listed pros are available for urgent callouts and emergency repairs.</p>
           </div>
-
         </div>
       </div>
     </section>
 
-    <!-- Blog / Tips Section -->
-    <section style="padding: 90px 0; background: #f8f9fa;">
+    <!-- FOR ELECTRICIANS -->
+    <section class="for-pros-section section-padding bg-light">
       <div class="container">
-        <div style="text-align: center; margin-bottom: 3rem;">
-          <span style="color: #ff9900; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem;">Knowledge Base</span>
-          <h2 style="font-size: 2rem; font-weight: 800; color: #1a1a1a; margin-top: 10px;">
-            ELECTRICAL <span style="color: #ff9900;">SAFETY TIPS</span>
-          </h2>
-          <p style="color: #666; max-width: 600px; margin: 12px auto; line-height: 1.7;">Stay informed. Our experts share practical advice to keep your home and business electrically safe.</p>
+        <div class="pros-banner glass-card reveal">
+          <div class="pros-content">
+            <h2>Grow Your Electrical Business With <span class="text-accent">SparkConnect</span></h2>
+            <ul class="pros-benefits">
+              <li><i class="fa-solid fa-check"></i> More customers</li>
+              <li><i class="fa-solid fa-check"></i> Flexible schedule</li>
+              <li><i class="fa-solid fa-check"></i> Secure direct payments</li>
+              <li><i class="fa-solid fa-check"></i> Verified profile status</li>
+            </ul>
+            <a href="signup.html" class="btn btn-primary btn-large mt-3">Become a Verified Electrician</a>
+          </div>
+          <div class="pros-image">
+            <div class="pros-img-wrapper" style="background-image: url('assets/images/electrician_work.png')"></div>
+          </div>
         </div>
-        <!-- Article cards rendered dynamically by js/articles.js based on publishDate -->
-        <div id="articles-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px;"></div>
       </div>
     </section>
 
-    <!-- Footer -->
+    <!-- FAQ -->
+    <section class="faq-section section-padding">
+      <div class="container">
+        <div class="section-header text-center reveal">
+          <h2>Frequently Asked <span class="text-accent">Questions</span></h2>
+        </div>
+
+        <div class="faq-container reveal">
+          <div class="faq-item">
+            <div class="faq-header">
+              How do I hire an electrician?
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-content">
+              <div class="faq-content-inner">
+                Simply use the search bar or browse our services to find professionals in your area. You can view their profiles, compare ratings, and contact them directly via phone or WhatsApp to book.
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-header">
+              How are electricians verified?
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-content">
+              <div class="faq-content-inner">
+                We perform thorough checks including identity verification, skill assessments based on past projects, and background checks before awarding a verified badge.
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-header">
+              Can I book emergency services?
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-content">
+              <div class="faq-content-inner">
+                Yes! Many of our electricians offer 24/7 emergency callouts. You can filter by emergency services or look for professionals who highlight rapid response in their profiles.
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-header">
+              How do payments work?
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-content">
+              <div class="faq-content-inner">
+                SparkConnect charges zero commission fees. You negotiate the price and pay the electrician directly for their services.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="final-cta section-padding">
+      <div class="container">
+        <div class="cta-box glass-card text-center reveal">
+          <h2>Ready to Find Your Trusted Electrician?</h2>
+          <p>Join thousands of homeowners and businesses who rely on SparkConnect for safe, reliable electrical services.</p>
+          <div class="hero-ctas justify-center mt-4">
+            <a href="electricians.html" class="btn btn-primary btn-large">Find an Electrician</a>
+            <a href="signup.html" class="btn btn-outline btn-large btn-light">Become an Electrician</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
     <footer>
       <div class="container">
         <div class="footer-grid">
           <div class="footer-col">
-            <h4>SparkConnect</h4>
+            <div class="logo footer-logo mb-3">
+              <div class="footer-logo-icon"><i class="fa-solid fa-bolt"></i></div>
+              SparkConnect
+            </div>
             <p style="color: #bbb; line-height: 1.6">
               Connecting you with the best electrical professionals in Nigeria.
               Safe, fast, and reliable.
@@ -330,6 +419,14 @@
               <li><a href="electricians.html">Find Electricians</a></li>
               <li><a href="about.html">About Us</a></li>
               <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Legal &amp; Safety</h4>
+            <ul>
+              <li><a href="privacy.html">Privacy Policy</a></li>
+              <li><a href="terms.html">Terms of Service</a></li>
+              <li><a href="safety.html">Safety Guidelines</a></li>
             </ul>
           </div>
           <div class="footer-col">
@@ -347,57 +444,15 @@
       </div>
     </footer>
 
-    <!-- Quick View Modal Container -->
-    <div class="custom-modal-overlay" id="quick-view-overlay">
-      <div class="custom-modal-container" id="quick-view-modal-container" style="max-width: 600px; padding: 25px;">
-        <div style="display: flex; justify-content: flex-end;">
-          <button onclick="closeQuickView()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-gray); line-height: 1;">&times;</button>
-        </div>
-        <div class="quickview-modal-grid" id="quick-view-content">
-          <!-- Dynamic Content -->
-        </div>
-      </div>
-    </div>
-
+    <!-- Scripts -->
     <script src="js/data.js"></script>
     <script src="js/nav.js"></script>
+    <script src="js/animations.js"></script>
     <script>
+      // Load Featured Electricians logic (reused from existing index.html)
       const grid = document.getElementById("portfolio-grid");
-
-      // HERO SLIDESHOW
-      (function() {
-        var slides = document.querySelectorAll('.hero-slide');
-        var dots = document.querySelectorAll('.hero-dot');
-        var current = 0;
-        var timer;
-        function goTo(idx) {
-          slides[current].classList.remove('active');
-          dots[current].classList.remove('active');
-          current = (idx + slides.length) % slides.length;
-          slides[current].classList.add('active');
-          dots[current].classList.add('active');
-        }
-        function autoplay() { timer = setInterval(function() { goTo(current + 1); }, 5000); }
-        dots.forEach(function(dot) {
-          dot.addEventListener('click', function() { clearInterval(timer); goTo(parseInt(this.dataset.idx)); autoplay(); });
-        });
-        autoplay();
-      })();
-
-      // SCROLL REVEAL
-      (function() {
-        var els = document.querySelectorAll('.reveal');
-        var io = new IntersectionObserver(function(entries) {
-          entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
-        }, { threshold: 0.12 });
-        els.forEach(function(el) { io.observe(el); });
-      })();
-
-      // Async function to load featured electricians
       async function loadFeatured(filter = "All") {
         const electricians = await DataManager.getAllElectricians();
-
-        // Base filter: remove visitors and admins
         let activeElectricians = electricians.filter((e) => {
           const isVisitor = e.specialty && e.specialty.toLowerCase() === "visitor";
           const isAdmin = e.name && e.name.toLowerCase() === "admin";
@@ -412,36 +467,21 @@
           });
         }
 
-        // Filter top rated (mock logic: rating >= 4.5)
         const featured = activeElectricians.filter((e) => e.rating >= 4.5);
-
-        // If no featured, fallback to show some
         const listToDisplay = featured.length > 0 ? featured : activeElectricians.slice(0, 4);
-
         grid.innerHTML = "";
 
         listToDisplay.forEach((el) => {
           const card = document.createElement("div");
           card.className = "electrician-card reveal";
-          card.onclick = (e) => {
-            if (e.target.classList.contains("card-quickview-btn")) {
-              e.stopPropagation();
-              return;
-            }
-            window.location.href = `profile.html?id=${el.id}`;
-          };
+          card.onclick = () => window.location.href = `profile.html?id=${el.id}`;
 
           const imgPath = el.image || "assets/images/default.jpg";
           const hasImage = el.image && el.image !== "assets/images/profile_placeholder.jpg";
-          const imgStyle = hasImage 
-            ? `background-image: url('${imgPath}'); background-size: cover; background-position: center;` 
-            : `background-color: #eee;`;
+          const imgStyle = hasImage ? `background-image: url('${imgPath}'); background-size: cover; background-position: center;` : `background-color: #eee;`;
           
           let initials = DataManager.getInitials(el.name);
-          const imgContent = hasImage 
-            ? `<div class="card-quickview-btn" onclick="openQuickView(event, '${el.id}')">Quick View</div>` 
-            : `<div class="list-img-placeholder" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #888;">${initials}</div>
-               <div class="card-quickview-btn" onclick="openQuickView(event, '${el.id}')">Quick View</div>`;
+          const imgContent = hasImage ? '' : `<div class="list-img-placeholder" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #888;">${initials}</div>`;
 
           card.innerHTML = `
                 <div class="card-img-container" style="${imgStyle}">
@@ -461,223 +501,13 @@
           grid.appendChild(card);
         });
 
-        var io2 = new IntersectionObserver(function(entries) {
-          entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); io2.unobserve(e.target); } });
-        }, { threshold: 0.1 });
-        grid.querySelectorAll('.reveal').forEach(function(el) { io2.observe(el); });
-      }
-
-      // Typewriter effect in search placeholder
-      const placeholderTexts = [
-        "Wiring installation...",
-        "Solar panel setup...",
-        "Fault finding and repairs...",
-        "Generator servicing...",
-        "AC unit installation...",
-        "Commercial cabling..."
-      ];
-      let textIndex = 0;
-      let charIndex = 0;
-      let isDeleting = false;
-      const searchInput = document.getElementById("search-input");
-
-      function typePlaceholder() {
-        if (!searchInput) return;
-        const currentText = placeholderTexts[textIndex];
-        if (isDeleting) {
-          searchInput.placeholder = "Search for " + currentText.substring(0, charIndex);
-          charIndex--;
-        } else {
-          searchInput.placeholder = "Search for " + currentText.substring(0, charIndex);
-          charIndex++;
+        // re-observe new reveals
+        if(window.IntersectionObserver) {
+            const io = new IntersectionObserver((entries, obs) => {
+                entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+            }, { threshold: 0.1 });
+            grid.querySelectorAll('.reveal').forEach(el => io.observe(el));
         }
-
-        let delay = 100;
-        if (!isDeleting && charIndex === currentText.length + 1) {
-          isDeleting = true;
-          delay = 2000;
-        } else if (isDeleting && charIndex === 0) {
-          isDeleting = false;
-          textIndex = (textIndex + 1) % placeholderTexts.length;
-          delay = 500;
-        }
-
-        setTimeout(typePlaceholder, delay);
-      }
-
-      // Search suggestions logic
-      const suggestionsBox = document.getElementById("suggestions-box");
-      if (searchInput && suggestionsBox) {
-        searchInput.addEventListener("input", function() {
-          const val = this.value.trim().toLowerCase();
-          if (!val || val.length < 2) {
-            suggestionsBox.innerHTML = "";
-            suggestionsBox.classList.remove("show");
-            return;
-          }
-          
-          DataManager.getAllElectricians().then(electricians => {
-            const matches = electricians.filter(el => {
-              const isVisitor = el.specialty && el.specialty.toLowerCase() === "visitor";
-              const isAdmin = el.name && el.name.toLowerCase() === "admin";
-              if (isVisitor || isAdmin) return false;
-              
-              return (el.name && el.name.toLowerCase().includes(val)) ||
-                     (el.specialty && el.specialty.toLowerCase().includes(val)) ||
-                     (el.state && el.state.toLowerCase().includes(val));
-            }).slice(0, 5);
-            
-            if (matches.length === 0) {
-              suggestionsBox.innerHTML = `<div style="padding: 10px 15px; color: var(--text-gray); font-size: 13px;">No matches found</div>`;
-              suggestionsBox.classList.add("show");
-              return;
-            }
-            
-            suggestionsBox.innerHTML = "";
-            matches.forEach(el => {
-              const item = document.createElement("div");
-              item.className = "suggestion-item";
-              
-              const hasImg = el.image && el.image !== "assets/images/profile_placeholder.jpg";
-              const avatarHtml = hasImg 
-                ? `<div class="suggestion-avatar" style="background-image: url('${el.image}')"></div>` 
-                : `<div class="suggestion-avatar">${DataManager.getInitials(el.name)}</div>`;
-                
-              item.innerHTML = `
-                ${avatarHtml}
-                <div class="suggestion-info">
-                  <div class="suggestion-name">${el.name}</div>
-                  <div class="suggestion-meta">${el.specialty} • ${el.state}</div>
-                </div>
-              `;
-              
-              item.onclick = () => {
-                window.location.href = `profile.html?id=${el.id}`;
-              };
-              suggestionsBox.appendChild(item);
-            });
-            suggestionsBox.classList.add("show");
-          });
-        });
-
-        document.addEventListener("click", function(e) {
-          if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
-            suggestionsBox.classList.remove("show");
-          }
-        });
-      }
-
-      // Bind category chips
-      document.querySelectorAll(".category-chip").forEach(chip => {
-        chip.addEventListener("click", function() {
-          const q = this.getAttribute("data-query");
-          const state = document.getElementById("state-select").value;
-          window.location.href = `electricians.html?q=${encodeURIComponent(q)}&state=${encodeURIComponent(state)}`;
-        });
-      });
-
-      // Cost Estimator Logic
-      const taskOptions = document.getElementById("estimator-task-options");
-      const scaleOptions = document.getElementById("estimator-scale-options");
-      const estStateSelect = document.getElementById("estimator-state-select");
-      const costDisplay = document.getElementById("estimator-cost-display");
-      const matchesGrid = document.getElementById("estimator-matches-grid");
-      const matchesHeader = document.getElementById("estimator-matches-header");
-
-      function formatCurrency(num) {
-        return "₦" + num.toLocaleString();
-      }
-
-      function calculateEstimate() {
-        if (!taskOptions || !scaleOptions) return;
-        const activeTask = taskOptions.querySelector(".estimator-card-select.active");
-        const activeScale = scaleOptions.querySelector(".estimator-card-select.active");
-        
-        if (!activeTask || !activeScale) return;
-        
-        const basePrice = parseInt(activeTask.getAttribute("data-price-base"));
-        const varPrice = parseInt(activeTask.getAttribute("data-price-var"));
-        const multiplier = parseFloat(activeScale.getAttribute("data-multiplier"));
-        
-        const minEstimate = Math.round(basePrice * multiplier);
-        const maxEstimate = Math.round((basePrice + varPrice) * multiplier);
-        
-        if (costDisplay) {
-          costDisplay.textContent = `${formatCurrency(minEstimate)} - ${formatCurrency(maxEstimate)}`;
-        }
-        
-        updateMatches();
-      }
-
-      async function updateMatches() {
-        if (!estStateSelect || !matchesGrid || !matchesHeader) return;
-        const selectedState = estStateSelect.value;
-        if (!selectedState) {
-          matchesHeader.textContent = "Matching Local Electricians";
-          matchesGrid.innerHTML = `<p style="font-size: 13px; opacity: 0.8; margin-top: 10px;">Select your location state to find matches in your area.</p>`;
-          return;
-        }
-        
-        matchesHeader.textContent = `Matching Electricians in ${selectedState}`;
-        matchesGrid.innerHTML = `<div style="text-align:center; font-size:12px; padding:10px; opacity:0.8;">Finding professionals...</div>`;
-        
-        try {
-          const electricians = await DataManager.getAllElectricians();
-          let matches = electricians.filter(el => {
-            const isVisitor = el.specialty && el.specialty.toLowerCase() === "visitor";
-            const isAdmin = el.name && el.name.toLowerCase() === "admin";
-            if (isVisitor || isAdmin) return false;
-            return el.state && el.state.toLowerCase() === selectedState.toLowerCase();
-          });
-          
-          matches.sort((a, b) => b.rating - a.rating);
-          
-          if (matches.length === 0) {
-            matchesGrid.innerHTML = `<p style="font-size: 13px; opacity: 0.8; margin-top: 10px;">No electricians registered in ${selectedState} yet. <a href="electricians.html?state=${encodeURIComponent(selectedState)}" style="color:var(--secondary-orange); text-decoration:underline;">View all instead →</a></p>`;
-            return;
-          }
-          
-          matchesGrid.innerHTML = "";
-          matches.slice(0, 3).forEach(el => {
-            const item = document.createElement("div");
-            item.className = "estimator-match-item";
-            item.onclick = () => window.location.href = `profile.html?id=${el.id}`;
-            
-            const hasImg = el.image && el.image !== "assets/images/profile_placeholder.jpg";
-            const avatarHtml = hasImg 
-              ? `<div class="estimator-match-avatar" style="background-image: url('${el.image}')"></div>` 
-              : `<div class="estimator-match-avatar">${DataManager.getInitials(el.name)}</div>`;
-              
-            item.innerHTML = `
-              ${avatarHtml}
-              <div class="estimator-match-details">
-                <div class="estimator-match-name">${el.name}</div>
-                <div class="estimator-match-meta">${el.specialty}</div>
-              </div>
-              <div class="estimator-match-rating">★ ${el.rating > 0 ? el.rating : 'New'}</div>
-            `;
-            matchesGrid.appendChild(item);
-          });
-        } catch (e) {
-          console.error(e);
-          matchesGrid.innerHTML = `<p style="font-size: 13px; opacity: 0.8; margin-top: 10px;">Error fetching electricians.</p>`;
-        }
-      }
-
-      if (taskOptions && scaleOptions) {
-        [taskOptions, scaleOptions].forEach(container => {
-          container.querySelectorAll(".estimator-card-select").forEach(btn => {
-            btn.addEventListener("click", function() {
-              container.querySelector(".estimator-card-select.active").classList.remove("active");
-              this.classList.add("active");
-              calculateEstimate();
-            });
-          });
-        });
-      }
-
-      if (estStateSelect) {
-        estStateSelect.addEventListener("change", calculateEstimate);
       }
 
       // FAQ accordion
@@ -685,196 +515,23 @@
         header.addEventListener("click", function() {
           const parent = this.parentElement;
           const isActive = parent.classList.contains("active");
-          
-          document.querySelectorAll(".faq-item.active").forEach(item => {
-            item.classList.remove("active");
-          });
-          
-          if (!isActive) {
-            parent.classList.add("active");
-          }
+          document.querySelectorAll(".faq-item.active").forEach(item => item.classList.remove("active"));
+          if (!isActive) parent.classList.add("active");
         });
       });
 
-      // Stats counters scroll trigger
-      function animateCounters() {
-        const statsSection = document.getElementById("stats-section");
-        if (!statsSection) return;
-        
-        const observer = new IntersectionObserver((entries, obs) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const countElements = entry.target.querySelectorAll("[data-target]");
-              countElements.forEach(el => {
-                const target = parseFloat(el.getAttribute("data-target"));
-                const decimals = parseInt(el.getAttribute("data-decimals") || "0");
-                const duration = 2000;
-                const start = 0;
-                const startTime = performance.now();
-                
-                function updateCount(currentTime) {
-                  const elapsed = currentTime - startTime;
-                  const progress = Math.min(elapsed / duration, 1);
-                  const easeProgress = 1 - Math.pow(1 - progress, 3);
-                  
-                  const currentVal = start + easeProgress * (target - start);
-                  
-                  if (decimals > 0) {
-                    el.textContent = currentVal.toFixed(decimals) + (el.getAttribute("data-target") === "4.9" ? "/5" : "");
-                  } else {
-                    const plus = el.getAttribute("data-target") === "500" ? "+" : (el.getAttribute("data-target") === "10000" ? "k+" : "");
-                    let valToDisplay = Math.floor(currentVal);
-                    if (plus === "k+") {
-                      valToDisplay = (valToDisplay / 1000).toFixed(0) + "k+";
-                      el.textContent = valToDisplay;
-                    } else {
-                      el.textContent = valToDisplay + plus;
-                    }
-                  }
-                  
-                  if (progress < 1) {
-                    requestAnimationFrame(updateCount);
-                  } else {
-                    if (decimals > 0) {
-                      el.textContent = target.toFixed(decimals) + (el.getAttribute("data-target") === "4.9" ? "/5" : "");
-                    } else {
-                      const plus = el.getAttribute("data-target") === "500" ? "+" : (el.getAttribute("data-target") === "10000" ? "k+" : "");
-                      el.textContent = (plus === "k+") ? "10k+" : (target + plus);
-                    }
-                  }
-                }
-                
-                requestAnimationFrame(updateCount);
-              });
-              obs.disconnect();
-            }
-          });
-        }, { threshold: 0.1 });
-        
-        observer.observe(statsSection);
-      }
-
-      // Quick View Modal
-      const quickViewOverlay = document.getElementById("quick-view-overlay");
-      const quickViewContent = document.getElementById("quick-view-content");
-
-      async function openQuickView(event, id) {
-        if (event) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        
-        if (!quickViewOverlay || !quickViewContent) return;
-        
-        quickViewContent.innerHTML = `<div style="grid-column: span 2; text-align: center; padding: 40px; font-weight: 500;">Loading profile details...</div>`;
-        quickViewOverlay.classList.add("visible");
-        document.getElementById("quick-view-modal-container").classList.add("visible");
-        
-        try {
-          const el = await DataManager.getElectricianById(id);
-          if (!el) {
-            quickViewContent.innerHTML = `<div style="grid-column: span 2; text-align: center; padding: 40px; color: var(--text-gray);">Electrician details not found.</div>`;
-            return;
-          }
-          
-          const hasImg = el.image && el.image !== "assets/images/profile_placeholder.jpg";
-          const leftContent = hasImg 
-            ? `<div class="quickview-img" style="background-image: url('${el.image}')"></div>` 
-            : `<div class="quickview-initials">${DataManager.getInitials(el.name)}</div>`;
-            
-          const ratingVal = el.reviews > 0 ? el.rating : 'New';
-          const reviewsCount = el.reviews;
-          
-          quickViewContent.innerHTML = `
-            <div class="quickview-left">
-              ${leftContent}
-              <div class="quickview-rating-badge">
-                <span class="star">★</span>
-                <span>${ratingVal}</span>
-                <span style="font-weight: 400; opacity: 0.8; font-size: 11px;">(${reviewsCount} reviews)</span>
-              </div>
-            </div>
-            <div class="quickview-right">
-              <div>
-                <h3 class="quickview-title">${el.name}</h3>
-                <div class="quickview-subtitle">${el.specialty}</div>
-                <div style="font-size: 13px; color: var(--text-gray); margin-bottom: 12px; display: flex; align-items: center; gap: 4px;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                  ${el.state} State
-                </div>
-                <p class="quickview-desc">${el.description}</p>
-              </div>
-              <div class="quickview-contact">
-                <a href="profile.html?id=${el.id}" class="btn btn-primary" style="flex: 1; font-size: 14px; padding: 10px 0; text-align: center;">View Full Profile</a>
-                ${el.phone ? `<a href="tel:${el.phone}" class="btn btn-outline" style="padding: 10px; display: flex; align-items: center; justify-content: center;" title="Call Electrician">📞</a>` : ''}
-                ${el.whatsapp ? `<a href="https://wa.me/${el.whatsapp.replace(/\D/g, '')}" target="_blank" class="btn btn-outline" style="padding: 10px; display: flex; align-items: center; justify-content: center; border-color:#25D366; color:#25D366;" title="WhatsApp Electrician">💬</a>` : ''}
-              </div>
-            </div>
-          `;
-        } catch (e) {
-          console.error(e);
-          quickViewContent.innerHTML = `<div style="grid-column: span 2; text-align: center; padding: 40px; color: var(--text-gray);">Error loading details.</div>`;
-        }
-      }
-
-      function closeQuickView() {
-        if (!quickViewOverlay) return;
-        quickViewOverlay.classList.remove("visible");
-        document.getElementById("quick-view-modal-container").classList.remove("visible");
-      }
-      
-      if (quickViewOverlay) {
-        quickViewOverlay.addEventListener("click", function(e) {
-          if (e.target === quickViewOverlay) {
-            closeQuickView();
-          }
+      // Filter portfolio
+      document.querySelectorAll('.pf-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          document.querySelectorAll('.pf-btn').forEach(b => b.classList.remove('active'));
+          e.target.classList.add('active');
+          await loadFeatured(e.target.getAttribute('data-filter'));
         });
-      }
+      });
 
-      // Populate State drop-downs
-      function populateStates() {
-        const stateSelect = document.getElementById("state-select");
-        const estStateSelect = document.getElementById("estimator-state-select");
-        
-        if (stateSelect && estStateSelect) {
-          NIGERIAN_STATES.forEach(state => {
-            const opt1 = document.createElement("option");
-            opt1.value = state;
-            opt1.textContent = state;
-            stateSelect.appendChild(opt1);
-            
-            const opt2 = document.createElement("option");
-            opt2.value = state;
-            opt2.textContent = state;
-            estStateSelect.appendChild(opt2);
-          });
-        }
-      }
-
-      // Init function
-      async function init() {
-        populateStates();
-        await loadFeatured();
-        
-        // Add portfolio filter listeners
-        document.querySelectorAll('.pf-btn').forEach(btn => {
-          btn.addEventListener('click', async (e) => {
-            document.querySelectorAll('.pf-btn').forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-            const filter = e.target.getAttribute('data-filter');
-            await loadFeatured(filter);
-          });
-        });
-
-        typePlaceholder();
-        calculateEstimate();
-        animateCounters();
-        renderArticleCards('articles-grid');
-      }
-
-      init();
+      document.addEventListener('DOMContentLoaded', () => {
+         loadFeatured();
+      });
     </script>
-    <script src="js/articles.js"></script>
-    <script defer src="/_vercel/insights/script.js"></script>
   </body>
 </html>

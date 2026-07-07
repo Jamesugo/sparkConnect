@@ -26,7 +26,8 @@ BASE_DIR = os.path.join(API_DIR, '..', 'public')
 
 # MongoDB Configuration
 MONGO_URI = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/sparkconnect')
-client = MongoClient(MONGO_URI)
+import certifi
+client = MongoClient(MONGO_URI, tlsCAFile=certifi.where())
 # Explicitly get the 'sparkconnect' database if the URI doesn't specify one
 db = client.get_database('sparkconnect' if 'mongodb+srv' in MONGO_URI else None)
 
