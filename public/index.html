@@ -31,6 +31,7 @@
           <div class="graphic-line gl-2"></div>
           <div class="graphic-glow"></div>
         </div>
+        <canvas id="hero-particles"></canvas>
       </div>
       
       <div class="container hero-content-premium">
@@ -66,41 +67,80 @@
     </section>
 
     <!-- THE STORY SECTION -->
-    <section class="story-section section-padding bg-light">
+    <section class="story-section section-padding">
+      <div class="story-curve-top">
+        <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,80 C360,10 1080,90 1440,30 L1440,100 L0,100 Z" fill="#0a0e1a"></path>
+        </svg>
+      </div>
       <div class="container">
-        <div class="section-header text-center reveal">
-          <h2>Electrical Problems <span class="text-accent">Shouldn't Be Stressful</span></h2>
-          <p class="subtitle">SparkConnect was built to remove uncertainty by giving homeowners and businesses instant access to skilled, verified electricians.</p>
-        </div>
-
-        <div class="story-comparison reveal reveal-delay-1">
-          <div class="comparison-card without-spark">
-            <div class="comp-header">
-              <h3>Without SparkConnect</h3>
-              <div class="comp-icon error-icon"><i class="fa-solid fa-xmark"></i></div>
+        <div class="story-wrapper reveal">
+          
+          <!-- LEFT COLUMN: Brand info -->
+          <div class="story-left">
+            <div class="story-brand">
+              <div class="story-shield">
+                <!-- SVG Shield with Bolt -->
+                <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Dark background shield -->
+                  <path d="M10,10 L50,0 L90,10 C90,50 80,90 50,120 C20,90 10,50 10,10 Z" fill="#0c0f1d" />
+                  <!-- Inner light gold highlight -->
+                  <path d="M18,17 L50,9 L82,17 C82,51 73,86 50,111 C27,86 18,51 18,17 Z" fill="none" stroke="#fff7c2" stroke-width="2.5" opacity="0.4" />
+                  <!-- Lightning bolt -->
+                  <path d="M52,25 L32,60 L50,60 L45,95 L70,55 L50,55 Z" fill="#ffb700" />
+                </svg>
+              </div>
+              <div class="story-brand-text">
+                <h2>SparkConnect</h2>
+                <p>Quality Without Stress</p>
+              </div>
             </div>
-            <ul class="comp-list">
-              <li>Finding trustworthy electricians is hard</li>
-              <li>Waiting days for responses</li>
-              <li>Unclear pricing and hidden fees</li>
-              <li>Poor workmanship & no guarantees</li>
-            </ul>
+            <p class="story-desc">
+              From expected maintenance and urgent emergency callouts to complex industrial systems, we've got you covered. Get instant access to top-rated, vetted local electricians and scale up your electrical solutions seamlessly.
+            </p>
+            <a href="electricians.html" class="btn-pill-dark">Find an Electrician</a>
           </div>
 
-          <div class="comparison-vs">VS</div>
-
-          <div class="comparison-card with-spark">
-            <div class="comp-header">
-              <h3>With SparkConnect</h3>
-              <div class="comp-icon success-icon"><i class="fa-solid fa-check"></i></div>
+          <!-- RIGHT COLUMN: Service lists card -->
+          <div class="story-right">
+            <div class="usecase-card">
+              <div class="usecase-grid">
+                <div class="usecase-item">
+                  <div class="usecase-bullet"></div>
+                  <span>Emergency Outages</span>
+                </div>
+                <div class="usecase-item">
+                  <div class="usecase-bullet"></div>
+                  <span>Commercial Projects</span>
+                </div>
+                <div class="usecase-item">
+                  <div class="usecase-bullet"></div>
+                  <span>Home Rewiring</span>
+                </div>
+                <div class="usecase-item">
+                  <div class="usecase-bullet"></div>
+                  <span>Smart Automation</span>
+                </div>
+                <div class="usecase-item">
+                  <div class="usecase-bullet"></div>
+                  <span>Solar & Inverters</span>
+                </div>
+                <div class="usecase-item">
+                  <div class="usecase-bullet"></div>
+                  <span>Safety Audits</span>
+                </div>
+                <div class="usecase-item">
+                  <div class="usecase-bullet"></div>
+                  <span>Security & CCTV</span>
+                </div>
+                <div class="usecase-item">
+                  <div class="usecase-bullet"></div>
+                  <span>Appliance Setups</span>
+                </div>
+              </div>
             </div>
-            <ul class="comp-list">
-              <li>Instant access to verified professionals</li>
-              <li>Real-time availability and fast responses</li>
-              <li>Transparent pricing & direct negotiation</li>
-              <li>Ratings, reviews, and quality assurance</li>
-            </ul>
           </div>
+
         </div>
       </div>
     </section>
@@ -533,5 +573,8 @@
          loadFeatured();
       });
     </script>
+    <button class="scroll-top-btn" id="scrollTopBtn" title="Go to top">
+      <i class="fa-solid fa-arrow-up"></i>
+    </button>
   </body>
 </html>
