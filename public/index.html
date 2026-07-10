@@ -148,43 +148,78 @@
     <!-- HOW SPARKCONNECT WORKS -->
     <section class="how-it-works-premium section-padding">
       <div class="container">
-        <div class="section-header text-center reveal">
-          <h2>How <span class="text-accent">SparkConnect</span> Works</h2>
-          <p class="subtitle">Your electrical solutions sorted in 4 simple steps.</p>
-        </div>
+        <div class="hiw-layout">
 
-        <div class="timeline-steps">
-          <div class="timeline-step reveal">
-            <div class="step-marker">1</div>
-            <div class="step-content glass-card">
-              <h3>Search</h3>
-              <p>Find the exact service you need across residential, commercial, or industrial electrical fields.</p>
+          <!-- LEFT: Animated Visual -->
+          <div class="hiw-left reveal">
+            <div class="hiw-visual-wrap">
+              <div class="hiw-pulse-ring"></div>
+              <div class="hiw-pulse-ring hiw-ring-2"></div>
+              <div class="hiw-pulse-ring hiw-ring-3"></div>
+              <div class="hiw-icon-center">
+                <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" class="hiw-bolt-svg">
+                  <defs>
+                    <linearGradient id="boltGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#00c6ff"/>
+                      <stop offset="100%" stop-color="#ffb700"/>
+                    </linearGradient>
+                    <filter id="boltGlow">
+                      <feGaussianBlur stdDeviation="3" result="blur"/>
+                      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                  </defs>
+                  <path d="M58,5 L20,62 L46,62 L38,115 L82,52 L54,52 Z" fill="url(#boltGrad)" filter="url(#boltGlow)"/>
+                </svg>
+              </div>
+              <div class="hiw-orbit">
+                <div class="hiw-orbit-dot" style="--angle:0deg"></div>
+                <div class="hiw-orbit-dot" style="--angle:90deg"></div>
+                <div class="hiw-orbit-dot" style="--angle:180deg"></div>
+                <div class="hiw-orbit-dot" style="--angle:270deg"></div>
+              </div>
+            </div>
+            <div class="hiw-left-text">
+              <h2>How <span class="text-accent">SparkConnect</span> Works</h2>
+              <p class="subtitle">Your electrical solutions sorted in 4 simple steps.</p>
             </div>
           </div>
-          <div class="timeline-step reveal reveal-delay-1">
-            <div class="step-marker">2</div>
-            <div class="step-content glass-card">
-              <h3>Compare</h3>
-              <p>Review verified electrician profiles, read past customer reviews, and check their ratings.</p>
+
+          <!-- RIGHT: 2x2 Grid of Steps -->
+          <div class="hiw-steps-grid">
+            <div class="timeline-step reveal">
+              <div class="step-marker">1</div>
+              <div class="step-content glass-card">
+                <h3>Search</h3>
+                <p>Find the exact service you need across residential, commercial, or industrial electrical fields.</p>
+              </div>
+            </div>
+            <div class="timeline-step reveal reveal-delay-1">
+              <div class="step-marker">2</div>
+              <div class="step-content glass-card">
+                <h3>Compare</h3>
+                <p>Review verified electrician profiles, read past customer reviews, and check their ratings.</p>
+              </div>
+            </div>
+            <div class="timeline-step reveal reveal-delay-2">
+              <div class="step-marker">3</div>
+              <div class="step-content glass-card">
+                <h3>Connect</h3>
+                <p>Contact them directly via phone or WhatsApp to discuss pricing and book instantly.</p>
+              </div>
+            </div>
+            <div class="timeline-step reveal reveal-delay-3">
+              <div class="step-marker">4</div>
+              <div class="step-content glass-card">
+                <h3>Track &amp; Review</h3>
+                <p>Get the job done safely, and leave a review to help maintain our high quality standards.</p>
+              </div>
             </div>
           </div>
-          <div class="timeline-step reveal reveal-delay-2">
-            <div class="step-marker">3</div>
-            <div class="step-content glass-card">
-              <h3>Connect</h3>
-              <p>Contact them directly via phone or WhatsApp to discuss pricing and book instantly.</p>
-            </div>
-          </div>
-          <div class="timeline-step reveal reveal-delay-3">
-            <div class="step-marker">4</div>
-            <div class="step-content glass-card">
-              <h3>Track & Review</h3>
-              <p>Get the job done safely, and leave a review to help maintain our high quality standards.</p>
-            </div>
-          </div>
+
         </div>
       </div>
     </section>
+
 
     <!-- SERVICES SECTION -->
     <section class="services-premium section-padding bg-light">

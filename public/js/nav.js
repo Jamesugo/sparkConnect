@@ -37,10 +37,13 @@ const NavManager = {
 
     // Determine active link
     const path = window.location.pathname;
-    const isHome = path.includes("index.html") || path.endsWith("/");
-    const isList = path.includes("electricians.html");
+    const isHome = path.includes("index.html") || path.endsWith("/") || path === "";
     const isAbout = path.includes("about.html");
-    // Dashboard link is hidden in main Nav if not logged in, but we handle that dynamically below
+    const isList = path.includes("electricians.html");
+    const isFaq = path.includes("faq.html");
+    const isBlog = path.includes("blog.html");
+    const isContact = path.includes("contact.html");
+    const isDashboard = path.includes("dashboard.html");
 
     nav.innerHTML = `
             <div class="container nav-container">
@@ -56,20 +59,15 @@ const NavManager = {
                 
                 <!-- Desktop Nav Links -->
                 <div class="nav-links hidden-mobile">
-                    <a href="index.html" class="${
-                      isHome ? "active" : ""
-                    }">Home</a>
-                    <a href="electricians.html" class="${
-                      isList ? "active" : ""
-                    }">Find Electricians</a>
-                    <a href="about.html" class="${
-                      isAbout ? "active" : ""
-                    }">About</a>
+                    ${!isHome ? `<a href="index.html">Home</a>` : ""}
+                    ${!isAbout ? `<a href="about.html">About</a>` : ""}
+                    ${!isList ? `<a href="electricians.html">Find Electricians</a>` : ""}
+                    ${!isFaq ? `<a href="faq.html">FAQ</a>` : ""}
+                    ${!isBlog ? `<a href="blog.html">Blog</a>` : ""}
+                    ${!isContact ? `<a href="contact.html">Contact</a>` : ""}
                     ${
-                      currentUser
-                        ? `<a href="dashboard.html" class="${
-                            path.includes("dashboard.html") ? "active" : ""
-                          }">Dashboard</a>`
+                      currentUser && !isDashboard
+                        ? `<a href="dashboard.html">Dashboard</a>`
                         : ""
                     }
                 </div>
@@ -118,20 +116,15 @@ const NavManager = {
                     <button onclick="NavManager.toggleMobileMenu()" style="background:none; font-size: 1.5rem; padding: 5px;">&times;</button>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <a href="index.html" class="${
-                      isHome ? "active" : ""
-                    }" style="font-size: 1.1rem; color: var(--text-dark);">Home</a>
-                    <a href="electricians.html" class="${
-                      isList ? "active" : ""
-                    }" style="font-size: 1.1rem; color: var(--text-dark);">Find Electricians</a>
-                    <a href="about.html" class="${
-                      isAbout ? "active" : ""
-                    }" style="font-size: 1.1rem; color: var(--text-dark);">About Us</a>
+                    ${!isHome ? `<a href="index.html" style="font-size: 1.1rem; color: var(--text-dark);">Home</a>` : ""}
+                    ${!isAbout ? `<a href="about.html" style="font-size: 1.1rem; color: var(--text-dark);">About Us</a>` : ""}
+                    ${!isList ? `<a href="electricians.html" style="font-size: 1.1rem; color: var(--text-dark);">Find Electricians</a>` : ""}
+                    ${!isFaq ? `<a href="faq.html" style="font-size: 1.1rem; color: var(--text-dark);">FAQ</a>` : ""}
+                    ${!isBlog ? `<a href="blog.html" style="font-size: 1.1rem; color: var(--text-dark);">Blog</a>` : ""}
+                    ${!isContact ? `<a href="contact.html" style="font-size: 1.1rem; color: var(--text-dark);">Contact</a>` : ""}
                     ${
-                      currentUser
-                        ? `<a href="dashboard.html" class="${
-                            path.includes("dashboard.html") ? "active" : ""
-                          }" style="font-size: 1.1rem; color: var(--text-dark);">Dashboard</a>`
+                      currentUser && !isDashboard
+                        ? `<a href="dashboard.html" style="font-size: 1.1rem; color: var(--text-dark);">Dashboard</a>`
                         : ""
                     }
                 </div>

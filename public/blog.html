@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD479W7GGP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-CD479W7GGP');
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Electrical Tips, Guides & Blog - SparkConnect</title>
+    <meta name="description" content="Read expert electrical guides, home improvement advice, energy-saving tips, and electrical safety resources curated by SparkConnect." />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+      /* Hero styling */
+      .blog-hero {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
+        color: var(--white);
+        padding: var(--spacing-xxl) 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .blog-hero h1 {
+        font-size: var(--font-size-3xl);
+        font-weight: 800;
+        margin-bottom: var(--spacing-md);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+      .blog-hero p {
+        font-size: var(--font-size-lg);
+        max-width: 700px;
+        margin: 0 auto;
+        opacity: 0.9;
+        line-height: 1.6;
+      }
+
+      /* Blog Grid */
+      .blog-section {
+        padding: var(--spacing-xxl) 0;
+        background-color: var(--bg-light);
+      }
+      .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: var(--spacing-lg);
+        margin-top: var(--spacing-lg);
+      }
+      @media (max-width: 480px) {
+        .blog-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .blog-card {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+      .blog-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+      }
+
+      .blog-card-image {
+        height: 200px;
+        position: relative;
+        background: #eee;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-blue);
+        font-size: 3rem;
+      }
+      .blog-card-badge {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: var(--primary-blue);
+        color: var(--white);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .blog-card-content {
+        padding: var(--spacing-lg);
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+      }
+      .blog-card-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: var(--spacing-sm);
+        line-height: 1.4;
+      }
+      .blog-card-excerpt {
+        color: var(--text-gray);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: var(--spacing-lg);
+        flex-grow: 1;
+      }
+
+      .blog-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85rem;
+        color: var(--text-gray);
+        border-top: 1px solid var(--border-color);
+        padding-top: var(--spacing-md);
+      }
+
+      .blog-card-footer span i {
+        margin-right: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Nav rendered by js/nav.js -->
+    <nav></nav>
+
+    <!-- Hero Section -->
+    <header class="blog-hero">
+      <div class="container">
+        <h1>SparkConnect Blog & Guides</h1>
+        <p>
+          Expert tips, safety recommendations, and step-by-step guides for all your home and commercial electrical needs.
+        </p>
+      </div>
+    </header>
+
+    <!-- Blog Grid Section -->
+    <section class="blog-section">
+      <div class="container">
+        <div class="blog-grid">
+          
+          <!-- Card 1: Solar -->
+          <article class="blog-card">
+            <div class="blog-card-image" style="background: linear-gradient(135deg, #ff9900 0%, #ffc670 100%);">
+              <i class="fa-solid fa-solar-panel text-white"></i>
+              <span class="blog-card-badge">Solar</span>
+            </div>
+            <div class="blog-card-content">
+              <h2 class="blog-card-title">Is Solar Worth It in Nigeria in 2026?</h2>
+              <p class="blog-card-excerpt">
+                With NEPA instability, rising grid costs, and fuel price hikes, going solar is becoming the preferred choice. We break down the real investment costs and returns.
+              </p>
+              <div class="blog-card-footer">
+                <span><i class="fa-regular fa-clock"></i> 5 min read</span>
+                <a href="article-solar.html" class="btn btn-outline" style="padding: 5px 12px; font-size: 0.85rem; border-color: var(--primary-blue); color: var(--primary-blue);">Read More</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2: Complete Rewire -->
+          <article class="blog-card">
+            <div class="blog-card-image" style="background: linear-gradient(135deg, #0066cc 0%, #6ab2ff 100%);">
+              <i class="fa-solid fa-plug text-white"></i>
+              <span class="blog-card-badge">Wiring</span>
+            </div>
+            <div class="blog-card-content">
+              <h2 class="blog-card-title">How to Know When Your Home Needs a Complete Rewire</h2>
+              <p class="blog-card-excerpt">
+                Old and faulty wiring is one of the leading causes of electrical fires. Learn the warning signs that indicate your home's wiring needs to be replaced.
+              </p>
+              <div class="blog-card-footer">
+                <span><i class="fa-regular fa-clock"></i> 8 min read</span>
+                <a href="article-rewire.html" class="btn btn-outline" style="padding: 5px 12px; font-size: 0.85rem; border-color: var(--primary-blue); color: var(--primary-blue);">Read More</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3: Generator vs Inverter -->
+          <article class="blog-card">
+            <div class="blog-card-image" style="background: linear-gradient(135deg, #28a745 0%, #7ee694 100%);">
+              <i class="fa-solid fa-car-battery text-white"></i>
+              <span class="blog-card-badge">Power</span>
+            </div>
+            <div class="blog-card-content">
+              <h2 class="blog-card-title">Generator vs Inverter: Best Back-up Power Option</h2>
+              <p class="blog-card-excerpt">
+                Should you buy a generator or set up a solar/battery inverter system for your Nigerian home? We compare noise, initial cost, maintenance, and long-term costs.
+              </p>
+              <div class="blog-card-footer">
+                <span><i class="fa-regular fa-clock"></i> 6 min read</span>
+                <a href="article-generator-vs-inverter.html" class="btn btn-outline" style="padding: 5px 12px; font-size: 0.85rem; border-color: var(--primary-blue); color: var(--primary-blue);">Read More</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 4: Surge Protection -->
+          <article class="blog-card">
+            <div class="blog-card-image" style="background: linear-gradient(135deg, #dc3545 0%, #f7707e 100%);">
+              <i class="fa-solid fa-bolt-lightning text-white"></i>
+              <span class="blog-card-badge">Safety</span>
+            </div>
+            <div class="blog-card-content">
+              <h2 class="blog-card-title">Protecting Your Appliances From High Voltage & Surges</h2>
+              <p class="blog-card-excerpt">
+                Voltage fluctuations can destroy expensive household appliances in seconds. Learn the key methods to implement full surge protection.
+              </p>
+              <div class="blog-card-footer">
+                <span><i class="fa-regular fa-clock"></i> 4 min read</span>
+                <a href="article-surge-protection.html" class="btn btn-outline" style="padding: 5px 12px; font-size: 0.85rem; border-color: var(--primary-blue); color: var(--primary-blue);">Read More</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 5: Electric Bill -->
+          <article class="blog-card">
+            <div class="blog-card-image" style="background: linear-gradient(135deg, #17a2b8 0%, #6cd7e8 100%);">
+              <i class="fa-solid fa-money-bill-wave text-white"></i>
+              <span class="blog-card-badge">Energy</span>
+            </div>
+            <div class="blog-card-content">
+              <h2 class="blog-card-title">10 Pro Tips to Reduce Your Monthly Electric Bill</h2>
+              <p class="blog-card-excerpt">
+                Are you on Band A tariff plan and paying too much? Here are simple, practical steps to drastically cut down your electricity consumption immediately.
+              </p>
+              <div class="blog-card-footer">
+                <span><i class="fa-regular fa-clock"></i> 5 min read</span>
+                <a href="article-electric-bill.html" class="btn btn-outline" style="padding: 5px 12px; font-size: 0.85rem; border-color: var(--primary-blue); color: var(--primary-blue);">Read More</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 6: Commercial Projects -->
+          <article class="blog-card">
+            <div class="blog-card-image" style="background: linear-gradient(135deg, #6c757d 0%, #adb5bd 100%);">
+              <i class="fa-solid fa-building text-white"></i>
+              <span class="blog-card-badge">Commercial</span>
+            </div>
+            <div class="blog-card-content">
+              <h2 class="blog-card-title">Hiring Electricians for Commercial Electrical Work</h2>
+              <p class="blog-card-excerpt">
+                Commercial electrical projects require distinct licensing and expertise compared to residential tasks. Learn how to verify commercial contractors.
+              </p>
+              <div class="blog-card-footer">
+                <span><i class="fa-regular fa-clock"></i> 7 min read</span>
+                <a href="article-commercial.html" class="btn btn-outline" style="padding: 5px 12px; font-size: 0.85rem; border-color: var(--primary-blue); color: var(--primary-blue);">Read More</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <h4>SparkConnect</h4>
+            <p style="color: #bbb; line-height: 1.6">
+              Connecting you with the best electrical professionals in Nigeria.
+              Safe, fast, and reliable.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About Us</a></li>
+              <li><a href="electricians.html">Find Electricians</a></li>
+              <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Contact</h4>
+            <ul>
+              <li>support@sparkconnect.com</li>
+              <li>+234 800 123 4567</li>
+              <li>Lagos, Nigeria</li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 SparkConnect. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/nav.js"></script>
+  </body>
+</html>

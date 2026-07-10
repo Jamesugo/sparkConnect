@@ -183,9 +183,21 @@ window.DataManager = {
     },
     
     deleteElectrician: async function(id) {
-         // Not fully implemented on backend but simulation
-         // Usually we'd have a delete endpoint
+         // Fallback/simulation
          console.warn("Delete account not connected to API yet");
+    },
+
+    deleteCurrentAccount: async function() {
+        const res = await networkRequest(`${API_BASE_URL}/api/user/delete`, {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+        if (res.ok) {
+            return true;
+        } else {
+            const error = await res.json();
+            throw new Error(error.error || 'Failed to delete account');
+        }
     },
     
     getInitials: function(name) {

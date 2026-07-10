@@ -533,25 +533,121 @@
 }
 .how-it-works-premium .subtitle { color: rgba(255,255,255,0.7) !important; }
 
-.timeline-steps {
+/* HOW IT WORKS — Two-column layout */
+.hiw-layout {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+/* ── Left panel ─────────────────────────────────────── */
+.hiw-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.hiw-left-text {
+  text-align: center;
+}
+.hiw-left-text h2 {
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+.hiw-left-text .subtitle {
+  color: rgba(255,255,255,0.7);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* Animated visual wrap */
+.hiw-visual-wrap {
   position: relative;
+  width: 240px;
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-/* Connecting line between steps */
-.timeline-steps::after {
-  content: '';
+
+/* Pulsing rings */
+.hiw-pulse-ring {
   position: absolute;
-  top: 24px;
-  left: 10%;
-  width: 80%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(0,198,255,0.3), rgba(255,153,0,0.3), transparent);
-  pointer-events: none;
-  display: none;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 198, 255, 0.35);
+  animation: hiwPulse 3s ease-out infinite;
 }
-@media (min-width: 900px) { .timeline-steps::after { display: block; } }
+.hiw-pulse-ring          { width: 100%; height: 100%; animation-delay: 0s; }
+.hiw-ring-2              { width: 75%;  height: 75%;  animation-delay: 1s; border-color: rgba(255, 183, 0, 0.3); }
+.hiw-ring-3              { width: 50%;  height: 50%;  animation-delay: 2s; border-color: rgba(0, 198, 255, 0.2); }
+
+@keyframes hiwPulse {
+  0%   { transform: scale(0.85); opacity: 0.8; }
+  50%  { transform: scale(1.05); opacity: 0.4; }
+  100% { transform: scale(0.85); opacity: 0.8; }
+}
+
+/* Center bolt icon */
+.hiw-icon-center {
+  position: absolute;
+  z-index: 3;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, rgba(0,132,255,0.25), transparent 70%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hiw-bolt-svg {
+  width: 52px;
+  height: 60px;
+  animation: boltFlicker 2.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px rgba(0, 198, 255, 0.8));
+}
+@keyframes boltFlicker {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  40%       { opacity: 0.7; transform: scale(1.08); }
+  60%       { opacity: 1;   transform: scale(0.96); }
+}
+
+/* Orbiting dots */
+.hiw-orbit {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  animation: hiwOrbit 8s linear infinite;
+  z-index: 2;
+}
+.hiw-orbit-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00c6ff, #ffb700);
+  top: 50%;
+  left: 50%;
+  margin: -5px 0 0 -5px;
+  transform: rotate(var(--angle)) translateX(118px);
+  box-shadow: 0 0 8px rgba(0, 198, 255, 0.8);
+}
+@keyframes hiwOrbit {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── Right panel: 2×2 grid ──────────────────────────── */
+.hiw-steps-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
 
 .timeline-step { text-align: center; position: relative; }
 .step-marker {
@@ -575,7 +671,7 @@
 }
 
 .step-content {
-  padding: 2rem 1.5rem;
+  padding: 1.75rem 1.25rem;
   background: rgba(255,255,255,0.06) !important;
   border: 1px solid rgba(255,255,255,0.1) !important;
   backdrop-filter: blur(10px);
@@ -586,12 +682,19 @@
   background: rgba(255,255,255,0.1) !important;
   box-shadow: 0 16px 40px rgba(0,0,0,0.25) !important;
 }
-.step-content h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; color: #fff; }
-.step-content p  { font-size: 0.9rem; color: rgba(255,255,255,0.7); line-height: 1.6; }
+.step-content h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: #fff; }
+.step-content p  { font-size: 0.88rem; color: rgba(255,255,255,0.7); line-height: 1.6; }
 
-/* ============================================================
-   SERVICES SECTION
-   ============================================================ */
+/* Responsive */
+@media (max-width: 900px) {
+  .hiw-layout { grid-template-columns: 1fr; gap: 3rem; }
+  .hiw-steps-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px) {
+  .hiw-steps-grid { grid-template-columns: 1fr; }
+}
+
+
 .services-premium { background: linear-gradient(180deg, #fffbf0 0%, #fff9e6 100%); }
 
 .services-grid-premium {

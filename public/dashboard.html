@@ -583,9 +583,17 @@
         ModalManager.confirm(
           "Are you sure you want to delete your account? This action cannot be undone.",
           "Delete Account",
-          () => {
-            // TODO: Implement API delete
-            ModalManager.alert("Feature coming soon via API", "Coming Soon");
+          async () => {
+            try {
+              const success = await DataManager.deleteCurrentAccount();
+              if (success) {
+                ModalManager.alert("Your account has been successfully deleted.", "Account Deleted", () => {
+                  window.location.href = "index.html";
+                });
+              }
+            } catch (err) {
+              ModalManager.alert("Failed to delete account: " + err.message, "Error");
+            }
           }
         );
       }

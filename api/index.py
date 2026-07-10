@@ -27,7 +27,7 @@ BASE_DIR = os.path.join(API_DIR, '..', 'public')
 # MongoDB Configuration
 MONGO_URI = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/sparkconnect')
 import certifi
-client = MongoClient(MONGO_URI, tlsCAFile=certifi.where())
+client = MongoClient(MONGO_URI, tlsCAFile=certifi.where(), connect=False, serverSelectionTimeoutMS=5000)
 # Explicitly get the 'sparkconnect' database if the URI doesn't specify one
 db = client.get_database('sparkconnect' if 'mongodb+srv' in MONGO_URI else None)
 
@@ -357,6 +357,18 @@ def remove_from_gallery():
     db.users.update_one({'_id': ObjectId(session['user_id'])}, {'$pull': {'gallery': item_to_remove}})
     user = db.users.find_one({'_id': ObjectId(session['user_id'])})
     return jsonify({'gallery': user.get('gallery', [])})
+
+@app.route('/api/user/delete', methods=['DELETE'])
+def delete_current_user():
+    if 'user_id' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
+    try:
+        user_id = session['user_id']
+        db.users.delete_one({'_id': ObjectId(user_id)})
+        session.pop('user_id', None)
+        return jsonify({'message': 'Account deleted successfully'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/admin/users/<string:user_id>', methods=['DELETE'])
 def admin_delete_user(user_id):

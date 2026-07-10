@@ -15,7 +15,7 @@ const ModalManager = {
         return { overlay, modalContainer };
     },
 
-    alert: function(message, title = 'Notification') {
+    alert: function(message, title = 'Notification', onOkCallback) {
         const { overlay, modalContainer } = this._createOverlay();
         
         modalContainer.innerHTML = `
@@ -35,6 +35,9 @@ const ModalManager = {
         // Event listener to close
         document.getElementById('modal-ok-btn').addEventListener('click', () => {
             this._close(overlay, modalContainer);
+            if (typeof onOkCallback === 'function') {
+                onOkCallback();
+            }
         });
     },
 
