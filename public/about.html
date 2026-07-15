@@ -22,18 +22,31 @@
     <style>
       /* Hero styling */
       .about-hero {
-        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
+        background: linear-gradient(135deg, #0a1628 0%, #0d2147 100%);
         color: var(--white);
-        padding: var(--spacing-xxl) 0;
+        padding: 80px 0;
         text-align: center;
         position: relative;
         overflow: hidden;
       }
+      .about-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0,102,204,0.1) 0%, transparent 60%);
+        pointer-events: none;
+      }
       .about-hero h1 {
-        font-size: var(--font-size-3xl);
-        font-weight: 800;
+        font-size: 3rem;
+        font-weight: 900;
         margin-bottom: var(--spacing-md);
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(90deg, #fff, #e0e8f4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
       .about-hero p {
         font-size: var(--font-size-lg);
@@ -93,23 +106,25 @@
         margin-bottom: var(--spacing-md);
       }
       .mission-stats {
-        background: var(--bg-light);
-        border-radius: var(--radius-md);
-        padding: var(--spacing-lg);
+        background: linear-gradient(135deg, #0066cc 0%, #004c99 100%);
+        border-radius: 20px;
+        padding: var(--spacing-xl);
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: var(--spacing-md);
         text-align: center;
+        color: #fff;
+        box-shadow: 0 12px 30px rgba(0, 102, 204, 0.2);
       }
       .mission-stat-item h3 {
-        font-size: var(--font-size-2xl);
-        color: var(--primary-blue);
-        font-weight: 800;
-        margin-bottom: var(--spacing-xs);
+        font-size: 2.5rem;
+        color: #ff9900;
+        font-weight: 900;
+        margin-bottom: 4px;
       }
       .mission-stat-item p {
-        font-size: var(--font-size-sm);
-        color: var(--text-gray);
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.9);
         font-weight: 500;
       }
 
@@ -121,23 +136,26 @@
         margin-top: var(--spacing-lg);
       }
       .value-card {
-        background: var(--white);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius-lg);
-        padding: var(--spacing-xl);
+        background: linear-gradient(to bottom, #ffffff 0%, #f9fbff 100%);
+        border: 1px solid #eef1f7;
+        border-radius: 20px;
+        padding: 36px 24px;
         transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         text-align: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.02);
       }
       .value-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-        border-color: var(--primary-blue);
+        transform: translateY(-8px);
+        box-shadow: 0 16px 40px rgba(0, 102, 204, 0.12);
+        border-color: #cce0ff;
       }
       .value-icon {
-        width: 60px;
-        height: 60px;
-        background: rgba(0, 102, 204, 0.08);
-        color: var(--primary-blue);
+        width: 72px;
+        height: 72px;
+        background: linear-gradient(135deg, #e0e8f4 0%, #c8d8ee 100%);
+        color: #0066cc;
+        border: 2px solid #fff;
+        box-shadow: 0 8px 20px rgba(0, 102, 204, 0.1);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -250,29 +268,37 @@
     <section class="about-section" style="background-color: var(--bg-light); border-top: 1px solid var(--border-color);">
       <div class="container">
         <span class="section-subtitle">Our Values</span>
-        <h2 class="section-title">What Drives Us Every Day</h2>
+        <h2 class="section-title">What We Stand For</h2>
         <div class="about-grid">
           <!-- Value Card 1 -->
           <div class="value-card">
-            <div class="value-icon">🛡️</div>
+            <div class="value-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+            </div>
             <h3 class="value-title">Safety First</h3>
             <p class="value-desc">Electrical work is critical and requires caution. We prioritize safety by registering only qualified professionals.</p>
           </div>
           <!-- Value Card 2 -->
           <div class="value-card">
-            <div class="value-icon">🤝</div>
+            <div class="value-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </div>
             <h3 class="value-title">Reliability</h3>
             <p class="value-desc">We build trust through verified customer reviews and honest communication channels.</p>
           </div>
           <!-- Value Card 3 -->
           <div class="value-card">
-            <div class="value-icon">👁️</div>
+            <div class="value-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </div>
             <h3 class="value-title">Transparency</h3>
             <p class="value-desc">Zero hidden charges. Negotiate directly with the electricians and get fair pricing without middlewares.</p>
           </div>
           <!-- Value Card 4 -->
           <div class="value-card">
-            <div class="value-icon">⭐</div>
+            <div class="value-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+            </div>
             <h3 class="value-title">Professionalism</h3>
             <p class="value-desc">From residential wiring to heavy industrial setups, our electricians represent the peak of local expertise.</p>
           </div>
@@ -280,16 +306,21 @@
       </div>
     </section>
 
-    <!-- Call to Action Section -->
-    <section class="cta-section">
-      <div class="cta-container">
-        <h2 class="cta-title">Ready to Get Started?</h2>
-        <p class="cta-desc">
-          Whether you need a quick repair or a complete solar installation, SparkConnect is here to help you find the perfect electrician for the job.
-        </p>
-        <div class="cta-buttons">
-          <a href="electricians.html" class="btn btn-primary">Find an Electrician</a>
-          <a href="signup.html" class="btn btn-outline">Join as an Electrician</a>
+    <!-- Vision Section -->
+    <section class="about-section">
+      <div class="container">
+        <span class="section-subtitle">Our Future</span>
+        <h2 class="section-title">Our Vision</h2>
+        <div class="mission-container" style="flex-direction: row-reverse;">
+          <div class="mission-text">
+            <h2>Empowering Communities Through Safe Electrification</h2>
+            <p>
+              We envision a future where every home and business in Nigeria has access to safe, reliable, and affordable electrical services. We aim to elevate the standard of the electrical trade across the nation by fostering continuous learning and adherence to the highest safety protocols.
+            </p>
+            <p>
+              By bridging the gap between skilled professionals and those in need of their services, SparkConnect is dedicated to powering progress, one safe connection at a time.
+            </p>
+          </div>
         </div>
       </div>
     </section>

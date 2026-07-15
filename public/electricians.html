@@ -15,45 +15,165 @@
     <title>Find Electricians - SparkConnect</title>
     <link rel="stylesheet" href="css/style.css" />
     <style>
+      .page-header {
+        background: linear-gradient(135deg, #0a1628 0%, #0d2147 100%);
+        color: #fff;
+        padding: 60px 0 80px;
+        text-align: center;
+        position: relative;
+        margin-bottom: -40px;
+      }
+      .page-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+      }
+      .page-header p {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.8);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .search-container {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 10;
+        background: #fff;
+        padding: 10px;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .search-container input {
+        flex: 1;
+        border: none;
+        padding: 12px 20px;
+        font-size: 1rem;
+        background: transparent;
+      }
+
+      .search-container input:focus {
+        box-shadow: none;
+        outline: none;
+      }
+
+      .search-container .btn-search {
+        background: linear-gradient(135deg, #0066cc, #004c99);
+        color: #fff;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .search-container .btn-search:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 102, 204, 0.3);
+      }
+
       .list-container {
         display: flex;
-        gap: var(--spacing-xl);
-        padding: var(--spacing-xl) 0;
+        gap: var(--spacing-xxl);
+        padding: var(--spacing-xxl) 0;
         align-items: flex-start;
       }
 
       .filters {
-        width: 250px;
-        background: var(--white);
-        padding: var(--spacing-md);
-        border-radius: var(--radius-md);
-        border: 1px solid var(--border-color);
+        width: 280px;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(20px);
+        padding: var(--spacing-xl);
+        border-radius: 20px;
+        border: 1px solid rgba(255,255,255,0.5);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.05);
         position: sticky;
         top: 100px;
+        flex-shrink: 0;
       }
 
       .filter-group {
-        margin-bottom: var(--spacing-lg);
+        margin-bottom: var(--spacing-xl);
+      }
+      .filter-group:last-child {
+        margin-bottom: 0;
       }
 
       .filter-group h3 {
-        font-size: var(--font-size-base);
-        margin-bottom: var(--spacing-md);
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #0a1628;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
 
       .filter-select {
         width: 100%;
-        padding: var(--spacing-sm);
-        border-radius: var(--radius-md);
-        border: 1px solid var(--border-color);
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1.5px solid #eef1f7;
+        background: #f8fafd;
+        font-size: 0.95rem;
+        color: #333;
+        font-weight: 500;
+        transition: border-color 0.2s;
+        appearance: none;
       }
 
-      .filter-option {
+      .filter-select:focus {
+        border-color: #0066cc;
+        outline: none;
+      }
+
+      .filter-checkbox-label {
         display: flex;
         align-items: center;
-        gap: var(--spacing-sm);
-        margin-bottom: var(--spacing-sm);
+        gap: 10px;
+        margin-bottom: 10px;
         cursor: pointer;
+        font-size: 0.95rem;
+        color: #555;
+        transition: color 0.2s;
+      }
+      .filter-checkbox-label:hover {
+        color: #0066cc;
+      }
+
+      .filter-checkbox-label input[type="checkbox"] {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border: 1.5px solid #c0ccda;
+        border-radius: 4px;
+        outline: none;
+        position: relative;
+        cursor: pointer;
+        transition: all 0.2s;
+        padding: 0;
+      }
+
+      .filter-checkbox-label input[type="checkbox"]:checked {
+        background: #0066cc;
+        border-color: #0066cc;
+      }
+
+      .filter-checkbox-label input[type="checkbox"]:checked::after {
+        content: "✓";
+        position: absolute;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
       }
 
       .results {
@@ -61,61 +181,187 @@
       }
 
       .results-header {
-        margin-bottom: var(--spacing-lg);
-      }
-
-      .electrician-list-item {
-        background: var(--white);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius-lg);
-        padding: var(--spacing-lg);
-        margin-bottom: var(--spacing-md);
+        margin-bottom: var(--spacing-xl);
         display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .results-header h2 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #0a1628;
+      }
+
+      .results-header p {
+        color: var(--text-gray);
+        font-size: 0.95rem;
+        font-weight: 500;
+      }
+
+      /* Premium Card specific adjustments for the list page */
+      .electrician-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: var(--spacing-lg);
-        transition: box-shadow 0.2s;
       }
 
-      .electrician-list-item:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      .electrician-card {
+        background: #fff;
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid #eef1f7;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        opacity: 0;
+        transform: translateY(20px);
       }
 
-      .list-img {
-        width: 120px;
-        height: 120px;
-        border-radius: var(--radius-full);
+      .electrician-card.animate-in {
+        animation: cardFadeUp 0.5s forwards;
+      }
+
+      @keyframes cardFadeUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .electrician-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 16px 40px rgba(0,102,204,0.12);
+        border-color: #cce0ff;
+      }
+
+      .card-img-container {
+        height: 220px;
+        position: relative;
+        overflow: hidden;
+        background-color: #f0f4f8;
+      }
+      
+      .card-img {
+        width: 100%;
+        height: 100%;
         object-fit: cover;
-        background-color: #eee;
+        transition: transform 0.5s ease;
       }
 
-      .list-info {
+      .electrician-card:hover .card-img {
+        transform: scale(1.05);
+      }
+
+      .card-body {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
         flex: 1;
       }
 
-      .info-header {
+      .card-name {
+        font-weight: 800;
+        font-size: 1.15rem;
+        margin-bottom: 4px;
+        color: #0a1628;
+      }
+
+      .card-specialty {
+        color: #0066cc;
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+      }
+
+      .card-desc {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 16px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.6;
+        flex: 1;
+      }
+
+      .card-footer {
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: var(--spacing-sm);
+        align-items: center;
+        margin-top: auto;
+        padding-top: 16px;
+        border-top: 1px solid #f0f4f8;
       }
 
-      .list-name {
-        font-size: var(--font-size-xl);
-        font-weight: 700;
+      .card-rating {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 600;
       }
 
-      .list-rating {
-        font-weight: 700;
+      .card-location {
+        font-size: 13px;
+        color: #888;
+        display: flex;
+        align-items: center;
+        gap: 4px;
       }
 
-      @media (max-width: 768px) {
+      .no-results {
+        text-align: center;
+        padding: 60px 20px;
+        background: #fff;
+        border-radius: 20px;
+        border: 1px dashed #c0ccda;
+      }
+
+      .no-results h3 {
+        font-size: 1.5rem;
+        color: #0a1628;
+        margin-bottom: 10px;
+      }
+
+      .no-results p {
+        color: #666;
+      }
+
+      @media (max-width: 860px) {
         .list-container {
           flex-direction: column;
+          align-items: stretch;
+        }
+
+        .results {
+          width: 100%;
         }
 
         .filters {
           width: 100%;
           position: static;
           margin-bottom: var(--spacing-lg);
+        }
+
+        .electrician-grid {
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;
+          justify-content: center !important;
+          gap: var(--spacing-lg);
+          width: 100%;
+        }
+
+        .electrician-card {
+          width: 100% !important;
+          max-width: 400px !important;
+          margin: 0 auto !important;
         }
       }
     </style>
@@ -124,52 +370,68 @@
     <!-- Nav rendered by js/nav.js -->
     <nav></nav>
 
+    <div class="page-header">
+      <div class="container">
+        <h1>Find Trusted Electricians</h1>
+        <p>Connect with verified professionals in your area for residential, commercial, and industrial electrical projects.</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="search-container">
+        <input type="text" id="keyword-search" placeholder="Search by name, specialty, or description..." />
+        <button class="btn-search" onclick="filterElectricians()">Search</button>
+      </div>
+    </div>
+
     <div class="container list-container">
       <!-- Sidebar Filters -->
       <aside class="filters">
         <div class="filter-group">
-          <h3>Location (State)</h3>
-          <select
-            id="state-filter"
-            class="filter-select"
-            onchange="filterElectricians()"
-          >
+          <h3>📍 Location (State)</h3>
+          <select id="state-filter" class="filter-select" onchange="filterElectricians()">
             <option value="">All States</option>
             <!-- Populated by JS -->
           </select>
         </div>
 
         <div class="filter-group">
-          <h3>Availability</h3>
-          <label class="filter-option"
-            ><input type="checkbox" /> Available Now</label
-          >
-          <label class="filter-option"
-            ><input type="checkbox" /> Weekends</label
-          >
+          <h3>⚡ Specialty</h3>
+          <label class="filter-checkbox-label">
+            <input type="checkbox" value="Residential" onchange="filterElectricians()" class="specialty-cb" /> 
+            Residential
+          </label>
+          <label class="filter-checkbox-label">
+            <input type="checkbox" value="Commercial" onchange="filterElectricians()" class="specialty-cb" /> 
+            Commercial
+          </label>
+          <label class="filter-checkbox-label">
+            <input type="checkbox" value="Industrial" onchange="filterElectricians()" class="specialty-cb" /> 
+            Industrial
+          </label>
+          <label class="filter-checkbox-label">
+            <input type="checkbox" value="Solar" onchange="filterElectricians()" class="specialty-cb" /> 
+            Solar & Inverter
+          </label>
         </div>
+
         <div class="filter-group">
-          <h3>Specialty</h3>
-          <label class="filter-option"
-            ><input type="checkbox" /> Residential</label
-          >
-          <label class="filter-option"
-            ><input type="checkbox" /> Commercial</label
-          >
-          <label class="filter-option"
-            ><input type="checkbox" /> Industrial</label
-          >
+          <h3>⭐ Rating</h3>
+          <label class="filter-checkbox-label">
+            <input type="checkbox" value="4" onchange="filterElectricians()" class="rating-cb" /> 
+            4 Stars & Above
+          </label>
         </div>
       </aside>
 
       <!-- Main Results -->
       <main class="results">
         <div class="results-header">
-          <h1>Electricians in Your Area</h1>
-          <p id="results-count">Showing all electricians</p>
+          <h2 id="results-heading">All Electricians</h2>
+          <p id="results-count">Showing 0 results</p>
         </div>
 
-        <div id="electricians-list">
+        <div id="electricians-list" class="electrician-grid">
           <!-- Populated by JS -->
         </div>
       </main>
@@ -180,7 +442,9 @@
     <script>
       const container = document.getElementById("electricians-list");
       const countLabel = document.getElementById("results-count");
+      const headingLabel = document.getElementById("results-heading");
       const stateSelect = document.getElementById("state-filter");
+      const searchInput = document.getElementById("keyword-search");
 
       // Populate State Filter
       NIGERIAN_STATES.forEach((state) => {
@@ -190,138 +454,153 @@
         stateSelect.appendChild(opt);
       });
 
+      // Handle Enter key in search
+      searchInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+          filterElectricians();
+        }
+      });
+
       function renderList(list) {
         container.innerHTML = "";
         countLabel.textContent = `Showing ${list.length} results`;
 
         if (list.length === 0) {
-          container.innerHTML = "<p>No electricians found in this area.</p>";
+          container.innerHTML = `
+            <div class="no-results" style="grid-column: 1 / -1;">
+              <h3>No professionals found</h3>
+              <p>Try adjusting your filters or search keywords to find what you're looking for.</p>
+            </div>
+          `;
           return;
         }
 
-        list.forEach((el) => {
-          const item = document.createElement("div");
-          item.className = "electrician-list-item";
+        list.forEach((el, index) => {
+          const a = document.createElement("a");
+          a.href = `profile.html?id=${el.id}`;
+          a.className = "electrician-card animate-in";
+          // Staggered animation delay
+          a.style.animationDelay = `${index * 0.05}s`;
 
           // Show rating only if they have one (new users start at 0)
-          const ratingHtml =
-            el.reviews > 0
-              ? `★ ${el.rating} <span style="font-weight:400; color:var(--text-gray)">(${el.reviews} reviews)</span>`
-              : `<span style="font-weight:400; color:var(--text-gray)">New Member</span>`;
+          const ratingHtml = el.reviews > 0
+              ? `<span style="color:#ff9900;">★</span> ${el.rating} <span style="opacity:0.7;font-weight:400">(${el.reviews})</span>`
+              : `<span style="color:#888;font-weight:400">New</span>`;
 
-          // Create image or initials placeholder
+          // Image handling
           let imageHtml;
-          if (
-            el.image &&
-            el.image !== "assets/images/profile_placeholder.jpg"
-          ) {
-            imageHtml = `<img src="${el.image}" alt="${
-              el.name
-            }" class="list-img" onerror="this.outerHTML='<div class=\\'list-img list-img-placeholder\\'>${DataManager.getInitials(
-              el.name
-            )}</div>'">`;
+          if (el.image && el.image !== "assets/images/profile_placeholder.jpg") {
+            imageHtml = `<img src="${el.image}" alt="${el.name}" class="card-img" onerror="this.outerHTML='<div class=\\'card-img\\' style=\\'display:flex;align-items:center;justify-content:center;background:#e0e8f4;color:#0066cc;font-size:3rem;font-weight:800;\\'>${DataManager.getInitials(el.name)}</div>'">`;
           } else {
-            imageHtml = `<div class="list-img list-img-placeholder">${DataManager.getInitials(
-              el.name
-            )}</div>`;
+            imageHtml = `<div class="card-img" style="display:flex;align-items:center;justify-content:center;background:#e0e8f4;color:#0066cc;font-size:3rem;font-weight:800;">${DataManager.getInitials(el.name)}</div>`;
           }
 
-          item.innerHTML = `
-                    ${imageHtml}
-                    <div class="list-info">
-                        <div class="info-header">
-                            <div class="list-name">${el.name}</div>
-                            <div class="list-rating">${ratingHtml}</div>
-                        </div>
-                        <div style="color: var(--primary-blue); margin-bottom: var(--spacing-sm);">${el.specialty} • ${el.state}</div>
-                        <p style="color: var(--text-gray); margin-bottom: var(--spacing-md);">${el.description}</p>
-                        <a href="profile.html?id=${el.id}" class="btn btn-outline">View Profile</a>
-                    </div>
-                `;
+          a.innerHTML = `
+            <div class="card-img-container">
+                ${imageHtml}
+            </div>
+            <div class="card-body">
+                <div class="card-name">${el.name}</div>
+                <div class="card-specialty">${el.specialty || 'General Electrician'}</div>
+                <div class="card-desc">${el.description || 'Experienced electrical professional ready to help with your projects.'}</div>
+                
+                <div class="card-footer">
+                  <div class="card-rating">${ratingHtml}</div>
+                  <div class="card-location">📍 ${el.state || 'Nigeria'}</div>
+                </div>
+            </div>
+          `;
 
-          container.appendChild(item);
+          container.appendChild(a);
         });
       }
 
       async function filterElectricians() {
         const selectedState = stateSelect.value;
+        const keyword = searchInput.value.toLowerCase().trim();
+        
+        // Get checked specialties
+        const specialtyCheckboxes = document.querySelectorAll('.specialty-cb:checked');
+        const selectedSpecialties = Array.from(specialtyCheckboxes).map(cb => cb.value.toLowerCase());
+
+        // Get checked ratings
+        const ratingCheckboxes = document.querySelectorAll('.rating-cb:checked');
+        const minRating = ratingCheckboxes.length > 0 ? 4.0 : 0;
+
         let all = await DataManager.getAllElectricians();
 
         // Filter out visitors and admin users
         all = all.filter((e) => {
-          const isVisitor =
-            e.specialty && e.specialty.toLowerCase() === "visitor";
+          const isVisitor = e.specialty && e.specialty.toLowerCase() === "visitor";
           const isAdmin = e.name && e.name.toLowerCase() === "admin";
           return !isVisitor && !isAdmin;
         });
 
-        if (selectedState === "") {
-          renderList(all);
+        const filtered = all.filter(e => {
+          // 1. State Filter
+          if (selectedState && e.state !== selectedState) return false;
+          
+          // 2. Keyword Filter
+          if (keyword) {
+            const matchesKeyword = 
+              (e.name && e.name.toLowerCase().includes(keyword)) ||
+              (e.specialty && e.specialty.toLowerCase().includes(keyword)) ||
+              (e.location && e.location.toLowerCase().includes(keyword)) ||
+              (e.description && e.description.toLowerCase().includes(keyword));
+            if (!matchesKeyword) return false;
+          }
+
+          // 3. Specialty Filter (if any are checked, must match at least one)
+          if (selectedSpecialties.length > 0) {
+            if (!e.specialty) return false;
+            // Simple string matching. In a real app, specialty might be an array.
+            const matchesSpecialty = selectedSpecialties.some(s => e.specialty.toLowerCase().includes(s));
+            if (!matchesSpecialty) return false;
+          }
+
+          // 4. Rating Filter
+          if (minRating > 0 && (e.rating || 0) < minRating) return false;
+
+          return true;
+        });
+
+        // Update Heading
+        if (keyword) {
+          headingLabel.textContent = `Search Results for "${keyword}"`;
+        } else if (selectedState) {
+          headingLabel.textContent = `Electricians in ${selectedState}`;
+        } else if (selectedSpecialties.length > 0) {
+          headingLabel.textContent = `Filtered Results`;
         } else {
-          const filtered = all.filter((e) => e.state === selectedState);
-          renderList(filtered);
+          headingLabel.textContent = `All Electricians`;
         }
+
+        renderList(filtered);
       }
 
       // Initial Render mechanism
       async function initList() {
-        // Check if logged in to show Dashboard link (async now)
-        const user = await DataManager.getCurrentUser();
-        if (user) {
-          const dashboardLink = document.getElementById("dashboard-link");
-          if (dashboardLink) {
-            dashboardLink.classList.remove("hidden");
-          }
-        }
+        // Check if logged in to show Dashboard link (handled by nav.js now mostly, but good to ensure data is loaded)
+        await DataManager.getCurrentUser();
 
-        let initialList = await DataManager.getAllElectricians();
-
-        // Base filter: remove visitors and admin
-        initialList = initialList.filter((e) => {
-          const isVisitor =
-            e.specialty && e.specialty.toLowerCase() === "visitor";
-          const isAdmin = e.name && e.name.toLowerCase() === "admin";
-          return !isVisitor && !isAdmin;
-        });
-
-        // Search Filter
+        // Search Filter from URL
         const params = new URLSearchParams(window.location.search);
         const query = params.get("q");
         const stateParam = params.get("state");
 
         if (stateParam) {
-          // Pre-select the state filter dropdown
           const matchedState = NIGERIAN_STATES.find(s => s.toLowerCase() === stateParam.toLowerCase());
           if (matchedState) {
             stateSelect.value = matchedState;
           }
-          
-          initialList = initialList.filter(
-            (e) => e.state && e.state.toLowerCase() === stateParam.toLowerCase()
-          );
         }
 
         if (query) {
-          const q = query.toLowerCase();
-          initialList = initialList.filter(
-            (e) =>
-              (e.name && e.name.toLowerCase().includes(q)) ||
-              (e.specialty && e.specialty.toLowerCase().includes(q)) ||
-              (e.location && e.location.toLowerCase().includes(q)) ||
-              (e.state && e.state.toLowerCase().includes(q))
-          );
+          searchInput.value = query;
         }
 
-        // Update header based on active filters
-        if (query && stateParam) {
-          document.querySelector(".results-header h1").textContent = `Search Results for "${query}" in ${stateParam}`;
-        } else if (query) {
-          document.querySelector(".results-header h1").textContent = `Search Results for "${query}"`;
-        } else if (stateParam) {
-          document.querySelector(".results-header h1").textContent = `Electricians in ${stateParam}`;
-        }
-
-        renderList(initialList);
+        // Run filter initially
+        filterElectricians();
       }
 
       initList();
