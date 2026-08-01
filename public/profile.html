@@ -15,131 +15,242 @@
     <title>Electrician Profile - SparkConnect</title>
     <link rel="stylesheet" href="css/style.css" />
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+      
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8fafc;
+      }
+
       .profile-header-container {
-        background-color: var(--white);
-        padding: var(--spacing-xxl) 0;
-        border-bottom: 1px solid var(--border-color);
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        padding: 60px 0 40px 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .profile-header-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 80% 20%, rgba(0, 112, 243, 0.2) 0%, transparent 40%);
+        pointer-events: none;
       }
 
       .profile-header {
         display: flex;
         align-items: center;
-        gap: var(--spacing-xl);
+        gap: 40px;
+        position: relative;
+        z-index: 10;
       }
 
       .profile-avatar {
-        width: 150px;
-        height: 150px;
-        border-radius: var(--radius-full);
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
         object-fit: cover;
-        border: 4px solid var(--white);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 6px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        background-color: #eee;
+        transition: transform 0.3s ease;
+      }
+      
+      .profile-avatar:hover {
+        transform: scale(1.05);
+      }
+
+      .profile-info {
+        color: white;
       }
 
       .profile-info h1 {
-        font-size: var(--font-size-3xl);
-        margin-bottom: var(--spacing-xs);
+        font-size: 2.5rem;
+        margin-bottom: 8px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
       }
 
-      .profile-meta {
-        color: var(--primary-blue);
+      .profile-badges {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+      }
+      
+      .badge {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(5px);
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.85rem;
         font-weight: 500;
-        margin-bottom: var(--spacing-sm);
+        letter-spacing: 0.3px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      
+      .badge-primary {
+        background: var(--primary-blue);
+        color: white;
+        border: none;
       }
 
       .profile-stats {
-        margin-top: var(--spacing-md);
-        color: var(--text-gray);
+        margin-top: 15px;
+        color: #cbd5e1;
+        display: flex;
+        gap: 20px;
+        font-size: 0.95rem;
+      }
+      
+      .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
       }
 
       .content-section {
-        padding: var(--spacing-xxl) 0;
+        padding: 60px 0;
+        background: white;
+        border-radius: 20px;
+        margin-top: -30px;
+        position: relative;
+        z-index: 20;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.05);
+        max-width: 1100px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 40px 50px;
       }
 
       .gallery-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: var(--spacing-md);
-        margin-top: var(--spacing-md);
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+        margin-top: 25px;
       }
 
       .gallery-item {
         aspect-ratio: 1;
-        border-radius: var(--radius-md);
+        border-radius: 15px;
         overflow: hidden;
         background-color: #eee;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        position: relative;
       }
 
-      .gallery-item img {
+      .gallery-item img, .gallery-item video {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.3s;
+        transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
       }
 
-      .gallery-item:hover img {
-        transform: scale(1.05);
+      .gallery-item:hover img, .gallery-item:hover video {
+        transform: scale(1.1);
+      }
+      
+      .review-card {
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(0,0,0,0.03);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      
+      .review-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      }
+      
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, #0056b3 100%);
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 112, 243, 0.4);
+        padding: 12px 28px;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        color: white;
+        cursor: pointer;
       }
 
-      .reviews-chart {
-        margin-top: var(--spacing-lg);
-        max-width: 500px;
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 112, 243, 0.5);
+      }
+      
+      .btn-outline {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255,255,255,0.3);
+        color: white;
+        padding: 12px 28px;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      
+      .btn-outline:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      
+      .review-form-container {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.02);
       }
 
-      .review-bar {
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-md);
-        margin-bottom: var(--spacing-xs);
-        font-size: var(--font-size-sm);
+      input[type="text"], textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: 10px;
+        border: 1px solid #cbd5e1;
+        background-color: #f8fafc;
+        font-family: 'Inter', sans-serif;
+        font-size: 1rem;
+        transition: all 0.3s ease;
       }
 
-      .bar-bg {
-        flex: 1;
-        height: 8px;
-        background-color: #e0e0e0;
-        border-radius: 4px;
-        overflow: hidden;
-      }
-
-      .bar-fill {
-        height: 100%;
-        background-color: var(--primary-blue);
+      input:focus, textarea:focus {
+        outline: none;
+        border-color: var(--primary-blue);
+        background-color: white;
+        box-shadow: 0 0 0 4px rgba(0, 112, 243, 0.1);
       }
 
       @media (max-width: 670px) {
         .profile-header {
           flex-direction: column;
           text-align: center;
-          gap: var(--spacing-lg);
+          gap: 20px;
         }
 
-        .profile-avatar {
-          width: 200px;
-          height: 200px;
-          border-radius: var(--radius-lg);
+        .profile-badges {
+          justify-content: center;
         }
 
-        .profile-info {
-          display: flex;
+        .profile-stats {
+          justify-content: center;
           flex-direction: column;
-          align-items: center;
+          gap: 5px;
         }
-
-        .profile-info .btn-outline {
-          margin-left: 0 !important;
-          margin-top: var(--spacing-sm);
+        
+        .content-section {
+          padding: 30px 20px;
+          border-radius: 20px 20px 0 0;
+          margin-top: -20px;
         }
-
+        
         .profile-info > div:last-child {
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-          gap: var(--spacing-sm);
-        }
-
-        .profile-info > div:last-child button {
-          width: 100%;
+          justify-content: center;
         }
       }
     </style>
@@ -205,78 +316,79 @@
         }" class="profile-avatar" onerror="this.onerror=null; this.src='assets/images/profile_placeholder.jpg'">
                         <div class="profile-info">
                             <h1>${electrician.name}</h1>
-                            <div class="profile-meta">${
-                              electrician.specialty || "Electrician"
-                            } • ${
-          electrician.state || "NG"
-        } • Licensed Electrician</div>
-                            <div class="profile-stats">★ ${
-                              electrician.rating || 0
-                            } (${electrician.reviews || 0} reviews)</div>
-                            ${
-                              electrician.email
-                                ? `<div style="font-size:0.9rem; color:var(--text-gray); margin-top:5px;">📧 ${electrician.email}</div>`
-                                : ""
-                            }
-                            ${
-                              electrician.phone
-                                ? `<div style="font-size:0.9rem; color:var(--text-gray); margin-top:2px;">📞 ${electrician.phone}</div>`
-                                : ""
-                            }
+                            <div class="profile-badges">
+                                <span class="badge badge-primary">${electrician.specialty || "Electrician"}</span>
+                                <span class="badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:-2px;margin-right:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> ${electrician.state || "NG"}</span>
+                                <span class="badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:-2px;margin-right:2px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Licensed</span>
+                            </div>
+                            <div class="profile-stats">
+                                <div class="stat-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#fbbf24;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> ${electrician.rating || 0} (${electrician.reviews || 0} reviews)</div>
+                                ${electrician.email ? `<div class="stat-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> ${electrician.email}</div>` : ""}
+                                ${electrician.phone ? `<div class="stat-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> ${electrician.phone}</div>` : ""}
+                            </div>
                             
-                            <div style="margin-top: var(--spacing-lg);">
-                                <button class="btn btn-primary contact-btn" onclick="contactElectrician()">Contact</button>
-                                <button class="btn btn-outline" style="margin-left: 10px;">Share Profile</button>
+                            <div style="margin-top: 25px; display: flex; gap: 15px; flex-wrap: wrap; justify-content: flex-start;">
+                                <button class="btn btn-primary contact-btn" onclick="contactElectrician()" style="background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); display: flex; align-items: center; gap: 8px;">
+                                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                                  WhatsApp
+                                </button>
+                                <button class="btn btn-outline" style="display: flex; align-items: center; gap: 8px;">
+                                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                                  Share Profile
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="container content-section">
-                    <section style="margin-bottom: var(--spacing-xxl);">
-                        <h2 style="margin-bottom: var(--spacing-md); font-size: var(--font-size-xl);">About Me</h2>
-                        <p style="color: var(--text-gray); line-height: 1.6;">${
+                <div class="container" style="max-width: 1150px;">
+                <div class="content-section">
+                    <section style="margin-bottom: 50px;">
+                        <h2 style="margin-bottom: 20px; font-size: 1.8rem; font-weight: 700; color: #1e293b;">About Me</h2>
+                        <p style="color: #475569; line-height: 1.8; font-size: 1.05rem;">${
                           electrician.description || "No description provided."
                         }</p>
                     </section>
                     
                     ${
                       isAdmin
-                        ? `<div id="admin-panel" style="margin-top: var(--spacing-xxl); padding-top: var(--spacing-xl); border-top: 1px solid var(--border-color);">
-                             <h3 style="color: #dc3545; margin-bottom: var(--spacing-md);">Admin: Danger Zone</h3>
-                             <p style="color: var(--text-gray); margin-bottom: var(--spacing-md);">Permanently delete this account and remove all data.</p>
-                             <button onclick="deleteAccount('${electrician.id}')" class="btn" style="background-color: #dc3545; color: white;">Delete Account</button>
+                        ? `<div id="admin-panel" style="margin-top: 40px; padding: 25px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px;">
+                             <h3 style="color: #dc2626; margin-bottom: 10px;">Admin: Danger Zone</h3>
+                             <p style="color: #7f1d1d; margin-bottom: 20px;">Permanently delete this account and remove all data.</p>
+                             <button onclick="deleteAccount('${electrician.id}')" class="btn" style="background-color: #dc2626; color: white; border: none;">Delete Account</button>
                     </div>`
                         : ""
                     }
 
-                    <section style="margin-bottom: var(--spacing-xxl);">
-                        <h2 style="margin-bottom: var(--spacing-md); font-size: var(--font-size-xl);">Gallery</h2>
+                    <section style="margin-bottom: 50px;">
+                        <h2 style="margin-bottom: 10px; font-size: 1.8rem; font-weight: 700; color: #1e293b;">Gallery</h2>
+                        <p style="color: #64748b; margin-bottom: 20px;">Photos and videos of my recent work</p>
                         <div id="profile-gallery-grid" class="gallery-grid">
-                            <p>Loading gallery...</p>
+                            <p style="color: #94a3b8;">Loading gallery...</p>
                         </div>
                     </section>
 
                     <section>
-                        <h2 style="margin-bottom: var(--spacing-md); font-size: var(--font-size-xl);">Reviews</h2>
-                        <div style="display: flex; align-items: center; gap: var(--spacing-md); margin-bottom: var(--spacing-xl);">
-                             <h1 style="font-size: 4rem; font-weight: 700;">${
+                        <h2 style="margin-bottom: 20px; font-size: 1.8rem; font-weight: 700; color: #1e293b;">Reviews</h2>
+                        
+                        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 35px; background: #f8fafc; padding: 25px; border-radius: 16px;">
+                             <h1 style="font-size: 3.5rem; font-weight: 700; color: #0f172a; line-height: 1;">${
                                electrician.rating || 0
                              }</h1>
                              <div>
-                                <div style="color: var(--secondary-orange);">★★★★★</div>
-                                <div style="color: var(--text-gray);">${
+                                <div style="color: #fbbf24; font-size: 1.2rem; letter-spacing: 2px;">★★★★★</div>
+                                <div style="color: #64748b; font-weight: 500; margin-top: 5px;">Based on ${
                                   electrician.reviews || 0
                                 } reviews</div>
                              </div>
                         </div>
 
                         <!-- Add Review Form -->
-                        <div style="background: #f8f9fa; padding: var(--spacing-lg); border-radius: var(--radius-md); margin-bottom: var(--spacing-xl);">
-                            <h3 style="margin-bottom: var(--spacing-md);">Leave a Review</h3>
+                        <div class="review-form-container" style="margin-bottom: 40px;">
+                            <h3 style="margin-bottom: 20px; font-size: 1.3rem; color: #1e293b;">Leave a Review</h3>
                             <form id="review-form">
-                                <div style="margin-bottom: var(--spacing-md);">
-                                    <label style="display: block; margin-bottom: var(--spacing-sm); font-weight: 500;">Rating</label>
+                                <div style="margin-bottom: 20px;">
+                                    <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #334155;">Rating</label>
                                     <div class="star-rating" style="font-size: 2rem; cursor: pointer;">
                                         <span class="star" data-rating="1">☆</span>
                                         <span class="star" data-rating="2">☆</span>
@@ -286,23 +398,24 @@
                                     </div>
                                     <input type="hidden" id="rating-value" required>
                                 </div>
-                                <div style="margin-bottom: var(--spacing-md);">
-                                    <label style="display: block; margin-bottom: var(--spacing-sm); font-weight: 500;">Your Name</label>
-                                    <input type="text" id="reviewer-name" placeholder="Enter your name" value="${currentUser ? currentUser.name : ''}" required style="width: 100%; max-width: 400px;">
+                                <div style="margin-bottom: 20px;">
+                                    <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #334155;">Your Name</label>
+                                    <input type="text" id="reviewer-name" placeholder="Enter your name" value="${currentUser ? currentUser.name : ''}" required style="max-width: 400px;">
                                 </div>
-                                <div style="margin-bottom: var(--spacing-md);">
-                                    <label style="display: block; margin-bottom: var(--spacing-sm); font-weight: 500;">Comment (Optional)</label>
-                                    <textarea id="review-comment" rows="3" placeholder="Share your experience..." style="width: 100%; max-width: 600px;"></textarea>
+                                <div style="margin-bottom: 25px;">
+                                    <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #334155;">Comment (Optional)</label>
+                                    <textarea id="review-comment" rows="4" placeholder="Share your experience..." style="max-width: 600px; resize: vertical;"></textarea>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Submit Review</button>
                             </form>
                         </div>
 
                         <!-- Reviews List -->
-                        <div id="reviews-list" style="margin-top: var(--spacing-xl);">
+                        <div id="reviews-list">
                             <!-- Populated by JS -->
                         </div>
                     </section>
+                </div>
                 </div>
             `;
 
@@ -368,7 +481,7 @@
             mediaHtml = `<img src="${src}" style="width:100%; height:100%; object-fit:cover;">`;
           }
 
-          return `<div style="aspect-ratio:1; background: #eee; overflow:hidden; border-radius: 4px;">${mediaHtml}</div>`;
+          return `<div class="gallery-item">${mediaHtml}</div>`;
         });
         container.innerHTML = renderedItems.join("");
       }
@@ -426,21 +539,21 @@
         reviewsListEl.innerHTML = list
           .map(
             (review) => `
-          <div style="border-bottom: 1px solid var(--border-color); padding: var(--spacing-lg) 0;">
-            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--spacing-sm);">
+          <div class="review-card">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
               <div>
-                <strong>${review.name}</strong>
-                <div style="color: var(--secondary-orange); margin-top: 4px;">${"★".repeat(
+                <strong style="font-size: 1.1rem; color: #1e293b;">${review.name}</strong>
+                <div style="color: #fbbf24; margin-top: 4px; font-size: 1.1rem; letter-spacing: 1px;">${"★".repeat(
                   review.rating
                 )}${"☆".repeat(5 - review.rating)}</div>
               </div>
-              <small style="color: var(--text-gray);">${new Date(
+              <small style="color: #94a3b8; font-weight: 500;">${new Date(
                 review.date
               ).toLocaleDateString()}</small>
             </div>
             ${
               review.comment
-                ? `<p style="color: var(--text-gray); margin-top: var(--spacing-sm);">${review.comment}</p>`
+                ? `<p style="color: #475569; margin-top: 10px; line-height: 1.6;">${review.comment}</p>`
                 : ""
             }
           </div>
